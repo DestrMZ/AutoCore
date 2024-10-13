@@ -15,6 +15,7 @@ struct AddRepair: View {
     
     @State var selectinImageRepair: PhotosPickerItem?
     @State var repairImage: UIImage?
+    @State var showSuccessMessage: Bool = false
     
     var body: some View {
         
@@ -57,39 +58,51 @@ struct AddRepair: View {
                         
                         PhotosPicker(selection: $selectinImageRepair, matching: .images) {
                             
-                            if let repairImage = repairImage {
-                                Image(uiImage: repairImage)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 150, height: 150)
-                                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                            } else {
-                                Image(systemName: "photo.badge.plus")
-                                    .font(.largeTitle)
-                                    .foregroundStyle(.dimGray)
-                            }
+                            Image(systemName: "photo.badge.plus")
+                                .font(.largeTitle)
+                                .foregroundStyle(.dimGray)
+                            
                         }
-
-                        .onChange(of: selectinImageRepair) { oldItem, newItem in
-                            if let newItem = newItem {
-                                newItem.loadTransferable(type: Data.self) { result in
-                                    switch result {
-                                    case .success(let imageData):
-                                        if let imageData = imageData, let image = UIImage(data: imageData) {
-                                            self.repairImage = image
+                    }
+                    .onChange(of: selectinImageRepair) { oldItem, newItem in
+                        if let newItem = newItem {
+                            newItem.loadTransferable(type: Data.self) { result in
+                                switch result {
+                                case .success(let imageData):
+                                    if let imageData = imageData, let image = UIImage(data: imageData) {
+                                        self.repairImage = image
+                                        self.showSuccessMessage = true
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                            self.showSuccessMessage = false
                                         }
-                                    case .failure(let error):
-                                        print("Ошибка загрузки изображения ремонта: \(error.localizedDescription)")
                                     }
+                                case .failure(let error):
+                                    print("Ошибка загрузки изображения ремонта: \(error.localizedDescription)")
+                                    
                                 }
                             }
                         }
                     }
                 }
+                
+                Button(action: {
+                    repairViewModel.createNewRepair()
+                    print("Repair успешно добавлен")
+                }) {
+                    Text("Save repair")
+                }
+                
+            }
+            if showSuccessMessage {
+                Text("Photo successfully uploaded!")
+                    .foregroundColor(.green)
+                    .transition(.opacity)
+                    .animation(.easeInOut, value: showSuccessMessage)
             }
         }
     }
 }
+
 
 
 

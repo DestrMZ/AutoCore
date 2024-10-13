@@ -20,6 +20,8 @@ class RepairViewModel: ObservableObject {
     @Published var photoRepair: Data = Data()
     @Published var car: Car? = nil
     
+    @Published var repairArray: [Repair] = []
+    
     
     func createNewRepair() {
         guard self.car != nil else {
@@ -37,11 +39,12 @@ class RepairViewModel: ObservableObject {
             notes: self.notes,
             photoRepair: self.photoRepair,
             car: self.car)
+        
     }
     
-    func getAllRepair(for car: Car) -> [Repair] {
+    func getAllRepair(for car: Car) {
         let requstAllRepair = CoreDataManaged.shared.fetchAllRepair(for: car)
-        return requstAllRepair
+        self.repairArray = requstAllRepair
     }
     
     func deleteRepair(_ repair: Repair) {
