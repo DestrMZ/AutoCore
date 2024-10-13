@@ -7,12 +7,15 @@
 
 import SwiftUI
 
-struct SettingsVIew: View {
+struct SettingsView: View {
+    
+    @EnvironmentObject var carViewModel: CarViewModel
+    
     var body: some View {
         Text("Settings View")
     }
 }
 
 #Preview {
-    SettingsVIew()
+    SettingsView()
 }

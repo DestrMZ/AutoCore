@@ -51,11 +51,20 @@ struct DashboardView: View {
                 
                 Divider()
                 
-                VStack(alignment: .leading) {
+                VStack() {
                     
                     ZStack {
                         CarInfoView()
+                            .padding(.horizontal, 15)
                     }
+                    
+                }.padding(.top, 15)
+                
+                Spacer()
+                
+                VStack {
+                    
+                    
                     
                 }
                 

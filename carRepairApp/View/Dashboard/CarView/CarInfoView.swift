@@ -73,6 +73,7 @@ struct CarInfoView: View {
             
             
         }
+        .frame(maxWidth: .infinity) 
         .padding()
         .background(Color.white)
         .cornerRadius(10)

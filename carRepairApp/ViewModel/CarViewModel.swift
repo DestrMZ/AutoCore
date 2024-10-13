@@ -75,6 +75,22 @@ class CarViewModel: ObservableObject {
     }
     
     func deleteCar() {
+        guard let car = getCar() else { return
+            print("Автомобиль для удаления не найден") }
+        CoreDataManaged.shared.deleteCar(car: car)
+        print("Увтомобиль успешно удален")
+        
+    }
+    
+    func resetCarInfo() {
+        nameModel = ""
+        year = 1990
+        vinNumber = ""
+        color = ""
+        mileage = 100
+        dateOfPurchase = Date()
+        engineType = .gasoline
+        transmissionType = .manual
     }
     
     

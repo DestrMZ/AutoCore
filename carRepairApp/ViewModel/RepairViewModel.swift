@@ -11,12 +11,12 @@ import Foundation
 class RepairViewModel: ObservableObject {
     
     @Published var repairDate = Date()
-    @Published var partReplaced = "Unknown"
+    @Published var partReplaced = ""
     @Published var cost: Double = 0
-    @Published var repairMileage: Int32 = 99999
-    @Published var repairShop: String = "Unknown"
-    @Published var nextServiceDate: Date? = Date()
-    @Published var notes: String = "Unknown"
+    @Published var repairMileage: Int32 = 0
+    @Published var repairShop: String = ""
+    @Published var nextServiceDate: Date = Date()
+    @Published var notes: String = ""
     @Published var photoRepair: Data = Data()
     @Published var car: Car? = nil
     

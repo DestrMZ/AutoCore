@@ -26,3 +26,19 @@ func dateFormatter() -> DateFormatter {
         formatter.dateStyle = .medium 
         return formatter
     }
+
+
+func numberFormatterForCoast() -> NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.isLenient = true
+        formatter.numberStyle = .currency
+        formatter.currencyCode = "RUB"
+        return formatter
+    }
+
+func numberFormatterForMileage() -> NumberFormatter {
+    let formatter = NumberFormatter()
+    formatter.isLenient = true
+    formatter.numberStyle = .decimal
+    return formatter
+}

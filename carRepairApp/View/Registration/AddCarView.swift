@@ -13,6 +13,12 @@ struct AddCarView: View {
     @State var buttonToContinue: Bool = false
     @State var showAlert: Bool = false
     
+    var colorCitron: Color = Color("Citron")
+    var colorDavyGray: Color = Color("DavyGray")
+    var colorDim: Color = Color("Dim")
+    var colorDimGray: Color = Color("DimGray")
+    var colorTeaGreen: Color = Color("TeaGreen")
+    
     var body: some View {
         
         NavigationStack {
@@ -113,6 +119,8 @@ struct AddCarView: View {
                         }
                     }
                 }
+            .background()
+            
             }
             .navigationDestination(isPresented: $buttonToContinue) {
                 AddPhotoCarView()

@@ -35,7 +35,7 @@ struct MainView: View {
                         Text("Statistics")
                     }
                 
-                SettingsVIew()
+                SettingsView()
                     .tabItem {
                         Image(systemName: "gearshape")
                         Text("Settings")

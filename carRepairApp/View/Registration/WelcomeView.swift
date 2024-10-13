@@ -12,24 +12,31 @@ struct WelcomeCarView: View {
     @EnvironmentObject var carViewModel: CarViewModel
     @State var continueView: Bool = false
     
+    var colorCitron: Color = Color("Citron")
+    var colorDavyGray: Color = Color("DavyGray")
+    var colorDim: Color = Color("Dim")
+    var colorDimGray: Color = Color("DimGray")
+    var colorTeaGreen: Color = Color("TeaGreen")
+    
     var body: some View {
         
         NavigationStack {
             
             VStack {
-                
+                 
                 Text("Welcome to AutoCare!")
-                    .font(.title)
+                    .font(.largeTitle)
                     .bold()
+                    .foregroundStyle(.white)
                     .padding(.top, 150)
                 Text("Go ahead and add your car details")
                     .font(.subheadline)
                     .bold()
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.white)
                 
                 Spacer()
                 
-                Image("car")
+                Image("car2")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 350, height: 350)
@@ -42,15 +49,19 @@ struct WelcomeCarView: View {
                         .frame(width: 120, height: 20)
                         .foregroundColor(.black)
                         .padding()
-                        .background(Color.orange)
+                        .background(colorCitron)
                         .cornerRadius(30)
                         .padding(.bottom, 70)
                 }.navigationBarBackButtonHidden(true)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .ignoresSafeArea()
+            .background(colorDimGray)
         }
     }
 }
 
 #Preview {
     WelcomeCarView()
+        .environmentObject(CarViewModel())
 }
