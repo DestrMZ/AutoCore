@@ -15,7 +15,9 @@ struct carRepairAppApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView().environmentObject(carViewModel)
+            ContentView()
+                .environmentObject(carViewModel)
+                .environmentObject(repairViewModel)
         }
     }
 }

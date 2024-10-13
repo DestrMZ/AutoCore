@@ -17,6 +17,7 @@ class RepairViewModel: ObservableObject {
     @Published var repairShop: String = "Unknown"
     @Published var nextServiceDate: Date? = Date()
     @Published var notes: String = "Unknown"
+    @Published var photoRepair: Data = Data()
     @Published var car: Car? = nil
     
     
@@ -34,6 +35,7 @@ class RepairViewModel: ObservableObject {
             repairShop: self.repairShop,
             nextServiceDate: self.nextServiceDate,
             notes: self.notes,
+            photoRepair: self.photoRepair,
             car: self.car)
     }
     

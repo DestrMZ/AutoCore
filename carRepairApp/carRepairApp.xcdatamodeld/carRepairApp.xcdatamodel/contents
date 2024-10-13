@@ -6,6 +6,7 @@
         <attribute name="engineType" attributeType="String"/>
         <attribute name="mileage" attributeType="Integer 32" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="nameModel" attributeType="String"/>
+        <attribute name="photoCar" optional="YES" attributeType="Binary"/>
         <attribute name="transmissionType" attributeType="String"/>
         <attribute name="vinNumber" attributeType="String"/>
         <attribute name="year" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
@@ -16,6 +17,7 @@
         <attribute name="nextServiceDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="notes" optional="YES" attributeType="String"/>
         <attribute name="partReplaced" attributeType="String"/>
+        <attribute name="photoRepair" optional="YES" attributeType="Binary"/>
         <attribute name="repairDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="repairMileage" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="repairShop" optional="YES" attributeType="String"/>

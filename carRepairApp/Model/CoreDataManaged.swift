@@ -7,6 +7,8 @@
 
 import Foundation
 import CoreData
+import PhotosUI
+import UIKit
 
 
 class CoreDataManaged {
@@ -40,7 +42,7 @@ class CoreDataManaged {
         }
     }
     
-    func creatingCar(nameModel: String?, year: Int16, vinNumber: String?, color: String?, mileage: Int32, dateOfPurchase: Date?, engineType: String?, transmissionType: String?) {
+    func creatingCar(nameModel: String?, year: Int16, vinNumber: String?, color: String?, mileage: Int32, dateOfPurchase: Date?, engineType: String?, transmissionType: String?, photoCar: Data?) {
         
         let car = Car(context: CoreDataManaged.shared.context)
         car.nameModel = nameModel ?? "Unknow"
@@ -51,12 +53,13 @@ class CoreDataManaged {
         car.dateOfPurchase = dateOfPurchase ?? Date()
         car.engineType = engineType ?? "Unknow Engine Type"
         car.transmissionType = transmissionType ?? "Unknow Transmission Type"
+        car.photoCar = photoCar
         
         saveContent()
         print("Новый автомобиль добавлен")
     }
     
-    func creatingRepair(repairDate: Date?, partReplaced: String?, cost: Double, repairMileage: Int32, repairShop: String?, nextServiceDate: Date?, notes: String?, car: Car?) {
+    func creatingRepair(repairDate: Date?, partReplaced: String?, cost: Double, repairMileage: Int32, repairShop: String?, nextServiceDate: Date?, notes: String?, photoRepair: Data?, car: Car?) {
         
         let repair = Repair(context: CoreDataManaged.shared.context)
         
@@ -67,6 +70,7 @@ class CoreDataManaged {
         repair.repairShop = repairShop ?? "Unknow Repair Shop"
         repair.nextServiceDate = nextServiceDate ?? Date()
         repair.notes = notes ?? "Unknow Notes"
+        repair.photoRepair = photoRepair
         repair.cars = car
         
         saveContent()
@@ -87,7 +91,7 @@ class CoreDataManaged {
         requestCar.fetchLimit = 1
         do {
             let car = try context.fetch(requestCar)
-            return car.first!
+            return car.first
         } catch {
             print("Ошибка при запросе к CoreData, нет найденного автомобиля")
             return nil
@@ -113,9 +117,59 @@ class CoreDataManaged {
         persistentContainer.viewContext.delete(repair)
     }
     
+    // MARK: Сохранение изображения ремонта в Core Data
+    func saveImageCarToCoreData(image: UIImage, for car: Car?) {
+        guard let car = car else { return }
+        guard let imageDataCar = image.jpegData(compressionQuality: 0.1) else { return }
+        func saveImageCarToCoreData(image: UIImage, for car: Car?) {
+            guard let car = car else { return } 
+            guard let imageDataCar = image.jpegData(compressionQuality: 0.1) else { return }
+
+            car.photoCar = imageDataCar
+
+            do {
+                try CoreDataManaged.shared.context.save()
+                print("Изображение автомобиля успешно сохранено.")
+            } catch {
+                print("Ошибка при сохранении изображения автомобиля: \(error.localizedDescription)")
+            }
+        }
+        car.photoCar = imageDataCar
+
+        do {
+            try CoreDataManaged.shared.context.save()
+            print("Изображение автомобиля успешно сохранено.")
+        } catch {
+            print("Ошибка при сохранении изображения автомобиля: \(error.localizedDescription)")
+        }
+    }
     
+    // MARK: Получение изображения автомобиля из Core Data
+    func saveImageRepairToCoreData(image: UIImage) {
+        guard let imageDataRepair = image.jpegData(compressionQuality: 0.1) else { return }
+        
+        let repair = Repair(context: CoreDataManaged.shared.context)
+        repair.photoRepair = imageDataRepair
+        
+        do {
+            try CoreDataManaged.shared.context.save()
+        } catch {
+            print("Ошибка сохранения изображения поломки: \(error.localizedDescription)")
+        }
+    }
     
+    func fetchImageCarFromCoreData() -> UIImage? {
+        if let car = fetchCar() {
+            if let imageData = car.photoCar {
+                return UIImage(data: imageData)
+            }
+        }
+        return nil
+    }
     
-    
-    
+    // TODO: Сделать позже
+//    func fetchImageRepairFromCoreData() -> UIImage? {
+//        let request: NSFetchRequest<Repair> = Repair.fetchRequest()
+//        requst.fetchLimit = 1
+//    }
 }
