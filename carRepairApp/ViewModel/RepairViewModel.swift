@@ -10,6 +10,8 @@ import Foundation
 
 class RepairViewModel: ObservableObject {
     
+    private var db = CoreDataManaged.shared
+    
     @Published var repairDate = Date()
     @Published var partReplaced = ""
     @Published var cost: Double = 0
@@ -24,12 +26,12 @@ class RepairViewModel: ObservableObject {
     
     
     func createNewRepair() {
-        guard self.car != nil else {
+        guard let car = self.car else{
             print("К сожалению, не указан автомобиль")
             return
         }
         
-        CoreDataManaged.shared.creatingRepair(
+        db.creatingRepair(
             repairDate: self.repairDate,
             partReplaced: self.partReplaced,
             cost: self.cost,
@@ -38,16 +40,18 @@ class RepairViewModel: ObservableObject {
             nextServiceDate: self.nextServiceDate,
             notes: self.notes,
             photoRepair: self.photoRepair,
-            car: self.car)
+            car: car
         
+        )
+        getAllRepair(for: car)
     }
     
     func getAllRepair(for car: Car) {
-        let requstAllRepair = CoreDataManaged.shared.fetchAllRepair(for: car)
+        let requstAllRepair = db.fetchAllRepair(for: car)
         self.repairArray = requstAllRepair
     }
     
     func deleteRepair(_ repair: Repair) {
-        CoreDataManaged.shared.deleteRepair(repair: repair)
+        db.deleteRepair(repair: repair)
     }
 }

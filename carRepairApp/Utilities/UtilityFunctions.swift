@@ -27,7 +27,6 @@ func dateFormatter() -> DateFormatter {
         return formatter
     }
 
-
 func numberFormatterForCoast() -> NumberFormatter {
         let formatter = NumberFormatter()
         formatter.isLenient = true

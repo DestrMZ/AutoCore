@@ -11,6 +11,8 @@ import PhotosUI
 
 class CarViewModel: ObservableObject {
     
+    private var db = CoreDataManaged.shared
+    
     @Published var nameModel: String = ""
     @Published var year: Int16 = 1990
     @Published var vinNumber: String = ""
@@ -24,7 +26,7 @@ class CarViewModel: ObservableObject {
     
     func createNewCar() {
         
-        CoreDataManaged.shared.creatingCar(
+        db.creatingCar(
             nameModel: self.nameModel,
             year: self.year,
             vinNumber: self.vinNumber,
@@ -36,7 +38,7 @@ class CarViewModel: ObservableObject {
             photoCar: self.photoCar
             )
         
-        CoreDataManaged.shared.saveContent()
+        db.saveContent()
         print("Успешно создан новый объект(Car).")
         
         print("Name model: \(nameModel)")
@@ -70,14 +72,14 @@ class CarViewModel: ObservableObject {
     }
     
     func getCar() -> Car? {
-        let requestCar = CoreDataManaged.shared.fetchCar()
+        let requestCar = db.fetchCar()
         return requestCar
     }
     
     func deleteCar() {
         guard let car = getCar() else { return
             print("Автомобиль для удаления не найден") }
-        CoreDataManaged.shared.deleteCar(car: car)
+        db.deleteCar(car: car)
         print("Увтомобиль успешно удален")
         
     }
@@ -96,15 +98,15 @@ class CarViewModel: ObservableObject {
     
     // MARK: Methdos for job with photoUI
     func saveImageCar(imageSelection: UIImage) {
-        if let car = CoreDataManaged.shared.fetchCar() {
-            CoreDataManaged.shared.saveImageCarToCoreData(image: imageSelection, for: car)
+        if let car = db.fetchCar() {
+            db.saveImageCarToCoreData(image: imageSelection, for: car)
         } else {
             print("Автомобиль не найден для сохранения изображения.")
         }
     }
     
     func getImageCar() -> UIImage? {
-        let image = CoreDataManaged.shared.fetchImageCarFromCoreData()
+        let image = db.fetchImageCarFromCoreData()
         return image
     }
 }

@@ -23,7 +23,7 @@ struct MainView: View {
                         Text("Main")
                     }
                 
-                RepairListView()
+                ListRepairView()
                     .tabItem {
                         Image(systemName: "wrench")
                         Text("Repairs")
