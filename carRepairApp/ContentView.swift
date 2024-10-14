@@ -11,7 +11,7 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var carViewModel: CarViewModel
-    @State var carArray: [Car] = []
+    @State var carArray: [Car] = [] // Плпробовать реализовать через ViewModel [Car]
     
     
     var body: some View {
