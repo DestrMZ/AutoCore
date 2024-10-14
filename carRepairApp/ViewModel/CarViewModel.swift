@@ -11,6 +11,8 @@ import PhotosUI
 
 class CarViewModel: ObservableObject {
     
+    // Добавить db
+    
     @Published var nameModel: String = ""
     @Published var year: Int16 = 1990
     @Published var vinNumber: String = ""
