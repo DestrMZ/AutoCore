@@ -8,11 +8,22 @@
 import SwiftUI
 
 struct AddButtonRepairView: View {
+    
+    @Binding var isPresented: Bool
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Button(action: {
+            isPresented = true
+        }) {
+            Image(systemName: "plus.circle.fill")
+                .resizable()
+                .frame(width: 50, height: 50)
+                .foregroundColor(.blue)
+                .shadow(radius: 10)
+        }
     }
 }
 
 #Preview {
-    AddButtonRepairView()
+    AddButtonRepairView(isPresented: .constant(false))
 }

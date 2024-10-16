@@ -1,58 +1,57 @@
-//
-//  RepairListView.swift
-//  carRepairApp
-//
-//  Created by Ivan Maslennikov on 12.10.2024.
-//
+    //
+    //  RepairListView.swift
+    //  carRepairApp
+    //
+    //  Created by Ivan Maslennikov on 12.10.2024.
+    //
 
-import SwiftUI
+    import SwiftUI
 
-struct ListRepairView: View {
-    
-    @EnvironmentObject var repairViewModel: RepairViewModel
-    
-    @State var showAddNewSheet: Bool = false
-    
-    var body: some View {
+
+    struct ListRepairView: View {
         
+        @EnvironmentObject var repairViewModel: RepairViewModel
         
-        NavigationStack {
+        @State var isPresented: Bool = false
+        
+        var body: some View {
             VStack {
-                List {
-                    if repairViewModel.repairArray.isEmpty {
-                        Text("Repair list is empty.")
-                            .font(.headline)
-                            .bold()
-                    } else {
-                        ForEach(repairViewModel.repairArray) { repair in
-                            ListRowView(repair: repair)
-                                .padding(.vertical, 20)
+                VStack {
+                    List {
+                        if repairViewModel.repairArray.isEmpty {
+                            Text("Repair list is empty.")
+                                .font(.headline)
+                                .bold()
+                        } else {
+                            ForEach(repairViewModel.repairArray) { repair in
+                                ListRowView(repair: repair)
+                                    .padding(.vertical, 20)
+                            }.onDelete(perform: repairViewModel.deteteRepairFromList)
                         }
                     }
-                }
+                }.padding()
+                
+                Spacer()
+         
+                AddButtonRepairView(isPresented: $isPresented)
+
             }
             .navigationBarTitle("Repairs", displayMode: .inline)
-            .navigationBarItems(
-                trailing: Button(action: {
-                    showAddNewSheet.toggle()
-                }) {
-                    Text("Add")
-                }
-            )
-            .sheet(isPresented: $showAddNewSheet) {
+            .sheet(isPresented: $isPresented) {
                 AddRepairView()
-                    .environmentObject(repairViewModel)
             }
-        }
-        .onAppear {
-            if let car = repairViewModel.car {
-                repairViewModel.getAllRepair(for: car)
+            .onAppear {
+                repairViewModel.loadCar()
+                if let car = repairViewModel.car {
+                    repairViewModel.getAllRepair(for: car)
+                } else {
+                    print("Car not found, can't load repairs.")
+                }
             }
         }
     }
-}
 
-#Preview {
-    ListRepairView()
-        .environmentObject(RepairViewModel())
-}
+    #Preview {
+        ListRepairView()
+            .environmentObject(RepairViewModel())
+    }

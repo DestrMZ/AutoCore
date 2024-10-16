@@ -24,26 +24,35 @@ class RepairViewModel: ObservableObject {
     
     @Published var repairArray: [Repair] = []
     
+    func loadCar() {
+        if let loadedCar = db.fetchCar() {
+            self.car = loadedCar
+            print("Car loaded: \(String(describing: loadedCar.nameModel))")
+        } else {
+            print("Car not found")
+        }
+    }
     
     func createNewRepair() {
-        guard let car = self.car else{
-            print("К сожалению, не указан автомобиль")
-            return
+        if let car = self.car {
+            db.creatingRepair(
+                repairDate: self.repairDate,
+                partReplaced: self.partReplaced,
+                cost: self.cost,
+                repairMileage: self.repairMileage,
+                repairShop: self.repairShop,
+                nextServiceDate: self.nextServiceDate,
+                notes: self.notes,
+                photoRepair: self.photoRepair,
+                car: car)
+            db.saveContent()
+            
+            getAllRepair(for: car)
+
+            print("Repair successfully created, car: \(String(describing: car.nameModel))")
+        } else {
+            print("Car not found")
         }
-        
-        db.creatingRepair(
-            repairDate: self.repairDate,
-            partReplaced: self.partReplaced,
-            cost: self.cost,
-            repairMileage: self.repairMileage,
-            repairShop: self.repairShop,
-            nextServiceDate: self.nextServiceDate,
-            notes: self.notes,
-            photoRepair: self.photoRepair,
-            car: car
-        
-        )
-        getAllRepair(for: car)
     }
     
     func getAllRepair(for car: Car) {
@@ -53,5 +62,16 @@ class RepairViewModel: ObservableObject {
     
     func deleteRepair(_ repair: Repair) {
         db.deleteRepair(repair: repair)
+    }
+    
+    func deteteRepairFromList(at offset: IndexSet) {
+        offset.forEach { index in
+            let repair = self.repairArray[index]
+            db.deleteRepair(repair: repair)
+            self.repairArray.remove(at: index)
+        }
+        
+        db.saveContent() 
+        print("Repair successfully deleted")
     }
 }

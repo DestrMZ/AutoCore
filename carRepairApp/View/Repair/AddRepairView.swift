@@ -7,6 +7,7 @@
 
     import SwiftUI
     import PhotosUI
+    import Combine
 
     struct AddRepairView: View {
         
@@ -43,22 +44,24 @@
                                     .foregroundStyle(.dimGray)
                             }
                         }
-                        .onChange(of: selectedImageRepair) { _, newItem in // Исправлено имя
+                        .onChange(of: selectedImageRepair) { _, newItem in
                             if let newItem = newItem {
                                 newItem.loadTransferable(type: Data.self) { result in
                                     switch result {
                                     case .success(let imageData):
                                         if let imageData = imageData {
-                                            self.repairImage = UIImage(data: imageData)
-                                            self.repairViewModel.photoRepair = imageData
+                                            DispatchQueue.main.async {
+                                                self.repairImage = UIImage(data: imageData)
+                                                self.repairViewModel.photoRepair = imageData
+                                            }
                                             self.showSuccessMessage = true
                                             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                                 self.showSuccessMessage = false
                                             }
-                                            print("Фото ремонта успешно добавлено")
+                                            print("Photo repair successfully uploaded")
                                         }
                                     case .failure(let error):
-                                        print("Ошибка загрузки изображения ремонта: \(error.localizedDescription)")
+                                        print("Error uploading photo repair: \(error.localizedDescription)")
                                     }
                                 }
                             }
@@ -67,22 +70,18 @@
                     
                     Button(action: {
                         repairViewModel.createNewRepair()
-                        print("Repair успешно добавлен")
+                        print("Repair created successfully")
                         print("Name: \(repairViewModel.partReplaced)")
                         print("Cost: \(repairViewModel.cost)")
                         print("Notes: \(repairViewModel.notes)")
                         
-                        if let car = repairViewModel.car {
-                            repairViewModel.getAllRepair(for: car)
-                            print("getAllRepair - is update")
-                        }
                     }) {
                         Text("Save repair")
                             .font(Font.system(size: 20))
                             .frame(width: 120, height: 40)
                             .foregroundColor(.black)
                             .padding()
-                            .background(colorCitron)
+                            .background(.blue)
                             .cornerRadius(30)
                     }
                     .disabled(repairViewModel.partReplaced.isEmpty || repairViewModel.cost <= 0) // Валидация

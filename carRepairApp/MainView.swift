@@ -10,13 +10,10 @@ import SwiftUI
 struct MainView: View {
     
     @EnvironmentObject var carViewModel: CarViewModel
+    @EnvironmentObject var repairViewModel: RepairViewModel
     
     var body: some View {
-        
-        NavigationStack {
-            
             TabView {
-                            
                 DashboardView()
                     .tabItem {
                         Image(systemName: "house")
@@ -39,8 +36,7 @@ struct MainView: View {
                     .tabItem {
                         Image(systemName: "gearshape")
                         Text("Settings")
-                }
-            }
+                    }
         }
     }
 }
@@ -48,4 +44,5 @@ struct MainView: View {
 #Preview {
     MainView()
         .environmentObject(CarViewModel())
+        .environmentObject(RepairViewModel())
 }
