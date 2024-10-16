@@ -10,9 +10,9 @@ import PhotosUI
 
 
 class CarViewModel: ObservableObject {
-    
+
     private var db = CoreDataManaged.shared
-    
+
     @Published var nameModel: String = ""
     @Published var year: Int16 = 1990
     @Published var vinNumber: String = ""
@@ -39,8 +39,6 @@ class CarViewModel: ObservableObject {
             )
         
         db.saveContent()
-        print("Успешно создан новый объект(Car).")
-        
         print("Name model: \(nameModel)")
         print("Year: \(year)")
         print("Vin number: \(vinNumber)")
@@ -85,18 +83,25 @@ class CarViewModel: ObservableObject {
     }
     
     func resetCarInfo() {
-        nameModel = ""
-        year = 1990
-        vinNumber = ""
-        color = ""
-        mileage = 100
-        dateOfPurchase = Date()
-        engineType = .gasoline
-        transmissionType = .manual
+        if let car = getCar() {
+            
+            car.nameModel = ""
+            car.year = 1990
+            car.vinNumber = ""
+            car.color = ""
+            car.mileage = 0
+            car.dateOfPurchase = Date()
+            car.engineType = EngineTypeEnum.gasoline.rawValue
+            car.transmissionType = TransmissionTypeEnum.automatic.rawValue
+            car.photoCar = nil
+            
+            db.saveContent()
+            print("Car info reset successfully.")
+        } else {
+            print("Method reset car info not work, car not found")
+        }
     }
     
-    
-    // MARK: Methdos for job with photoUI
     func saveImageCar(imageSelection: UIImage) {
         if let car = db.fetchCar() {
             db.saveImageCarToCoreData(image: imageSelection, for: car)
