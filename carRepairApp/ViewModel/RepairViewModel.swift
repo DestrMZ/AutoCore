@@ -10,7 +10,7 @@ import Foundation
 
 class RepairViewModel: ObservableObject {
     
-    private var db = CoreDataManaged.shared
+    var db = CoreDataManaged.shared
     
     @Published var repairDate = Date()
     @Published var partReplaced = ""

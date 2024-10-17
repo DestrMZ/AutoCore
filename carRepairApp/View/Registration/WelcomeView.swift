@@ -46,7 +46,7 @@ struct WelcomeCarView: View {
                 NavigationLink(destination: AddCarView()) {
                     Text("Go")
                         .font(Font.system(size: 20))
-                        .frame(width: 120, height: 20)
+                        .frame(width: 90, height: 20)
                         .foregroundColor(.black)
                         .padding()
                         .background(colorCitron)

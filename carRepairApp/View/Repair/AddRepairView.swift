@@ -1,107 +1,113 @@
-    //
-    //  AddRepair.swift
-    //  carRepairApp
-    //
-    //  Created by Ivan Maslennikov on 13.10.2024.
-    //
+//
+//  AddRepair.swift
+//  carRepairApp
+//
+//  Created by Ivan Maslennikov on 13.10.2024.
+//
 
-    import SwiftUI
-    import PhotosUI
-    import Combine
+import SwiftUI
+import PhotosUI
+import Combine
 
-    struct AddRepairView: View {
+struct AddRepairView: View {
+    
+    @EnvironmentObject var repairViewModel: RepairViewModel
+    @EnvironmentObject var carViewModel: CarViewModel
+    @Environment(\.dismiss) var dismiss
+    
+    @State var selectedImageRepair: PhotosPickerItem?
+    @State var repairImage: UIImage?
+    @State var showSuccessMessage: Bool = false
+    
+    var colorCitron: Color = Color("Citron")
+    
+    var body: some View {
         
-        @EnvironmentObject var repairViewModel: RepairViewModel
-        @EnvironmentObject var carViewModel: CarViewModel
-        
-        @State var selectedImageRepair: PhotosPickerItem?
-        @State var repairImage: UIImage?
-        @State var showSuccessMessage: Bool = false
-        
-        var colorCitron: Color = Color("Citron")
-        
-        var body: some View {
+        NavigationStack {
             
-            NavigationStack {
+            VStack {
                 
-                VStack {
+                Form {
+                    TextField("Name repair", text: $repairViewModel.partReplaced)
+                        .disableAutocorrection(true)
                     
-                    Form {
-                        TextField("Name repair", text: $repairViewModel.partReplaced)
-                            .disableAutocorrection(true)
-                        TextField("Amount", value: $repairViewModel.cost, formatter: numberFormatterForCoast())
-                        TextField("Mileage", value: $repairViewModel.repairMileage, formatter: numberFormatterForMileage())
-                        TextField("Notes", text: $repairViewModel.notes)
+                    TextField("Amount", value: $repairViewModel.cost, formatter: numberFormatterForCoast())
+                        .keyboardType(.decimalPad)
+                    
+                    TextField("Mileage", value: $repairViewModel.repairMileage, formatter: numberFormatterForMileage())
+                            .keyboardType(.numberPad)
+              
+                    DatePicker("Date of repair", selection: $repairViewModel.repairDate, displayedComponents: [.date])
                         
-                        DatePicker("Date of repair", selection: $repairViewModel.repairDate)
-                        
-                        HStack {
-                            Text("Add photo")
-                            Spacer()
-                            PhotosPicker(selection: $selectedImageRepair, matching: .images) {
-                                Image(systemName: "photo.badge.plus")
-                                    .font(.largeTitle)
-                                    .foregroundStyle(.dimGray)
-                            }
-                        }
-                        .onChange(of: selectedImageRepair) { _, newItem in
-                            if let newItem = newItem {
-                                newItem.loadTransferable(type: Data.self) { result in
-                                    switch result {
-                                    case .success(let imageData):
-                                        if let imageData = imageData {
-                                            DispatchQueue.main.async {
-                                                self.repairImage = UIImage(data: imageData)
-                                                self.repairViewModel.photoRepair = imageData
-                                            }
-                                            self.showSuccessMessage = true
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                                self.showSuccessMessage = false
-                                            }
-                                            print("Photo repair successfully uploaded")
-                                        }
-                                    case .failure(let error):
-                                        print("Error uploading photo repair: \(error.localizedDescription)")
-                                    }
-                                }
-                            }
+                    TextField("Notes (optional)", text: $repairViewModel.notes)
+                        .disableAutocorrection(true)
+                
+                    
+                    HStack {
+                        Text("Photo")
+                        Spacer()
+                        PhotosPicker(selection: $selectedImageRepair, matching: .images) {
+                            Image(systemName: "photo.badge.plus")
+                                .font(.largeTitle)
+                                .foregroundStyle(.dimGray)
                         }
                     }
-                    
-                    Button(action: {
-                        repairViewModel.createNewRepair()
-                        print("Repair created successfully")
-                        print("Name: \(repairViewModel.partReplaced)")
-                        print("Cost: \(repairViewModel.cost)")
-                        print("Notes: \(repairViewModel.notes)")
-                        
-                    }) {
-                        Text("Save repair")
-                            .font(Font.system(size: 20))
-                            .frame(width: 120, height: 40)
-                            .foregroundColor(.black)
-                            .padding()
-                            .background(.blue)
-                            .cornerRadius(30)
-                    }
-                    .disabled(repairViewModel.partReplaced.isEmpty || repairViewModel.cost <= 0) // Валидация
                 }
-                .overlay(
-                    Group {
-                        if showSuccessMessage {
-                            Text("Photo successfully uploaded!")
-                                .foregroundColor(.green)
-                                .transition(.opacity)
-                                .animation(.easeInOut, value: showSuccessMessage)
+                
+                Button(action: {
+                    repairViewModel.createNewRepair()
+                    self.dismiss()
+                }) {
+                    Text("Save")
+                        .font(Font.system(size: 20))
+                        .frame(width: 90, height: 20)
+                        .foregroundColor(.black)
+                        .padding()
+                        .background(colorCitron)
+                        .cornerRadius(30)
+                }
+                .disabled(repairViewModel.partReplaced.isEmpty || repairViewModel.cost <= 0)
+                
+                
+            }
+            .onChange(of: selectedImageRepair) { _, newItem in
+                if let newItem = newItem {
+                    newItem.loadTransferable(type: Data.self) { result in
+                        switch result {
+                        case .success(let imageData):
+                            if let imageData = imageData {
+                                DispatchQueue.main.async {
+                                    self.repairImage = UIImage(data: imageData)
+                                    self.repairViewModel.photoRepair = imageData
+                                }
+                                self.showSuccessMessage = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    self.showSuccessMessage = false
+                                }
+                                print("Photo repair successfully uploaded")
+                            }
+                        case .failure(let error):
+                            print("Error uploading photo repair: \(error.localizedDescription)")
                         }
                     }
-                )
+                }
             }
+            .overlay(
+                Group {
+                    if showSuccessMessage {
+                        Text("Photo successfully uploaded!")
+                            .foregroundColor(.green)
+                            .transition(.opacity)
+                            .animation(.easeInOut, value: showSuccessMessage)
+                    }
+                }
+            )
         }
     }
+}
 
-    #Preview {
-        AddRepairView()
-            .environmentObject(CarViewModel())
-            .environmentObject(RepairViewModel())
-    }
+#Preview {
+    AddRepairView()
+        .environmentObject(CarViewModel())
+        .environmentObject(RepairViewModel())
+}

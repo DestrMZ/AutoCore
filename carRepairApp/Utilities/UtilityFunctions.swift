@@ -22,22 +22,23 @@ func isValidForm(carViewModel: CarViewModel) -> Bool {
 }
 
 func dateFormatter() -> DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium 
-        return formatter
+    let formatter = DateFormatter()
+    formatter.dateStyle = .medium
+    return formatter
     }
 
 func numberFormatterForCoast() -> NumberFormatter {
-        let formatter = NumberFormatter()
-        formatter.isLenient = true
-        formatter.numberStyle = .currency
-        formatter.currencyCode = "RUB"
-        return formatter
+    let formatter = NumberFormatter()
+    formatter.isLenient = true
+    formatter.numberStyle = .currency
+    formatter.currencyCode = "RUB"
+    return formatter
     }
 
 func numberFormatterForMileage() -> NumberFormatter {
     let formatter = NumberFormatter()
     formatter.isLenient = true
-    formatter.numberStyle = .decimal
+    formatter.numberStyle = .currency
+    formatter.currencySymbol = "KM"
     return formatter
 }
