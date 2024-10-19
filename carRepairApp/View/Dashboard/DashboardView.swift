@@ -61,29 +61,35 @@ struct DashboardView: View {
                 }.padding(.top, 15)
                 
                 Spacer()
-                
-                VStack {
-                    
-                    
-                    
-                }
-                
-                
-                
-                
-                
+
             }
         }.navigationBarBackButtonHidden(true)
+
             .onAppear {
-                if let image = carViewModel.getImageCar() {
-                    carImage = image
-                    print("Изображение загружено")
-                } else {
-                    print("Изображение не найдено")
-                }
+                loadImageForSelectCar()
             }
+        
+            .onChange(of: carViewModel.selectedCar) { _, otherCar in
+                if otherCar != nil {
+                    loadImageForSelectCar()
+                }
+        }
     }
+    
+    private func loadImageForSelectCar() {
+        if let selectedCar = carViewModel.selectedCar {
+            if let image = carViewModel.getImageCar(for: selectedCar) {
+                carImage = image
+                print("Изображение загружено для \(selectedCar.nameModel ?? "Unknown")")
+            } else {
+                carImage = nil
+                print("Изображение не найдено")
+            }
+        }
+    }
+    
 }
+    
 
 #Preview {
     DashboardView()

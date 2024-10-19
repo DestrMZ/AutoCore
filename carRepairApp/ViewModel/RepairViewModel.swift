@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import PhotosUI
 
 
 class RepairViewModel: ObservableObject {
@@ -14,10 +15,8 @@ class RepairViewModel: ObservableObject {
     
     @Published var repairDate = Date()
     @Published var partReplaced = ""
-    @Published var cost: Double = 0
+    @Published var amount: Int32 = 0
     @Published var repairMileage: Int32 = 0
-    @Published var repairShop: String = ""
-    @Published var nextServiceDate: Date = Date()
     @Published var notes: String = ""
     @Published var photoRepair: Data = Data()
     @Published var car: Car? = nil
@@ -25,23 +24,21 @@ class RepairViewModel: ObservableObject {
     @Published var repairArray: [Repair] = []
     
     func loadCar() {
-        if let loadedCar = db.fetchCar() {
+        if let loadedCar = db.fetchFirstCar() {
             self.car = loadedCar
-            print("Car loaded: \(String(describing: loadedCar.nameModel))")
+            print("Car loaded: \(String(describing: loadedCar.nameModel)) -> (RepairViewModel)")
         } else {
-            print("Car not found")
+            print("Car not found -> (RepairViewModel)")
         }
     }
     
-    func createNewRepair() {
+    func createNewRepair(for: Car) {
         if let car = self.car {
             db.creatingRepair(
                 repairDate: self.repairDate,
                 partReplaced: self.partReplaced,
-                cost: self.cost,
+                amount: self.amount,
                 repairMileage: self.repairMileage,
-                repairShop: self.repairShop,
-                nextServiceDate: self.nextServiceDate,
                 notes: self.notes,
                 photoRepair: self.photoRepair,
                 car: car)
@@ -49,15 +46,20 @@ class RepairViewModel: ObservableObject {
             
             getAllRepair(for: car)
 
-            print("Repair successfully created, car: \(String(describing: car.nameModel))")
+            print("Repair successfully created, car: \(String(describing: car.nameModel)) -> (RepairViewModel)")
         } else {
-            print("Car not found")
+            print("Car not found -> (RepairViewModel)")
         }
     }
     
     func getAllRepair(for car: Car) {
         let requstAllRepair = db.fetchAllRepair(for: car)
         self.repairArray = requstAllRepair
+    }
+    
+    func getPhotoRepair(repair: Repair) -> UIImage? {
+        let image = db.fetchImageRepairCoreData(repair: repair)
+        return image
     }
     
     func deleteRepair(_ repair: Repair) {
@@ -71,7 +73,8 @@ class RepairViewModel: ObservableObject {
             self.repairArray.remove(at: index)
         }
         
-        db.saveContent() 
-        print("Repair successfully deleted")
+        db.saveContent()
+        print("Repair successfully deleted -> (RepairViewModel)")
     }
+    
 }

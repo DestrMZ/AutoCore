@@ -2,9 +2,8 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23231" systemVersion="24A348" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
     <entity name="Car" representedClassName="Car" syncable="YES">
         <attribute name="color" attributeType="String"/>
-        <attribute name="dateOfPurchase" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="engineType" attributeType="String"/>
-        <attribute name="mileage" attributeType="Integer 32" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="mileage" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="nameModel" attributeType="String"/>
         <attribute name="photoCar" optional="YES" attributeType="Binary"/>
         <attribute name="transmissionType" attributeType="String"/>
@@ -13,14 +12,12 @@
         <relationship name="repairs" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Repair" inverseName="cars" inverseEntity="Repair"/>
     </entity>
     <entity name="Repair" representedClassName="Repair" syncable="YES">
-        <attribute name="cost" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="nextServiceDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="amount" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="notes" optional="YES" attributeType="String"/>
         <attribute name="partReplaced" attributeType="String"/>
         <attribute name="photoRepair" optional="YES" attributeType="Binary"/>
         <attribute name="repairDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="repairMileage" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="repairShop" optional="YES" attributeType="String"/>
         <relationship name="cars" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Car" inverseName="repairs" inverseEntity="Car"/>
     </entity>
 </model>

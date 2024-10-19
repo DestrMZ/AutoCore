@@ -24,8 +24,7 @@ struct ContentView: View {
                 MainView()
             }
         }.onAppear {
-            carArray = CoreDataManaged.shared.getAllCars()
-            print(carArray)
+            carArray = CoreDataManaged.shared.fetchAllCars()
         }
     }
 }

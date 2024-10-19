@@ -41,24 +41,21 @@ struct ListRowView: View {
 #Preview {
     let context = CoreDataManaged.shared.context
     
-    // Создаем тестовый объект Repair
     let exampleRepair = Repair(context: context)
     exampleRepair.partReplaced = "Brake Pads"
     exampleRepair.repairDate = Date()
-    exampleRepair.cost = 200.0
+    exampleRepair.amount = 200.0
     exampleRepair.repairMileage = 15000
     
     let anotherRepair = Repair(context: context)
     anotherRepair.partReplaced = "Engine Oil"
-    anotherRepair.repairDate = Date().addingTimeInterval(-86400) // Вчерашняя дата
-    anotherRepair.cost = 50.0
+    anotherRepair.repairDate = Date().addingTimeInterval(-86400)
+    anotherRepair.amount = 50.0
     anotherRepair.repairMileage = 30000
     
-    // Создаем RepairViewModel
     let repairViewModel = RepairViewModel()
     
     return List {
-        // Передаем объект Repair в ListRowView
         ListRowView(repair: exampleRepair)
             .environmentObject(repairViewModel)
         ListRowView(repair: anotherRepair)

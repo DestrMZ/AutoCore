@@ -55,8 +55,14 @@ struct AddRepairView: View {
                 }
                 
                 Button(action: {
-                    repairViewModel.createNewRepair()
-                    self.dismiss()
+                    repairViewModel.loadCar()
+                    if let selectedCar = repairViewModel.car {
+                        repairViewModel.createNewRepair(for: selectedCar)
+                        self.dismiss()
+                    } else {
+                        print("Car not found (AddRepairView")
+                    }
+                    
                 }) {
                     Text("Save")
                         .font(Font.system(size: 20))

@@ -54,6 +54,11 @@ struct ListRepairView: View {
                 print("Car not found, can't load repairs.")
             }
         }
+        .onChange(of: repairViewModel.car) { _, otherCar in
+            if let car = otherCar {
+                repairViewModel.getAllRepair(for: car)
+            }
+        }
     }
 }
 

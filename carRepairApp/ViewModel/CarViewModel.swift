@@ -23,6 +23,15 @@ class CarViewModel: ObservableObject {
     @Published var transmissionType: TransmissionTypeEnum = .manual
     @Published var photoCar: Data = Data()
     
+    @Published var allCars: [Car] = []
+    @Published var selectedCar: Car? {
+        didSet {
+            if let car = selectedCar {
+                loadCarInfo(for: car)
+                print("Enter: \(String(describing: car.nameModel)) -> (CarViewModel)")
+            }
+        }
+    }
     
     func createNewCar() {
         
@@ -32,7 +41,6 @@ class CarViewModel: ObservableObject {
             vinNumber: self.vinNumber,
             color: self.color,
             mileage: self.mileage,
-            dateOfPurchase: self.dateOfPurchase,
             engineType: self.engineType.rawValue,
             transmissionType: self.transmissionType.rawValue,
             photoCar: self.photoCar
@@ -44,74 +52,62 @@ class CarViewModel: ObservableObject {
         print("Vin number: \(vinNumber)")
         print("Color: \(color)")
         print("Mileage: \(mileage)")
-        print("Date of purchse: \(dateOfPurchase)")
         print("Engine type: \(engineType)")
         print("Transmission type: \(transmissionType)")
         
     }
     
-    func loadCarInfo() {
-        
-        if let carFromCoreData = getCar() {
-            self.nameModel = carFromCoreData.nameModel ?? ""
-            self.year = carFromCoreData.year
-            self.vinNumber = carFromCoreData.vinNumber ?? ""
-            self.color = carFromCoreData.color ?? ""
-            self.mileage = carFromCoreData.mileage
-            self.dateOfPurchase = carFromCoreData.dateOfPurchase ?? Date()
-            self.engineType = EngineTypeEnum(rawValue: carFromCoreData.engineType ?? "") ?? .gasoline
-            self.transmissionType = TransmissionTypeEnum(rawValue: carFromCoreData.transmissionType ?? "") ?? .manual
-            
-            print("Автомобиль найден")
-        } else {
-            print("Автомобиль не найден")
-        }
-        
+    func loadCarInfo(for car: Car) {
+
+        self.nameModel = car.nameModel ?? ""
+        self.year = car.year
+        self.vinNumber = car.vinNumber ?? ""
+        self.color = car.color ?? ""
+        self.mileage = car.mileage
+        self.engineType = EngineTypeEnum(rawValue: car.engineType ?? "") ?? .gasoline
+        self.transmissionType = TransmissionTypeEnum(rawValue: car.transmissionType ?? "") ?? .manual
+
+        print("Car found: \(String(describing: car.nameModel)) -> (CarViewModel)")
     }
     
     func getCar() -> Car? {
-        let requestCar = db.fetchCar()
+        let requestCar = db.fetchFirstCar()
         return requestCar
+    }
+    
+    func getAllCars() {
+        let requestAllCars = db.fetchAllCars()
+        self.allCars = requestAllCars
+    }
+    
+    func saveImageCar(imageSelection: UIImage) {
+        if let car = db.fetchFirstCar() {
+            db.saveImageCarToCoreData(image: imageSelection, for: car)
+        } else {
+            print("No vehicle found to save image -> (CarViewModel).")
+        }
+    }
+    
+    func getImageCar(for car: Car) -> UIImage? {
+        let image = db.fetchImageCarFromCoreData(car: car)
+        return image
     }
     
     func deleteCar() {
         guard let car = getCar() else { return
-            print("Автомобиль для удаления не найден") }
+            print("Car for delet, not found -> (CarViewModel)") }
         db.deleteCar(car: car)
-        print("Увтомобиль успешно удален")
+        print("Car successfully deleted -> (CarViewModel)")
+    }
+    
+    func deleteCarFromList(at offset: IndexSet) {
+        offset.forEach { index in
+            let car = self.allCars[index]
+            db.deleteCar(car: car)
+            self.allCars.remove(at: index)
+        }
         
-    }
-    
-    func resetCarInfo() {
-        if let car = getCar() {
-            
-            car.nameModel = ""
-            car.year = 1990
-            car.vinNumber = ""
-            car.color = ""
-            car.mileage = 0
-            car.dateOfPurchase = Date()
-            car.engineType = EngineTypeEnum.gasoline.rawValue
-            car.transmissionType = TransmissionTypeEnum.automatic.rawValue
-            car.photoCar = nil
-            
-            db.saveContent()
-            print("Car info reset successfully.")
-        } else {
-            print("Method reset car info not work, car not found")
-        }
-    }
-    
-    func saveImageCar(imageSelection: UIImage) {
-        if let car = db.fetchCar() {
-            db.saveImageCarToCoreData(image: imageSelection, for: car)
-        } else {
-            print("Автомобиль не найден для сохранения изображения.")
-        }
-    }
-    
-    func getImageCar() -> UIImage? {
-        let image = db.fetchImageCarFromCoreData()
-        return image
+        db.saveContent()
+        print("Car successfully deleted -> (CarViewModel)")
     }
 }

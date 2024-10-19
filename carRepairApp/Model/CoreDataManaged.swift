@@ -8,7 +8,6 @@
 import Foundation
 import CoreData
 import PhotosUI
-import UIKit
 
 
 class CoreDataManaged {
@@ -31,6 +30,7 @@ class CoreDataManaged {
         return persistentContainer.viewContext
     }
     
+    // MARK: Method for save model in CoreData
     func saveContent() {
         let context = persistentContainer.viewContext
         
@@ -42,7 +42,8 @@ class CoreDataManaged {
         }
     }
     
-    func creatingCar(nameModel: String?, year: Int16, vinNumber: String?, color: String?, mileage: Int32, dateOfPurchase: Date?, engineType: String?, transmissionType: String?, photoCar: Data?) {
+    // MARK: Methods for creating models
+    func creatingCar(nameModel: String?, year: Int16, vinNumber: String?, color: String?, mileage: Int32, engineType: String?, transmissionType: String?, photoCar: Data?) {
         
         let car = Car(context: CoreDataManaged.shared.context)
         car.nameModel = nameModel ?? "Unknow"
@@ -50,25 +51,22 @@ class CoreDataManaged {
         car.vinNumber = vinNumber ?? "Unknow VIN Number"
         car.color = color ?? "Unknow Color"
         car.mileage = mileage
-        car.dateOfPurchase = dateOfPurchase ?? Date()
         car.engineType = engineType ?? "Unknow Engine Type"
         car.transmissionType = transmissionType ?? "Unknow Transmission Type"
         car.photoCar = photoCar
         
         saveContent()
-        print("Новый автомобиль добавлен")
+        print("Create new car: \(String(describing: car.nameModel)) -> (CoreDataModel)")
     }
     
-    func creatingRepair(repairDate: Date?, partReplaced: String?, cost: Double, repairMileage: Int32, repairShop: String?, nextServiceDate: Date?, notes: String?, photoRepair: Data?, car: Car?) {
+    func creatingRepair(repairDate: Date?, partReplaced: String?, amount: Int32, repairMileage: Int32, notes: String?, photoRepair: Data?, car: Car?) {
         
         let repair = Repair(context: CoreDataManaged.shared.context)
         
         repair.repairDate = repairDate ?? Date()
         repair.partReplaced = partReplaced ?? "Unknow Part Replaced"
-        repair.cost = cost
+        repair.amount = amount
         repair.repairMileage = repairMileage
-        repair.repairShop = repairShop ?? "Unknow Repair Shop"
-        repair.nextServiceDate = nextServiceDate ?? Date()
         repair.notes = notes ?? "Unknow Notes"
         repair.photoRepair = photoRepair
         repair.cars = car
@@ -76,17 +74,8 @@ class CoreDataManaged {
         saveContent()
     }
     
-    func getAllCars() -> [Car] {
-        let requestCar: NSFetchRequest<Car> = Car.fetchRequest()
-        do {
-            return try context.fetch(requestCar)
-        } catch {
-            print("Ошибка при запросе к CoreData, нет найденных автомобиля")
-            return []
-        }
-    }
-    
-    func fetchCar() -> Car? {
+    // MARK: Methods for get models
+    func fetchFirstCar() -> Car? {
         let requestCar: NSFetchRequest<Car> = Car.fetchRequest()
         requestCar.fetchLimit = 1
         do {
@@ -95,6 +84,16 @@ class CoreDataManaged {
         } catch {
             print("Ошибка при запросе к CoreData, нет найденного автомобиля")
             return nil
+        }
+    }
+    
+    func fetchAllCars() -> [Car] {
+        let requestCar: NSFetchRequest<Car> = Car.fetchRequest()
+        do {
+            return try context.fetch(requestCar)
+        } catch {
+            print("Ошибка при запросе к CoreData, нет найденных автомобиля")
+            return []
         }
     }
     
@@ -109,31 +108,11 @@ class CoreDataManaged {
         }
     }
     
-    func deleteCar(car: Car) {
-        persistentContainer.viewContext.delete(car)
-    }
-    
-    func deleteRepair(repair: Repair) {
-        persistentContainer.viewContext.delete(repair)
-    }
-    
     // MARK: Сохранение изображения ремонта в Core Data
     func saveImageCarToCoreData(image: UIImage, for car: Car?) {
         guard let car = car else { return }
         guard let imageDataCar = image.jpegData(compressionQuality: 0.1) else { return }
-        func saveImageCarToCoreData(image: UIImage, for car: Car?) {
-            guard let car = car else { return } 
-            guard let imageDataCar = image.jpegData(compressionQuality: 0.1) else { return }
-
-            car.photoCar = imageDataCar
-
-            do {
-                try CoreDataManaged.shared.context.save()
-                print("Изображение автомобиля успешно сохранено.")
-            } catch {
-                print("Ошибка при сохранении изображения автомобиля: \(error.localizedDescription)")
-            }
-        }
+        
         car.photoCar = imageDataCar
 
         do {
@@ -158,18 +137,26 @@ class CoreDataManaged {
         }
     }
     
-    func fetchImageCarFromCoreData() -> UIImage? {
-        if let car = fetchCar() {
-            if let imageData = car.photoCar {
-                return UIImage(data: imageData)
-            }
+    func fetchImageCarFromCoreData(car: Car) -> UIImage? {
+        if let photoData = car.photoCar {
+            return UIImage(data: photoData)
         }
         return nil
     }
     
-    // TODO: Сделать позже
-//    func fetchImageRepairFromCoreData() -> UIImage? {
-//        let request: NSFetchRequest<Repair> = Repair.fetchRequest()
-//        requst.fetchLimit = 1
-//    }
+    func fetchImageRepairCoreData(repair: Repair) -> UIImage? {
+        if let imageData = repair.photoRepair {
+            return UIImage(data: imageData)
+        }
+        return nil
+    }
+    
+    // MARK: Methods for delete from CoreData
+    func deleteCar(car: Car) {
+        persistentContainer.viewContext.delete(car)
+    }
+    
+    func deleteRepair(repair: Repair) {
+        persistentContainer.viewContext.delete(repair)
+    }
 }

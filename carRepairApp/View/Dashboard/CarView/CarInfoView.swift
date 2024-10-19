@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CarInfoView: View {
     
-    @EnvironmentObject var car: CarViewModel
+    @EnvironmentObject var carViewModel: CarViewModel
     
     
     var body: some View {
@@ -18,56 +18,56 @@ struct CarInfoView: View {
             HStack {
                 Text("Name:")
                     .font(.headline)
-                Text(car.nameModel)
+                Text(carViewModel.nameModel)
                     .font(.body)
             }
             
             HStack {
                 Text("Year:")
                     .font(.headline)
-                Text("\(car.year)")
+                Text("\(carViewModel.year)")
                     .font(.body)
             }
             
             HStack {
                 Text("VIN number:")
                     .font(.headline)
-                Text(car.vinNumber)
+                Text(carViewModel.vinNumber)
                     .font(.body)
             }
             
             HStack {
                 Text("Color:")
                     .font(.headline)
-                Text(car.color)
+                Text(carViewModel.color)
                     .font(.body)
             }
             
             HStack {
                 Text("Mileage:")
                     .font(.headline)
-                Text("\(car.mileage)")
+                Text("\(carViewModel.mileage)")
                     .font(.body)
             }
             
             HStack {
                 Text("Date of purchase:")
                     .font(.headline)
-                Text(dateFormatter().string(from: car.dateOfPurchase))
+                Text(DateFormatter().string(from: carViewModel.dateOfPurchase))
                     .font(.body)
             }
             
             HStack {
                 Text("Engine type:")
                     .font(.headline)
-                Text(car.engineType.rawValue)
+                Text(carViewModel.engineType.rawValue)
                     .font(.body)
             }
             
             HStack {
                 Text("Transmission type:")
                     .font(.headline)
-                Text(car.transmissionType.rawValue)
+                Text(carViewModel.transmissionType.rawValue)
                     .font(.body)
             }
             
@@ -79,7 +79,9 @@ struct CarInfoView: View {
         .cornerRadius(10)
         .shadow(radius: 5)
         .onAppear {
-            car.loadCarInfo()
+            if let selectedCar = carViewModel.selectedCar {
+                carViewModel.loadCarInfo(for: selectedCar)
+            }
         }
     }
 }

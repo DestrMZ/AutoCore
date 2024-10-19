@@ -26,6 +26,12 @@ struct MainView: View {
                         Text("Repairs")
                     }
                 
+                SelectCarView()
+                    .tabItem {
+                        Image(systemName: "car.2")
+                        Text("Cars")
+                    }
+                
                 StatisticsView()
                     .tabItem {
                         Image(systemName: "chart.bar")
