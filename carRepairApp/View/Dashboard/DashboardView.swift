@@ -10,6 +10,7 @@ import SwiftUI
 struct DashboardView: View {
     
     @EnvironmentObject var carViewModel: CarViewModel
+    
     @State private var carImage: UIImage? = nil
     
     var body: some View {
@@ -35,7 +36,7 @@ struct DashboardView: View {
                         Image(uiImage: carImage)
                             .resizable()
                             .scaledToFill()
-                            .frame(width: 100, height: 100)
+                            .frame(width: 80, height: 80)
                             .clipShape(Circle())
                             .overlay(Circle().stroke(Color.gray, lineWidth: 2))
                             .shadow(radius: 5)
@@ -80,14 +81,13 @@ struct DashboardView: View {
         if let selectedCar = carViewModel.selectedCar {
             if let image = carViewModel.getImageCar(for: selectedCar) {
                 carImage = image
-                print("Изображение загружено для \(selectedCar.nameModel ?? "Unknown")")
+                print("INFO: Изображение загружено для \(selectedCar.nameModel ?? "Unknown")")
             } else {
                 carImage = nil
-                print("Изображение не найдено")
+                print("WARNING: Изображение не найдено")
             }
         }
     }
-    
 }
     
 

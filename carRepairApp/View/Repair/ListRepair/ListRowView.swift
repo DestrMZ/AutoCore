@@ -22,11 +22,11 @@ struct ListRowView: View {
                         .bold()
                         .lineLimit(1)
                     
-                    Text("Amount: \(repair.cost.formatted())")
+                    Text("Amount: \(repair.amount.formatted())")
                         .font(.subheadline)
                         .lineLimit(1)
                     
-                    Text("Due: \(repair.repairDate?.formatted() ?? "Unknown date")")
+                    Text("Due: \(repair.repairDate?.formatted(.dateTime.year().month().day()) ?? "Unknown date")")
                         .font(.subheadline)
                         .foregroundColor(Color.gray)
                 }
@@ -44,13 +44,13 @@ struct ListRowView: View {
     let exampleRepair = Repair(context: context)
     exampleRepair.partReplaced = "Brake Pads"
     exampleRepair.repairDate = Date()
-    exampleRepair.amount = 200.0
+    exampleRepair.amount = 200
     exampleRepair.repairMileage = 15000
     
     let anotherRepair = Repair(context: context)
     anotherRepair.partReplaced = "Engine Oil"
     anotherRepair.repairDate = Date().addingTimeInterval(-86400)
-    anotherRepair.amount = 50.0
+    anotherRepair.amount = 50
     anotherRepair.repairMileage = 30000
     
     let repairViewModel = RepairViewModel()

@@ -10,26 +10,25 @@ import SwiftUI
 
 
 struct ContentView: View {
-    @EnvironmentObject var carViewModel: CarViewModel
-    @State var carArray: [Car] = [] // Плпробовать реализовать через ViewModel [Car]
     
+    @EnvironmentObject var carViewModel: CarViewModel
     
     var body: some View {
         
         VStack {
             
-            if carArray.isEmpty {
+            if carViewModel.allCars.isEmpty {
                 WelcomeCarView()
             } else {
                 MainView()
             }
         }.onAppear {
-            carArray = CoreDataManaged.shared.fetchAllCars()
+            carViewModel.getAllCars()
         }
     }
 }
 
 
-//#Preview {
-//    ContentView()
-//}
+#Preview {
+    ContentView()
+}

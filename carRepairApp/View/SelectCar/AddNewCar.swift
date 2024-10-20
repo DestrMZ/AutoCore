@@ -82,19 +82,6 @@ struct AddNewCar: View {
                                 .background(Color.gray)
                                 .cornerRadius(8)
                                 .padding(.horizontal, 35)
-                                
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            DatePicker("Дата покупки", selection: $carViewModel.dateOfPurchase, displayedComponents: .date)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.horizontal)
-                                .datePickerStyle(.automatic)
-                                .accentColor(.red)
                         }
                         .padding(.top, 25)
                     }

@@ -31,7 +31,7 @@ struct AddRepairView: View {
                     TextField("Name repair", text: $repairViewModel.partReplaced)
                         .disableAutocorrection(true)
                     
-                    TextField("Amount", value: $repairViewModel.cost, formatter: numberFormatterForCoast())
+                    TextField("Amount", value: $repairViewModel.amount, formatter: numberFormatterForCoast())
                         .keyboardType(.decimalPad)
                     
                     TextField("Mileage", value: $repairViewModel.repairMileage, formatter: numberFormatterForMileage())
@@ -41,6 +41,7 @@ struct AddRepairView: View {
                         
                     TextField("Notes (optional)", text: $repairViewModel.notes)
                         .disableAutocorrection(true)
+                    
                 
                     
                     HStack {
@@ -55,12 +56,12 @@ struct AddRepairView: View {
                 }
                 
                 Button(action: {
-                    repairViewModel.loadCar()
-                    if let selectedCar = repairViewModel.car {
+                    if let selectedCar = carViewModel.selectedCar {
                         repairViewModel.createNewRepair(for: selectedCar)
+                        print("Repair created for \(carViewModel.nameModel)")
                         self.dismiss()
                     } else {
-                        print("Car not found (AddRepairView")
+                        print("Car not found (AddRepairView)")
                     }
                     
                 }) {
@@ -72,7 +73,7 @@ struct AddRepairView: View {
                         .background(colorCitron)
                         .cornerRadius(30)
                 }
-                .disabled(repairViewModel.partReplaced.isEmpty || repairViewModel.cost <= 0)
+                .disabled(repairViewModel.partReplaced.isEmpty || repairViewModel.amount <= 0)
                 
                 
             }

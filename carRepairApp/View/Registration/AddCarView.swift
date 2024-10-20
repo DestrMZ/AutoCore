@@ -10,6 +10,7 @@ import SwiftUI
 struct AddCarView: View {
     
     @EnvironmentObject var carViewModel: CarViewModel
+    
     @State var buttonToContinue: Bool = false
     @State var showAlert: Bool = false
     
@@ -22,7 +23,7 @@ struct AddCarView: View {
     var body: some View {
         
         NavigationStack {
-        
+            
             VStack {
                 Text("Enter Your Car Details")
                     .font(.title2)
@@ -78,57 +79,43 @@ struct AddCarView: View {
                                 .background(Color.gray)
                                 .cornerRadius(8)
                                 .padding(.horizontal, 35)
-                                
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            DatePicker("Дата покупки", selection: $carViewModel.dateOfPurchase, displayedComponents: .date)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.horizontal)
-                                .datePickerStyle(.automatic)
-                                .accentColor(.red)
+                                .padding(.top, 25)
                         }
-                        .padding(.top, 25)
-                    }
-                    
-                    Button(action: {
-                        if isValidForm(carViewModel: carViewModel) {
-                            carViewModel.createNewCar()
-                            buttonToContinue = true
-                        } else {
-                            print("Заполните все поля")
-                            showAlert = true
+                        
+                        Button(action: {
+                            if isValidForm(carViewModel: carViewModel) {
+                                carViewModel.createNewCar()
+                                buttonToContinue = true
+                            } else {
+                                print("Заполните все поля")
+                                showAlert = true
+                            }
+                        }) {
+                            Text("Next")
+                                .font(Font.system(size: 20))
+                                .frame(width: 120, height: 20)
+                                .foregroundColor(.black)
+                                .padding()
+                                .background(Color.orange)
+                                .cornerRadius(30)
+                                .padding(.bottom, 70)
                         }
-                    }) {
-                        Text("Next")
-                            .font(Font.system(size: 20))
-                            .frame(width: 120, height: 20)
-                            .foregroundColor(.black)
-                            .padding()
-                            .background(Color.orange)
-                            .cornerRadius(30)
-                            .padding(.bottom, 70)
-                    }
-                    .padding(.bottom, 20)
-                    .alert(isPresented: $showAlert) {
-                        Alert(title: Text("Упс"), message: Text("Пожалуйста, заполните все поля"), dismissButton: .default(Text("OK")))
+                        .padding(.bottom, 20)
+                        .alert(isPresented: $showAlert) {
+                            Alert(title: Text("Упс"), message: Text("Пожалуйста, заполните все поля"), dismissButton: .default(Text("OK")))
                         }
                     }
                 }
-            .background()
-            
+                .background()
+                
             }
             .navigationDestination(isPresented: $buttonToContinue) {
                 AddPhotoCarView()
             }
             .navigationBarBackButtonHidden(true)
+        }
     }
 }
-
 
 #Preview {
     AddCarView()

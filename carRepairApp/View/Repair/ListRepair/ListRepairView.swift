@@ -11,6 +11,7 @@ import SwiftUI
 struct ListRepairView: View {
     
     @EnvironmentObject var repairViewModel: RepairViewModel
+    @EnvironmentObject var carViewModel: CarViewModel
     
     @State var isPresented: Bool = false
     
@@ -27,12 +28,20 @@ struct ListRepairView: View {
                             ForEach(repairViewModel.repairArray) { repair in
                                 NavigationLink(destination: DetailRepairView(repair: repair)) {
                                     ListRowView(repair: repair)
-                                        .padding(.vertical, 20)
+                                        .padding(.vertical, 5)
+                                }
+                                .contextMenu {
+                                    Button(action: {
+                                        repairViewModel.deleteRepair(repair)
+                                    }) {
+                                        Text("Delete repair")
+                                        Image(systemName: "trash")
+                                    }
                                 }
                             }
                         }
                     }
-                    .listStyle(PlainListStyle())
+                    .listStyle(GroupedListStyle())
                     .padding(.horizontal, 0)
                 }
                 
@@ -44,19 +53,15 @@ struct ListRepairView: View {
         }
         .navigationBarTitle("Repairs", displayMode: .inline)
         .sheet(isPresented: $isPresented) {
-            AddRepairView()
-        }
-        .onAppear {
-            repairViewModel.loadCar()
-            if let car = repairViewModel.car {
-                repairViewModel.getAllRepair(for: car)
-            } else {
-                print("Car not found, can't load repairs.")
+            if carViewModel.selectedCar != nil {
+                AddRepairView()
             }
         }
-        .onChange(of: repairViewModel.car) { _, otherCar in
-            if let car = otherCar {
-                repairViewModel.getAllRepair(for: car)
+        .onAppear {
+            if let selectedCar = carViewModel.selectedCar {
+                repairViewModel.getAllRepair(for: selectedCar)
+            } else {
+                print("Car not found (ListRepairView")
             }
         }
     }
@@ -65,4 +70,5 @@ struct ListRepairView: View {
 #Preview {
     ListRepairView()
         .environmentObject(RepairViewModel())
+        .environmentObject(CarViewModel())
 }

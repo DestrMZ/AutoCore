@@ -19,32 +19,64 @@ struct DetailRepairView: View {
             
             Form {
                 
-                Text("Name: \(repair.partReplaced ?? "Unknown part")")
-                    .font(.subheadline)
-                    .foregroundStyle(.primary)
+                HStack {
+                    Text("Name ")
+                        .font(.headline)
+                    Spacer()
+                    Text("\(repair.partReplaced ?? "Unknow part")")
+                        .foregroundColor(.secondary)
+                }
                 
-                Text("Amount: \(repair.amount)")
-                    .font(.subheadline)
-                    .foregroundStyle(.primary)
+                HStack {
+                    Text("Meleage:  ")
+                        .font(.headline)
+                    Spacer()
+                    Text("\(repair.repairMileage) KM")
+                        .foregroundColor(.secondary)
+                }
                 
-                Text("Mileage: \(repair.repairMileage)")
-                    .font(.subheadline)
-                    .foregroundStyle(.primary)
+                HStack {
+                    Text("Amount ")
+                        .font(.headline)
+                    Spacer()
+                    Text("\(repair.amount) RUB")
+                        .foregroundColor(.secondary)
+                }
                 
-                Text("Notes: \(repair.notes ?? "No notes")")
+                HStack {
+                    Text("Date of repair:")
+                        .font(.headline)
+                    Spacer()
+                    Text("\(repair.repairDate?.formatted(.dateTime.year().month().day()) ?? "Unknown date")")
+                        .foregroundColor(.secondary)
+                }
                 
+                HStack {
+                    Text("Notes: ")
+                        .font(.headline)
+                    Spacer()
+                    Text("\(repair.notes ?? "(Option)")")
+                        .foregroundColor(.secondary)
+                }
+                
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Photo of the repair:")
+                        .font(.headline)
+                        .padding(.top, 20)
+                    
+                    if let imageRepair = imageRepair {
+                        Image(uiImage: imageRepair)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 300, height: 200)
+                            .clipped()
+                    } else {
+                        Text("Image not found")
+                            .foregroundColor(.secondary)
+                    }
+                }
             }
-            
-            if let imageRepair = imageRepair {
-                Image(uiImage: imageRepair)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 200, height: 200)
-            } else {
-                Text("Image not found")
-            }
-
-            
+    
             Spacer()
             
         }
@@ -69,9 +101,11 @@ struct DetailRepairView: View {
     
     let repair1 = Repair(context: context)
     repair1.partReplaced = "Brake Pads"
-    repair1.amount = 200.0
+    repair1.amount = 200
     repair1.repairMileage = 123000
     repair1.repairDate = Date()
+    repair1.notes = "Brake Pads were replaced"
     
     return DetailRepairView(repair: repair1)
+        .environmentObject(RepairViewModel())
 }

@@ -38,7 +38,7 @@ class CoreDataManaged {
             try context.save()
         } catch {
             let nsError = error as NSError
-            fatalError("Ошибка сохранения: \(nsError), \(nsError.userInfo)")
+            fatalError("WARNING: Ошибка сохранения: \(nsError), \(nsError.userInfo)")
         }
     }
     
@@ -56,7 +56,7 @@ class CoreDataManaged {
         car.photoCar = photoCar
         
         saveContent()
-        print("Create new car: \(String(describing: car.nameModel)) -> (CoreDataModel)")
+        print("INFO: Create new car: \(String(describing: car.nameModel)) -> (CoreDataModel)")
     }
     
     func creatingRepair(repairDate: Date?, partReplaced: String?, amount: Int32, repairMileage: Int32, notes: String?, photoRepair: Data?, car: Car?) {
@@ -82,7 +82,7 @@ class CoreDataManaged {
             let car = try context.fetch(requestCar)
             return car.first
         } catch {
-            print("Ошибка при запросе к CoreData, нет найденного автомобиля")
+            print("WARNING: Ошибка при запросе к CoreData, нет найденного автомобиля")
             return nil
         }
     }
@@ -92,7 +92,7 @@ class CoreDataManaged {
         do {
             return try context.fetch(requestCar)
         } catch {
-            print("Ошибка при запросе к CoreData, нет найденных автомобиля")
+            print("WARNING: Ошибка при запросе к CoreData, нет найденных автомобиля")
             return []
         }
     }
@@ -103,7 +103,7 @@ class CoreDataManaged {
         do {
             return try context.fetch(requestRepair)
         } catch {
-            print("К сожалению, ничего не найдено из ремонта")
+            print("WARNING: К сожалению, ничего не найдено из ремонта")
             return []
         }
     }
@@ -117,9 +117,9 @@ class CoreDataManaged {
 
         do {
             try CoreDataManaged.shared.context.save()
-            print("Изображение автомобиля успешно сохранено.")
+            print("INFO: Изображение автомобиля успешно сохранено.")
         } catch {
-            print("Ошибка при сохранении изображения автомобиля: \(error.localizedDescription)")
+            print("WARNING: Ошибка при сохранении изображения автомобиля: \(error.localizedDescription)")
         }
     }
     
@@ -133,7 +133,7 @@ class CoreDataManaged {
         do {
             try CoreDataManaged.shared.context.save()
         } catch {
-            print("Ошибка сохранения изображения поломки: \(error.localizedDescription)")
+            print("WARNING: Ошибка сохранения изображения поломки: \(error.localizedDescription)")
         }
     }
     

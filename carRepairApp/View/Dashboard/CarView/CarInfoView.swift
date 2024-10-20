@@ -51,13 +51,6 @@ struct CarInfoView: View {
             }
             
             HStack {
-                Text("Date of purchase:")
-                    .font(.headline)
-                Text(DateFormatter().string(from: carViewModel.dateOfPurchase))
-                    .font(.body)
-            }
-            
-            HStack {
                 Text("Engine type:")
                     .font(.headline)
                 Text(carViewModel.engineType.rawValue)
@@ -82,6 +75,7 @@ struct CarInfoView: View {
             if let selectedCar = carViewModel.selectedCar {
                 carViewModel.loadCarInfo(for: selectedCar)
             }
+            // Загружаем из CarViewModel информацию об автомобиле, указывая о каком именно авто нам нужна информация.
         }
     }
 }
