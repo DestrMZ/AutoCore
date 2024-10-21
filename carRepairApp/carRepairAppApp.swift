@@ -18,6 +18,10 @@ struct carRepairAppApp: App {
             ContentView()
                 .environmentObject(carViewModel)
                 .environmentObject(repairViewModel)
+                .onAppear {
+                    carViewModel.getAllCars()
+                    carViewModel.loadLastSelectCar()
+                }
         }
     }
 }

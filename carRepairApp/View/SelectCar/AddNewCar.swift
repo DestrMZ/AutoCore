@@ -5,7 +5,7 @@
 //  Created by Ivan Maslennikov on 19.10.2024.
 //
 
-
+// FIXME: Переделать Desing для более дружелюбного использования!
 import SwiftUI
 import PhotosUI
 
@@ -15,7 +15,6 @@ struct AddNewCar: View {
     @State var showAlert: Bool = false
     
     @State private var selectionImageCar: PhotosPickerItem?
-    @State private var avatarImage: UIImage?
     
     var colorCitron: Color = Color("Citron")
     var colorDavyGray: Color = Color("DavyGray")
@@ -110,17 +109,19 @@ struct AddNewCar: View {
                 Image(systemName: "plus.circle.fill")
                     .font(.largeTitle)
             }
-            .onChange(of: selectionImageCar) { oldItem, newItem in
+            .onChange(of: selectionImageCar) { _, newItem in
                 if let newItem = newItem {
-                    
                     newItem.loadTransferable(type: Data.self) { result in
                         switch result {
                         case .success(let imageData):
-                            if let imageData = imageData, let image = UIImage(data: imageData) {
-                                self.avatarImage = image
+                            if let imageData = imageData {
+                                DispatchQueue.main.async {
+                                    self.carViewModel.photoCar = imageData
+                                }
+                                print("INFO: Фото автомобиля успешно добавлено")
                             }
                         case .failure(_):
-                            print("Ошибка загрузки изображения")
+                            print("WARNING: Ошибка при добавлении фотографии автомобиля")
                         }
                     }
                 }

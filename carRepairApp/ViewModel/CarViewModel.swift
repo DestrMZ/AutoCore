@@ -33,7 +33,25 @@ class CarViewModel: ObservableObject {
             if let car = selectedCar {
                 loadCarInfo(for: car) // Загружаем информацию о выбранном автомобиле
                 print("INFO: Выбран: \(String(describing: car.nameModel)) -> (CarViewModel)")
+                saveLastSelectCar()
             }
+        }
+    }
+    
+    // Метод для сохраениния в UserDefaults последний выбранный автомобиль
+    func saveLastSelectCar() {
+        if let lastSelectCar = selectedCar {
+            UserDefaults.standard.set(lastSelectCar.vinNumber, forKey: "lastSelectedCarVIN")
+        }
+    }
+    
+    // При запуске приложения, подгружает последни выбранный автомобиль
+    func loadLastSelectCar() {
+        if let lastSelectCar = UserDefaults.standard.string(forKey: "lastSelectedCarVIN") {
+            if let car = allCars.first(where: { $0.vinNumber == lastSelectCar }) {
+                self.selectedCar = car
+            }
+            print("INFO: При запуске приложения, загружен авто \(nameModel)")
         }
     }
     

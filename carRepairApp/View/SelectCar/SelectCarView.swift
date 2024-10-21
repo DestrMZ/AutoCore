@@ -15,8 +15,10 @@ struct SelectCarView: View {
     @State private var showAddCar: Bool = false
     @State private var selectedCar: Car? = nil
     @State private var isPresented: Bool = false
-    @State private var showDeleteConfirmation: Bool = false
     @State private var carIndexForDelete: IndexSet? = nil
+    
+    @State private var tabSelect: String = ""
+    @State private var showDeleteConfirmation: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -64,6 +66,7 @@ struct SelectCarView: View {
                         selectedCar = car
                         if let indexCar = carViewModel.allCars.firstIndex(where: { $0.id == car.id }) {
                             carIndexForDelete = IndexSet(integer: indexCar)
+                            tabSelect = car.nameModel ?? "Unknown"
                         }
                         showDeleteConfirmation = true
                     }
@@ -75,7 +78,6 @@ struct SelectCarView: View {
                 }) {
                     Text("Add new car")
                 }
-                
             }
         }
         .sheet(isPresented: $isPresented) {
@@ -85,11 +87,15 @@ struct SelectCarView: View {
             carViewModel.getAllCars()
         }
         .alert(isPresented: $showDeleteConfirmation) {
-            Alert(title: Text("Delete car"), message: Text("Are you sure you want to delete \(carViewModel.nameModel)?"), dismissButton: .destructive(Text("Delete")) {
+            Alert(title: Text("Delete car"),
+                  message: Text("Are you sure you want to delete \(tabSelect)?"),
+                  primaryButton: .destructive(Text("Yes, delete")) {
                 if let indexCar = carIndexForDelete {
                     carViewModel.deleteCarFromList(at: indexCar)
                 }
-            })
+            },
+                  secondaryButton: .cancel()
+            )
         }
     }
     private func selectCar(for car: Car) {
