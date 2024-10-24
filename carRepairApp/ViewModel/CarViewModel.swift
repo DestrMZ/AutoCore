@@ -49,9 +49,11 @@ class CarViewModel: ObservableObject {
     func loadLastSelectCar() {
         if let lastSelectCar = UserDefaults.standard.string(forKey: "lastSelectedCarVIN") {
             if let car = allCars.first(where: { $0.vinNumber == lastSelectCar }) {
-                self.selectedCar = car
+                print("INFO: При запуске приложения, загружен авто \(String(describing: car.nameModel))")
+                DispatchQueue.main.async {
+                    self.selectedCar = car // Вариант решения проблемы с тестом на реальном устройстве
+                }
             }
-            print("INFO: При запуске приложения, загружен авто \(nameModel)")
         }
     }
     

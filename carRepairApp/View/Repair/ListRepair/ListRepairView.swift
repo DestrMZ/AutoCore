@@ -42,7 +42,6 @@ struct ListRepairView: View {
                         }
                     }
                     .listStyle(GroupedListStyle())
-                    .padding(.horizontal, 0)
                 }
                 
                 Spacer()

@@ -54,12 +54,13 @@ class CoreDataManaged {
         car.engineType = engineType ?? "Unknow Engine Type"
         car.transmissionType = transmissionType ?? "Unknow Transmission Type"
         car.photoCar = photoCar
+    
         
         saveContent()
         print("INFO: Create new car: \(String(describing: car.nameModel)) -> (CoreDataModel)")
     }
     
-    func creatingRepair(repairDate: Date?, partReplaced: String?, amount: Int32, repairMileage: Int32, notes: String?, photoRepair: Data?, car: Car?) {
+    func creatingRepair(repairDate: Date?, partReplaced: String?, amount: Int32, repairMileage: Int32, notes: String?, photoRepair: Data?, repairCategory: String, car: Car?) {
         
         let repair = Repair(context: CoreDataManaged.shared.context)
         
@@ -69,6 +70,7 @@ class CoreDataManaged {
         repair.repairMileage = repairMileage
         repair.notes = notes ?? "Unknow Notes"
         repair.photoRepair = photoRepair
+        repair.repairCategory = repairCategory
         repair.cars = car
         
         saveContent()

@@ -30,15 +30,18 @@ func dateFormatter() -> DateFormatter {
 func numberFormatterForCoast() -> NumberFormatter {
     let formatter = NumberFormatter()
     formatter.isLenient = true
-    formatter.numberStyle = .currency
-    formatter.currencyCode = "RUB"
+    formatter.numberStyle = .decimal
+    formatter.maximumFractionDigits = 0
+    formatter.positiveSuffix = " RUB"
     return formatter
     }
 
 func numberFormatterForMileage() -> NumberFormatter {
     let formatter = NumberFormatter()
     formatter.isLenient = true
-    formatter.numberStyle = .currency
-    formatter.currencySymbol = "KM"
+    formatter.numberStyle = .decimal
+    formatter.maximumFractionDigits = 0
+    formatter.usesGroupingSeparator = false
+    formatter.positiveSuffix = " KM"
     return formatter
 }

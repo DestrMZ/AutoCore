@@ -9,13 +9,18 @@ import SwiftUI
 
 struct ListRowView: View {
     
+    @EnvironmentObject var repairViewModel: RepairViewModel
+    
     var repair: Repair
     
     var body: some View {
         
         VStack {
             HStack(spacing: 20) {
-                VStack(alignment: .leading, spacing: 5) {
+                
+                Text("\(repairViewModel.repairCategory.icon)")
+                
+                VStack(alignment: .leading) {
                     
                     Text("\(repair.partReplaced ?? "Unknow part")")
                         .font(.title3)

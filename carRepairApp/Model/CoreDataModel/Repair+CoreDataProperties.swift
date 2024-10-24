@@ -2,7 +2,7 @@
 //  Repair+CoreDataProperties.swift
 //  carRepairApp
 //
-//  Created by Ivan Maslennikov on 19.10.2024.
+//  Created by Ivan Maslennikov on 22.10.2024.
 //
 //
 
@@ -22,6 +22,7 @@ extension Repair {
     @NSManaged public var photoRepair: Data?
     @NSManaged public var repairDate: Date?
     @NSManaged public var repairMileage: Int32
+    @NSManaged public var repairCategory: String?
     @NSManaged public var cars: Car?
 
 }

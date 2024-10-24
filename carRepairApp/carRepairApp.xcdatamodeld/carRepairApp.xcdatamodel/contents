@@ -16,6 +16,7 @@
         <attribute name="notes" optional="YES" attributeType="String"/>
         <attribute name="partReplaced" attributeType="String"/>
         <attribute name="photoRepair" optional="YES" attributeType="Binary"/>
+        <attribute name="repairCategory" optional="YES" attributeType="String"/>
         <attribute name="repairDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="repairMileage" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="cars" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Car" inverseName="repairs" inverseEntity="Car"/>
