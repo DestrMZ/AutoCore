@@ -21,7 +21,7 @@ class RepairViewModel: ObservableObject {
     @Published var repairMileage: Int32 = 0
     @Published var notes: String = ""
     @Published var photoRepair: Data = Data()
-    @Published var repairCategory: RepairCategory = .engine
+    @Published var repairCategory: RepairCategory = .service
     
     // Автомобиль, для которого делается ремонт.
     @Published var car: Car? = nil

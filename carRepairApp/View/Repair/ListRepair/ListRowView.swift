@@ -16,9 +16,14 @@ struct ListRowView: View {
     var body: some View {
         
         VStack {
-            HStack(spacing: 20) {
-                
-                Text("\(repairViewModel.repairCategory.icon)")
+            HStack {
+                if let repairCategoryString = repair.repairCategory,
+                    let repairCategory = RepairCategory(rawValue: repairCategoryString) {
+                    Image(repairCategory.imageIcon)
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                        .padding(.trailing, 8)
+                }
                 
                 VStack(alignment: .leading) {
                     
@@ -35,6 +40,15 @@ struct ListRowView: View {
                         .font(.subheadline)
                         .foregroundColor(Color.gray)
                 }
+                
+                Spacer()
+                
+                Image(systemName: "info.circle")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 20, height: 20)
+                    .foregroundColor(.gray)
+                    .shadow(color: Color.gray.opacity(0.3), radius: 2, x: 0, y: 2)
             }
         }
     }
@@ -51,12 +65,14 @@ struct ListRowView: View {
     exampleRepair.repairDate = Date()
     exampleRepair.amount = 200
     exampleRepair.repairMileage = 15000
+    exampleRepair.repairCategory = RepairCategory.other.imageIcon
     
     let anotherRepair = Repair(context: context)
     anotherRepair.partReplaced = "Engine Oil"
     anotherRepair.repairDate = Date().addingTimeInterval(-86400)
     anotherRepair.amount = 50
     anotherRepair.repairMileage = 30000
+    anotherRepair.repairCategory = RepairCategory.service.imageIcon
     
     let repairViewModel = RepairViewModel()
     

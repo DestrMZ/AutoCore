@@ -18,7 +18,7 @@ struct AddButtonRepairView: View {
             Image(systemName: "plus.circle.fill")
                 .resizable()
                 .frame(width: 50, height: 50)
-                .foregroundColor(.blue)
+                .foregroundColor(.green)
                 .shadow(radius: 10)
         }
     }

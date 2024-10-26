@@ -44,30 +44,27 @@ enum TypeCar: String, CaseIterable {
 
 
 enum RepairCategory: String, CaseIterable {
-    case engine = "Engine"
-    case transmission = "Transmission"
-    case chassis = "Chassis"
-    case body = "Body"
-    case bodyEquipment = "Body Equipment"
-    case electric = "Electric"
+    case service = "Service"
+    case fuel = "Fuel"
+    case wash = "Washing"
+    case parking = "Parking"
+    case insurance = "Insurance"
     case other = "Other"
     
-    var icon: String {
+    var imageIcon: String {
         switch self {
-        case .engine:
-            return "🛠️" // Иконка для двигателя
-        case .transmission:
-            return "⚙️" // Иконка для трансмиссии
-        case .chassis:
-            return "🛞" // Иконка для шасси (колесо)
-        case .body:
-            return "🚗" // Иконка для кузова
-        case .bodyEquipment:
-            return "🧰" // Иконка для оборудования кузова
-        case .electric:
-            return "🔋" // Иконка для электрики
+        case .service:
+            return "service"
+        case .fuel:
+            return "fuel"
+        case .wash:
+            return "wash"
+        case .parking:
+            return "parking"
+        case .insurance:
+            return "insurance"
         case .other:
-            return "🔧" // Иконка для других видов ремонта
+            return "other"
         }
     }
 }

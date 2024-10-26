@@ -14,22 +14,17 @@ struct MainView: View {
     
     var body: some View {
             TabView {
-                DashboardView()
+                
+                SelectCarView()
                     .tabItem {
-                        Image(systemName: "house")
-                        Text("Main")
+                        Image(systemName: "car.2")
+                        Text("Cars")
                     }
                 
                 ListRepairView()
                     .tabItem {
                         Image(systemName: "wrench")
                         Text("Repairs")
-                    }
-                
-                SelectCarView()
-                    .tabItem {
-                        Image(systemName: "car.2")
-                        Text("Cars")
                     }
                 
                 StatisticsView()

@@ -34,12 +34,12 @@ struct SelectCarView: View {
                         if let imageData = car.photoCar {
                             if let image = UIImage(data: imageData) {
                                 Image(uiImage: image)
+                                    .renderingMode(.original)
                                     .resizable()
-                                    .scaledToFill()
+                                    .aspectRatio(contentMode: .fill)
                                     .frame(width: 60, height: 60)
-                                    .clipShape(Circle())
-                                    .overlay(Circle().stroke(Color.white, lineWidth: 2))
-                                    .shadow(radius: 5)
+                                    .clipped()
+                                    .mask { RoundedRectangle(cornerRadius: 8, style: .continuous) }
                             } else {
                                 Circle()
                                     .fill(Color.gray.opacity(0.3))
@@ -58,6 +58,15 @@ struct SelectCarView: View {
                             Text("VIN Number: \(car.vinNumber ?? "Unknown")")
                                 .font(.subheadline)
                         }
+                        
+                        Spacer()
+                        
+                        if carViewModel.selectedCar == car {
+                            Image(systemName: "checkmark.seal.fill")
+                                .foregroundColor(.red)
+                                .font(.title3)
+                        }
+                        
                     }
                     .onTapGesture {
                         selectCar(for: car)
@@ -70,7 +79,6 @@ struct SelectCarView: View {
                         }
                         showDeleteConfirmation = true
                     }
-                    .background(carViewModel.selectedCar == car ? Color.gray.opacity(0.2) : Color.clear)
                 }
                 
                 Button(action: {
@@ -108,4 +116,5 @@ struct SelectCarView: View {
 
 #Preview {
     SelectCarView()
+        .environmentObject(CarViewModel())
 }

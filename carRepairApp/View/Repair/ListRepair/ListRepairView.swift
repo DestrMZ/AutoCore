@@ -17,37 +17,42 @@ struct ListRepairView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                VStack {
-                    List {
-                        if repairViewModel.repairArray.isEmpty {
-                            Text("Repair list is empty.")
-                                .font(.headline)
-                                .bold()
-                        } else {
-                            ForEach(repairViewModel.repairArray) { repair in
-                                NavigationLink(destination: DetailRepairView(repair: repair)) {
-                                    ListRowView(repair: repair)
-                                        .padding(.vertical, 5)
-                                }
-                                .contextMenu {
-                                    Button(action: {
-                                        repairViewModel.deleteRepair(repair)
-                                    }) {
-                                        Text("Delete repair")
-                                        Image(systemName: "trash")
-                                    }
+            ScrollView {
+                VStack(alignment: .leading) {
+                    if repairViewModel.repairArray.isEmpty {
+                        Text("Repair list is empty.")
+                            .font(.headline)
+                            .bold()
+                    } else {
+                        
+                        ForEach(repairViewModel.repairArray) { repair in
+                            NavigationLink(destination: DetailRepairView(repair: repair)) {
+                                ListRowView(repair: repair)
+                                    .padding(.vertical, 5)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            .contextMenu {
+                                Button(action: {
+                                    repairViewModel.deleteRepair(repair)
+                                }) {
+                                    Text("Delete repair")
+                                    Image(systemName: "trash")
                                 }
                             }
+                            Divider()
+                                .background(Color.gray)
                         }
                     }
-                    .listStyle(GroupedListStyle())
+                    
+                    Spacer()
+                    
+//                    HStack {
+//                        Spacer()
+//                        AddButtonRepairView(isPresented: $isPresented)
+//                            .padding(.horizontal, 45)
+//                    }
                 }
-                
-                Spacer()
-                
-                AddButtonRepairView(isPresented: $isPresented)
-                
+                .padding(.horizontal, 15)
             }
         }
         .navigationBarTitle("Repairs", displayMode: .inline)
@@ -65,6 +70,7 @@ struct ListRepairView: View {
         }
     }
 }
+
 
 #Preview {
     ListRepairView()
