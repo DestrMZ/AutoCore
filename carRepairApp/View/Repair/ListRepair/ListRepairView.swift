@@ -20,40 +20,15 @@ struct ListRepairView: View {
             ScrollView {
                 VStack(alignment: .leading) {
                     if repairViewModel.repairArray.isEmpty {
-                        Text("Repair list is empty.")
-                            .font(.headline)
-                            .bold()
+                        emptyRepairList
                     } else {
+                        listRepairView
                         
-                        ForEach(repairViewModel.repairArray) { repair in
-                            NavigationLink(destination: DetailRepairView(repair: repair)) {
-                                ListRowView(repair: repair)
-                                    .padding(.vertical, 5)
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                            .contextMenu {
-                                Button(action: {
-                                    repairViewModel.deleteRepair(repair)
-                                }) {
-                                    Text("Delete repair")
-                                    Image(systemName: "trash")
-                                }
-                            }
-                            Divider()
-                                .background(Color.gray)
-                        }
                     }
-                    
-                    Spacer()
-                    
-//                    HStack {
-//                        Spacer()
-//                        AddButtonRepairView(isPresented: $isPresented)
-//                            .padding(.horizontal, 45)
-//                    }
                 }
                 .padding(.horizontal, 15)
             }
+            addButton
         }
         .navigationBarTitle("Repairs", displayMode: .inline)
         .sheet(isPresented: $isPresented) {
@@ -67,6 +42,48 @@ struct ListRepairView: View {
             } else {
                 print("Car not found (ListRepairView")
             }
+        }
+    }
+    
+    private var emptyRepairList: some View {
+        VStack(alignment: .leading) {
+            if repairViewModel.repairArray.isEmpty {
+                VStack {
+                    Text("Repair list is empty.")
+                        .font(.headline)
+                        .bold()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+        }
+    }
+    
+    private var listRepairView: some View {
+        ForEach(repairViewModel.repairArray) { repair in
+            NavigationLink(destination: DetailRepairView(repair: repair)) {
+                ListRowView(repair: repair)
+                    .padding(.vertical, 5)
+            }
+            .buttonStyle(PlainButtonStyle())
+            .contextMenu {
+                Button(action: {
+                    repairViewModel.deleteRepair(repair)
+                }) {
+                    Text("Delete repair")
+                    Image(systemName: "trash")
+                }
+            }
+            Divider()
+                .background(Color.gray)
+        }
+    }
+    
+    private var addButton: some View {
+        HStack {
+            Spacer()
+            AddButtonRepairView(isPresented: $isPresented)
+                .padding(.horizontal, 30)
+                .padding(.bottom, 90)
         }
     }
 }

@@ -12,35 +12,32 @@ struct MainView: View {
     @EnvironmentObject var carViewModel: CarViewModel
     @EnvironmentObject var repairViewModel: RepairViewModel
     
+    @State private var selectedTab: CustomTapBar.TabItems = .cars
+    
     var body: some View {
-            TabView {
-                
+        ZStack {
+            switch selectedTab {
+            case .cars:
                 SelectCarView()
-                    .tabItem {
-                        Image(systemName: "car.2")
-                        Text("Cars")
-                    }
-                
+            case .repair:
                 ListRepairView()
-                    .tabItem {
-                        Image(systemName: "wrench")
-                        Text("Repairs")
-                    }
-                
+            case .statistics:
                 StatisticsView()
-                    .tabItem {
-                        Image(systemName: "chart.bar")
-                        Text("Statistics")
-                    }
-                
+            case .settings:
                 SettingsView()
-                    .tabItem {
-                        Image(systemName: "gearshape")
-                        Text("Settings")
-                    }
+            }
+
+            VStack {
+                Spacer()
+                
+                CustomTapBar(selectedTab: $selectedTab)
+                    .padding(.bottom)
+            }
         }
+        .edgesIgnoringSafeArea(.bottom)
     }
 }
+
 
 #Preview {
     MainView()

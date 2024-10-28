@@ -49,6 +49,7 @@ struct ListRowView: View {
                     .frame(width: 20, height: 20)
                     .foregroundColor(.gray)
                     .shadow(color: Color.gray.opacity(0.3), radius: 2, x: 0, y: 2)
+                    .offset(x: -5)
             }
         }
     }
