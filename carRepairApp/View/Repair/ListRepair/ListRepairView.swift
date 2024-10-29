@@ -18,7 +18,7 @@ struct ListRepairView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading) {
+                VStack {
                     if repairViewModel.repairArray.isEmpty {
                         emptyRepairList
                     } else {
@@ -46,16 +46,20 @@ struct ListRepairView: View {
     }
     
     private var emptyRepairList: some View {
-        VStack(alignment: .leading) {
-            if repairViewModel.repairArray.isEmpty {
-                VStack {
-                    Text("Repair list is empty.")
-                        .font(.headline)
-                        .bold()
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        VStack {
+            VStack(spacing: 8) {
+                Text("🛠️ Go add your first expanses?")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .padding(.bottom, 1)
+                Text("Take control of your car expenses effortlessly! Tap " + "+" + " to log each cost and keep everything on track.")
+                    .font(.subheadline)
+                    .multilineTextAlignment(.center)
+                    .padding()
             }
+            .padding(.top, 300)
         }
+        .frame(maxHeight: .infinity)
     }
     
     private var listRepairView: some View {

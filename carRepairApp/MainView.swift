@@ -12,7 +12,7 @@ struct MainView: View {
     @EnvironmentObject var carViewModel: CarViewModel
     @EnvironmentObject var repairViewModel: RepairViewModel
     
-    @State private var selectedTab: CustomTapBar.TabItems = .cars
+    @State private var selectedTab: CustomTapBar.TabItems = .repair
     
     var body: some View {
         ZStack {
