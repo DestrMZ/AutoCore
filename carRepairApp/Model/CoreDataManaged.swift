@@ -76,6 +76,18 @@ class CoreDataManaged {
         saveContent()
     }
     
+    func creatingPart(nameDetail: String?, article: String?, for repair: Repair) {
+        
+        let part = Part(context: CoreDataManaged.shared.context)
+    
+        part.id = UUID()
+        part.namePart = nameDetail ?? "Unknow Part Name"
+        part.article = article ?? "Unknow Part Article"
+        part.partRepair = repair
+        
+        saveContent()
+    }
+    
     // MARK: Methods for get models
     func fetchFirstCar() -> Car? {
         let requestCar: NSFetchRequest<Car> = Car.fetchRequest()
@@ -106,6 +118,17 @@ class CoreDataManaged {
             return try context.fetch(requestRepair)
         } catch {
             print("WARNING: К сожалению, ничего не найдено из ремонта")
+            return []
+        }
+    }
+    
+    func fetchAllPart(for repair: Repair) -> [Part] {
+        let requestPart: NSFetchRequest<Part> = Part.fetchRequest()
+        requestPart.predicate = NSPredicate(format: "repair == %@", repair)
+        do {
+            return try context.fetch(requestPart)
+        } catch {
+            print("WARNING: Ошибка при запросе к CoreData, нет найденных запчастей")
             return []
         }
     }
@@ -156,9 +179,16 @@ class CoreDataManaged {
     // MARK: Methods for delete from CoreData
     func deleteCar(car: Car) {
         persistentContainer.viewContext.delete(car)
+        saveContent()
     }
     
     func deleteRepair(repair: Repair) {
         persistentContainer.viewContext.delete(repair)
+        saveContent()
+    }
+    
+    func deletePart(part: Part) {
+        persistentContainer.viewContext.delete(part)
+        saveContent()
     }
 }

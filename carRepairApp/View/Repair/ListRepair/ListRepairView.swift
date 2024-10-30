@@ -22,25 +22,31 @@ struct ListRepairView: View {
                     if repairViewModel.repairArray.isEmpty {
                         emptyRepairList
                     } else {
+                        Text("\(carViewModel.nameModel)")
+                            .font(.headline)
+                            .foregroundColor(.secondary)
+                            .padding(.bottom, 10)
+                    
                         listRepairView
-                        
                     }
                 }
                 .padding(.horizontal, 15)
             }
             addButton
         }
-        .navigationBarTitle("Repairs", displayMode: .inline)
+        .navigationTitle("Repairs")
         .sheet(isPresented: $isPresented) {
             if carViewModel.selectedCar != nil {
                 AddRepairView()
             }
         }
         .onAppear {
-            if let selectedCar = carViewModel.selectedCar {
-                repairViewModel.getAllRepair(for: selectedCar)
-            } else {
-                print("Car not found (ListRepairView")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                if let selectedCar = carViewModel.selectedCar {
+                    repairViewModel.getAllRepair(for: selectedCar)
+                } else {
+                    print("Car not found (ListRepairView)")
+                }
             }
         }
     }

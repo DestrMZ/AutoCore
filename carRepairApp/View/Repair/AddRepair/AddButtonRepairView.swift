@@ -19,7 +19,7 @@ struct AddButtonRepairView: View {
                 .resizable()
                 .frame(width: 50, height: 50)
                 .foregroundColor(.green)
-                .shadow(radius: 10)
+//                .shadow(radius: 10)
         }
     }
 }
