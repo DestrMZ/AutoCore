@@ -2,7 +2,7 @@
 //  Car+CoreDataClass.swift
 //  carRepairApp
 //
-//  Created by Ivan Maslennikov on 30.10.2024.
+//  Created by Ivan Maslennikov on 07.11.2024.
 //
 //
 

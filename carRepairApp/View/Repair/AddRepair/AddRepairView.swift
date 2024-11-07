@@ -15,9 +15,10 @@ struct AddRepairView: View {
     @EnvironmentObject var carViewModel: CarViewModel
     @Environment(\.dismiss) var dismiss
     
-    @State var selectedImageRepair: PhotosPickerItem?
-    @State var repairImage: UIImage?
-    @State var showSuccessMessage: Bool = false
+    @State private var parts: [Parts] = [Parts(article: "", name: "")]
+    @State private var selectedImageRepair: PhotosPickerItem?
+    @State private var repairImage: UIImage?
+    @State private var showSuccessMessage: Bool = false
         
     var body: some View {
         
@@ -105,9 +106,34 @@ struct AddRepairView: View {
                     .animation(.easeInOut, value: showSuccessMessage)
             }
             
+            partsRow
+            
     }
         .padding()
         .padding(.vertical, 25)
+    }
+    
+    var partsRow: some View {
+        
+        VStack(alignment: .leading) {
+            Text("Parts:")
+            ForEach(parts.indices, id: \.self) { index in
+                PartsRowView(part: $parts[index], addPart: { part in
+                    repairViewModel.addPart(to: part.article, name: part.name)
+                })
+            }
+            
+            Button(action: {
+                parts.append(Parts(article: "", name: "")) // Добавляем новое поле
+            }) {
+                HStack {
+                    Image(systemName: "plus.circle.fill")
+                    Text("Add part")
+                }
+                .foregroundColor(.blue)
+            }
+        }
+        
     }
     
     var selectCategory: some View {

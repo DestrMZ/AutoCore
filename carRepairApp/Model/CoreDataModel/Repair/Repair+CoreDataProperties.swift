@@ -2,7 +2,7 @@
 //  Repair+CoreDataProperties.swift
 //  carRepairApp
 //
-//  Created by Ivan Maslennikov on 30.10.2024.
+//  Created by Ivan Maslennikov on 07.11.2024.
 //
 //
 
@@ -23,25 +23,8 @@ extension Repair {
     @NSManaged public var repairCategory: String?
     @NSManaged public var repairDate: Date?
     @NSManaged public var repairMileage: Int32
+    @NSManaged public var parts: NSObject?
     @NSManaged public var cars: Car?
-    @NSManaged public var parts: NSSet?
-
-}
-
-// MARK: Generated accessors for parts
-extension Repair {
-
-    @objc(addPartsObject:)
-    @NSManaged public func addToParts(_ value: Part)
-
-    @objc(removePartsObject:)
-    @NSManaged public func removeFromParts(_ value: Part)
-
-    @objc(addParts:)
-    @NSManaged public func addToParts(_ values: NSSet)
-
-    @objc(removeParts:)
-    @NSManaged public func removeFromParts(_ values: NSSet)
 
 }
 

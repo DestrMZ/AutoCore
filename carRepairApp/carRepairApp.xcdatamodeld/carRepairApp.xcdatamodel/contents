@@ -11,21 +11,15 @@
         <attribute name="year" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="repairs" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Repair" inverseName="cars" inverseEntity="Repair"/>
     </entity>
-    <entity name="Part" representedClassName="Part" syncable="YES">
-        <attribute name="article" optional="YES" attributeType="String"/>
-        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="namePart" optional="YES" attributeType="String"/>
-        <relationship name="partRepair" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Repair" inverseName="parts" inverseEntity="Repair"/>
-    </entity>
     <entity name="Repair" representedClassName="Repair" syncable="YES">
         <attribute name="amount" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="notes" optional="YES" attributeType="String"/>
         <attribute name="partReplaced" attributeType="String"/>
+        <attribute name="parts" optional="YES" attributeType="Transformable"/>
         <attribute name="photoRepair" optional="YES" attributeType="Binary"/>
         <attribute name="repairCategory" optional="YES" attributeType="String"/>
         <attribute name="repairDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="repairMileage" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="cars" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Car" inverseName="repairs" inverseEntity="Car"/>
-        <relationship name="parts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Part" inverseName="partRepair" inverseEntity="Part"/>
     </entity>
 </model>

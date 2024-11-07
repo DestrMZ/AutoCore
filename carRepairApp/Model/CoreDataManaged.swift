@@ -31,6 +31,7 @@ class CoreDataManaged {
     }
     
     // MARK: Method for save model in CoreData
+    
     func saveContent() {
         let context = persistentContainer.viewContext
         
@@ -43,6 +44,7 @@ class CoreDataManaged {
     }
     
     // MARK: Methods for creating models
+    
     func creatingCar(nameModel: String?, year: Int16, vinNumber: String?, color: String?, mileage: Int32, engineType: String?, transmissionType: String?, photoCar: Data?) {
         
         let car = Car(context: CoreDataManaged.shared.context)
@@ -60,7 +62,7 @@ class CoreDataManaged {
         print("INFO: Create new car: \(String(describing: car.nameModel)) -> (CoreDataModel)")
     }
     
-    func creatingRepair(repairDate: Date?, partReplaced: String?, amount: Int32, repairMileage: Int32, notes: String?, photoRepair: Data?, repairCategory: String, car: Car?) {
+    func creatingRepair(repairDate: Date?, partReplaced: String?, amount: Int32, repairMileage: Int32, notes: String?, photoRepair: Data?, repairCategory: String, car: Car?, partsDict: [String: String]?) {
         
         let repair = Repair(context: CoreDataManaged.shared.context)
         
@@ -73,22 +75,15 @@ class CoreDataManaged {
         repair.repairCategory = repairCategory
         repair.cars = car
         
-        saveContent()
-    }
-    
-    func creatingPart(nameDetail: String?, article: String?, for repair: Repair) {
-        
-        let part = Part(context: CoreDataManaged.shared.context)
-    
-        part.id = UUID()
-        part.namePart = nameDetail ?? "Unknow Part Name"
-        part.article = article ?? "Unknow Part Article"
-        part.partRepair = repair
+        if let partsDict = partsDict {
+            repair.parts = NSDictionary(dictionary: partsDict)
+        }
         
         saveContent()
     }
-    
+ 
     // MARK: Methods for get models
+    
     func fetchFirstCar() -> Car? {
         let requestCar: NSFetchRequest<Car> = Car.fetchRequest()
         requestCar.fetchLimit = 1
@@ -122,18 +117,8 @@ class CoreDataManaged {
         }
     }
     
-    func fetchAllPart(for repair: Repair) -> [Part] {
-        let requestPart: NSFetchRequest<Part> = Part.fetchRequest()
-        requestPart.predicate = NSPredicate(format: "repair == %@", repair)
-        do {
-            return try context.fetch(requestPart)
-        } catch {
-            print("WARNING: Ошибка при запросе к CoreData, нет найденных запчастей")
-            return []
-        }
-    }
-    
     // MARK: Сохранение изображения ремонта в Core Data
+    
     func saveImageCarToCoreData(image: UIImage, for car: Car?) {
         guard let car = car else { return }
         guard let imageDataCar = image.jpegData(compressionQuality: 0.1) else { return }
@@ -149,6 +134,7 @@ class CoreDataManaged {
     }
     
     // MARK: Получение изображения автомобиля из Core Data
+    
     func saveImageRepairToCoreData(image: UIImage) {
         guard let imageDataRepair = image.jpegData(compressionQuality: 0.1) else { return }
         
@@ -177,6 +163,7 @@ class CoreDataManaged {
     }
     
     // MARK: Methods for delete from CoreData
+    
     func deleteCar(car: Car) {
         persistentContainer.viewContext.delete(car)
         saveContent()
@@ -184,11 +171,6 @@ class CoreDataManaged {
     
     func deleteRepair(repair: Repair) {
         persistentContainer.viewContext.delete(repair)
-        saveContent()
-    }
-    
-    func deletePart(part: Part) {
-        persistentContainer.viewContext.delete(part)
         saveContent()
     }
 }

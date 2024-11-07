@@ -22,13 +22,13 @@ class RepairViewModel: ObservableObject {
     @Published var notes: String = ""
     @Published var photoRepair: Data = Data()
     @Published var repairCategory: RepairCategory = .service
+    @Published var partDict: [String: String] = [:]
     
     // Автомобиль, для которого делается ремонт.
     @Published var car: Car? = nil
     
     // Список всех ремонтов для данного автомобиля.
     @Published var repairArray: [Repair] = []
-    
     
     // Создает новый ремонт для указанного автомобиля.
     //
@@ -45,7 +45,8 @@ class RepairViewModel: ObservableObject {
             notes: self.notes,
             photoRepair: self.photoRepair,
             repairCategory: self.repairCategory.rawValue,
-            car: car
+            car: car,
+            partsDict: self.partDict
         )
         
         // Сохраняем изменения в базе данных
@@ -104,5 +105,15 @@ class RepairViewModel: ObservableObject {
         
         db.saveContent() // Сохраняем изменения
         print("INFO: Ремонт успешно удален -> (RepairViewModel)")
+    }
+    
+    // MARK: Method for working with dictionary(Parts)
+    
+    func addPart(to article: String, name: String) {
+        partDict[article] = name
+    }
+    
+    func removePart(from article: String) {
+        partDict.removeValue(forKey: article)
     }
 }

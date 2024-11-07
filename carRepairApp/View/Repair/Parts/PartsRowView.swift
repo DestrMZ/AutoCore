@@ -7,12 +7,23 @@
 
 import SwiftUI
 
-struct PartsRowVie: View {
+struct PartsRowView: View {
+    @Binding var part: Parts
+    var addPart: (Parts) -> Void
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        HStack {
+            TextField("Article", text: $part.article)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .frame(maxWidth: .infinity)
+            
+            TextField("Name", text: $part.name)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .frame(maxWidth: .infinity)
+        }
+        .padding(.vertical, 8)
+        .onChange(of: part) { _, _ in
+            addPart(part) // Обновляем словарь при изменении данных
+        }
     }
-}
-
-#Preview {
-    PartsRowVie()
 }
