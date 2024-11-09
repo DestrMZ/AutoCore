@@ -17,6 +17,7 @@ struct ListRepairView: View {
     
     var body: some View {
         NavigationStack {
+            ZStack(alignment: .bottomTrailing) {
             ScrollView {
                 VStack {
                     if repairViewModel.repairArray.isEmpty {
@@ -26,13 +27,17 @@ struct ListRepairView: View {
                             .font(.headline)
                             .foregroundColor(.secondary)
                             .padding(.bottom, 10)
-                    
+                        
                         listRepairView
                     }
                 }
                 .padding(.horizontal, 15)
             }
-            addButton
+            
+                if !repairViewModel.repairArray.isEmpty {
+                    addButton
+                }
+        }
         }
         .navigationTitle("Repairs")
         .sheet(isPresented: $isPresented) {
@@ -70,7 +75,7 @@ struct ListRepairView: View {
     
     private var listRepairView: some View {
         ForEach(repairViewModel.repairArray) { repair in
-            NavigationLink(destination: DetailRepairView(repair: repair)) {
+            NavigationLink(destination: DetailView(repair: repair)) {
                 ListRowView(repair: repair)
                     .padding(.vertical, 5)
             }

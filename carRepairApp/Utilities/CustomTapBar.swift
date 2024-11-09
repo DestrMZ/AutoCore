@@ -82,7 +82,7 @@ struct CustomTapBar: View {
                     // Индикатор выбранной вкладки.
                     Capsule()
                         .frame(width: 32, height: 3) // Размер индикатора.
-                        .offset(x: -3) // Сдвиг индикатора.
+//                        .offset(x: -1) // Сдвиг индикатора.
                         .foregroundStyle(Color.red) // Цвет индикатора.
                         .padding(.horizontal, 14) // Внутренние отступы по горизонтали.
                         .shadow(color: Color.black, radius: 5, x: 0, y: -1) // Тень для индикатора.

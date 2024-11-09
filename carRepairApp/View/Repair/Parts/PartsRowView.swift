@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct PartsRowView: View {
-    @Binding var part: Parts
-    var addPart: (Parts) -> Void
+    @Binding var part: Part
     
     var body: some View {
         HStack {
@@ -22,8 +21,5 @@ struct PartsRowView: View {
                 .frame(maxWidth: .infinity)
         }
         .padding(.vertical, 8)
-        .onChange(of: part) { _, _ in
-            addPart(part) // Обновляем словарь при изменении данных
-        }
     }
 }

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import UIKit
 
 func isValidForm(carViewModel: CarViewModel) -> Bool {
     
@@ -44,4 +44,16 @@ func numberFormatterForMileage() -> NumberFormatter {
     formatter.usesGroupingSeparator = false
     formatter.positiveSuffix = " KM"
     return formatter
+}
+
+func copyToClipboard(text: String) {
+    UIPasteboard.general.string = text
+    print("INFO: \(text) скопирован в буфер обмена")
+
+}
+
+func provideHapticFeedback() {
+    let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+    impactFeedbackGenerator.prepare()
+    impactFeedbackGenerator.impactOccurred()
 }

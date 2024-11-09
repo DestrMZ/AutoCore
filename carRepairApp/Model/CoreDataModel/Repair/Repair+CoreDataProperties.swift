@@ -23,7 +23,7 @@ extension Repair {
     @NSManaged public var repairCategory: String?
     @NSManaged public var repairDate: Date?
     @NSManaged public var repairMileage: Int32
-    @NSManaged public var parts: NSObject?
+    @NSManaged public var parts: [String: String]?
     @NSManaged public var cars: Car?
 
 }

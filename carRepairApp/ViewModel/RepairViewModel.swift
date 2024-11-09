@@ -22,13 +22,15 @@ class RepairViewModel: ObservableObject {
     @Published var notes: String = ""
     @Published var photoRepair: Data = Data()
     @Published var repairCategory: RepairCategory = .service
-    @Published var partDict: [String: String] = [:]
     
     // Автомобиль, для которого делается ремонт.
     @Published var car: Car? = nil
     
     // Список всех ремонтов для данного автомобиля.
     @Published var repairArray: [Repair] = []
+    // Словарь для записей деталей [article: name]
+    @Published var part: [Part] = [Part(article: "", name: "")]
+    @Published var partsDictionary: [String: String] = [:]
     
     // Создает новый ремонт для указанного автомобиля.
     //
@@ -46,16 +48,20 @@ class RepairViewModel: ObservableObject {
             photoRepair: self.photoRepair,
             repairCategory: self.repairCategory.rawValue,
             car: car,
-            partsDict: self.partDict
+            partsDict: self.partsDictionary
         )
         
+        // Сохраняет списко деталей в словарь
+        savePart()
         // Сохраняем изменения в базе данных
         db.saveContent()
         // Получаем все ремонты для данного автомобиля
         getAllRepair(for: car)
 
         // Выводим сообщение о успешном создании ремонта
-        print("INFO: Ремонт был успешно создан, для авто: \(String(describing: car.nameModel)) -> (RepairViewModel)")
+        print("INFO: Ремонт был успешно создан, для авто: \(String(describing: car.nameModel))")
+        print("DEBUG is 'part' -> \(part)")
+        print("DEBUG is 'partDict' -> \(partsDictionary)")
     }
     
     // Получает все ремонты для указанного автомобиля.
@@ -109,11 +115,21 @@ class RepairViewModel: ObservableObject {
     
     // MARK: Method for working with dictionary(Parts)
     
-    func addPart(to article: String, name: String) {
-        partDict[article] = name
+    func addPart() {
+        part.append(Part(article: "", name: ""))
     }
     
-    func removePart(from article: String) {
-        partDict.removeValue(forKey: article)
+    func removePart(from index: Int) {
+        part.remove(at: index)
+    }
+    
+    func savePart() {
+        for part in part {
+            partsDictionary[part.article] = part.name
+        }
+    }
+    
+    func getParts(for repair: Repair) -> [(article: String, name: String)] {
+        return partsDictionary.map { ($0.key, $0.value) }
     }
 }

@@ -15,7 +15,6 @@ struct AddRepairView: View {
     @EnvironmentObject var carViewModel: CarViewModel
     @Environment(\.dismiss) var dismiss
     
-    @State private var parts: [Parts] = [Parts(article: "", name: "")]
     @State private var selectedImageRepair: PhotosPickerItem?
     @State private var repairImage: UIImage?
     @State private var showSuccessMessage: Bool = false
@@ -23,25 +22,29 @@ struct AddRepairView: View {
     var body: some View {
         
         NavigationStack {
-            formView
-                .toolbar {
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("Save") {
-                            if let selectedCar = carViewModel.selectedCar {
-                                repairViewModel.createNewRepair(for: selectedCar)
+            ScrollView {
+                formView
+                    .toolbar {
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Save") {
+                                if let selectedCar = carViewModel.selectedCar {
+                                    repairViewModel.savePart()
+                                    repairViewModel.createNewRepair(for: selectedCar)
+                                    dismiss()
+                                    print("Repair successfully saved for \(String(describing: selectedCar.nameModel))")
+                                    print("Parts: \(repairViewModel.partsDictionary)")
+                                }
+                            }.disabled(repairViewModel.partReplaced.isEmpty || repairViewModel.amount <= 0 || repairViewModel.repairMileage <= 0)
+                        }
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel") {
                                 dismiss()
-                                print("Repair successfully saved for \(String(describing: selectedCar.nameModel))")
                             }
-                        }.disabled(repairViewModel.partReplaced.isEmpty || repairViewModel.amount <= 0 || repairViewModel.repairMileage <= 0)
-                    }
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") {
-                            dismiss()
                         }
                     }
-                }
-                .navigationBarTitle("Add repair", displayMode: .inline)
-            Spacer()
+                    .navigationBarTitle("Add repair", displayMode: .inline)
+                Spacer()
+            }
         }
     }
     
@@ -63,9 +66,10 @@ struct AddRepairView: View {
       
             DatePicker("Date of repair", selection: $repairViewModel.repairDate, displayedComponents: [.date])
             
-            TextField("Notes (optional)", text: $repairViewModel.notes)
+            TextField("Description (optional)", text: $repairViewModel.notes)
                 .disableAutocorrection(true)
                 
+            partsRow // MARK: Adding parts view
             
             HStack {
                 Text("Photo")
@@ -105,35 +109,36 @@ struct AddRepairView: View {
                     .transition(.opacity)
                     .animation(.easeInOut, value: showSuccessMessage)
             }
-            
-            partsRow
-            
     }
         .padding()
         .padding(.vertical, 25)
     }
     
     var partsRow: some View {
-        
         VStack(alignment: .leading) {
             Text("Parts:")
-            ForEach(parts.indices, id: \.self) { index in
-                PartsRowView(part: $parts[index], addPart: { part in
-                    repairViewModel.addPart(to: part.article, name: part.name)
-                })
-            }
-            
-            Button(action: {
-                parts.append(Parts(article: "", name: "")) // Добавляем новое поле
-            }) {
+            ForEach(repairViewModel.part.indices, id: \.self) { index in
                 HStack {
-                    Image(systemName: "plus.circle.fill")
-                    Text("Add part")
+                    PartsRowView(part: $repairViewModel.part[index])
+                    
+                    if index == 0 {
+                        Button(action: {
+                            repairViewModel.addPart()
+                        }) {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundStyle(.green)
+                        }
+                    } else {
+                        Button(action: {
+                            repairViewModel.removePart(from: index)
+                        }) {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundStyle(.red)
+                        }
+                    }
                 }
-                .foregroundColor(.blue)
             }
         }
-        
     }
     
     var selectCategory: some View {
@@ -177,3 +182,4 @@ extension View {
         .environmentObject(CarViewModel())
         .environmentObject(RepairViewModel())
 }
+

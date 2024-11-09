@@ -74,9 +74,12 @@ class CoreDataManaged {
         repair.photoRepair = photoRepair
         repair.repairCategory = repairCategory
         repair.cars = car
+        repair.parts = partsDict
         
-        if let partsDict = partsDict {
-            repair.parts = NSDictionary(dictionary: partsDict)
+        if let partsDict = partsDict, !partsDict.isEmpty {
+            print("DEBUG: Сохраняемые запчасти \(partsDict)")
+        } else {
+            print("DEBUG: Нет данных для сохранения запчастей!")
         }
         
         saveContent()
