@@ -13,6 +13,10 @@ struct ListRepairView: View {
     @EnvironmentObject var repairViewModel: RepairViewModel
     @EnvironmentObject var carViewModel: CarViewModel
     
+    @State var searchText: String = ""
+    @State private var searchBarHeight: CGFloat = 0
+    @Binding var showTapBar: Bool
+
     @State var isPresented: Bool = false
     
     var body: some View {
@@ -23,12 +27,17 @@ struct ListRepairView: View {
                     if repairViewModel.repairArray.isEmpty {
                         emptyRepairList
                     } else {
-                        Text("\(carViewModel.nameModel)")
-                            .font(.headline)
-                            .foregroundColor(.secondary)
-                            .padding(.bottom, 10)
-                        
-                        listRepairView
+                        VStack {
+                            Text("\(carViewModel.nameModel)")
+                                .font(.headline)
+                                .foregroundColor(.secondary)
+                                .padding(.bottom, 10)
+                            
+                            SearchBar(text: $searchText, keyboardHeight: $searchBarHeight, placeholder: "Search repair")
+
+                            listRepairView
+                                .padding(.bottom, 1)
+                        }
                     }
                 }
                 .padding(.horizontal, 15)
@@ -56,6 +65,17 @@ struct ListRepairView: View {
         }
     }
     
+    private var filteredRepairs: [Repair] {
+        if searchText.isEmpty {
+            return repairViewModel.repairArray
+        } else {
+            return repairViewModel.repairArray.filter { repair in
+                repair.partReplaced!.lowercased().contains(searchText.lowercased())
+            }
+        }
+    }
+    
+    
     private var emptyRepairList: some View {
         VStack {
             VStack(spacing: 8) {
@@ -74,8 +94,10 @@ struct ListRepairView: View {
     }
     
     private var listRepairView: some View {
-        ForEach(repairViewModel.repairArray) { repair in
-            NavigationLink(destination: DetailView(repair: repair)) {
+        ForEach(filteredRepairs) { repair in
+            NavigationLink(destination: DetailView(repair: repair)
+                .onAppear { showTapBar = false }
+                .onDisappear { showTapBar = true }) {
                 ListRowView(repair: repair)
                     .padding(.vertical, 5)
             }
@@ -104,8 +126,8 @@ struct ListRepairView: View {
 }
 
 
-#Preview {
-    ListRepairView()
-        .environmentObject(RepairViewModel())
-        .environmentObject(CarViewModel())
-}
+//#Preview {
+//    ListRepairView()
+//        .environmentObject(RepairViewModel())
+//        .environmentObject(CarViewModel())
+//}

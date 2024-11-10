@@ -18,6 +18,9 @@ struct AddRepairView: View {
     @State private var selectedImageRepair: PhotosPickerItem?
     @State private var repairImage: UIImage?
     @State private var showSuccessMessage: Bool = false
+    
+    @State private var isValidAmount: Bool = true
+    @State private var isValidMileage: Bool = true
         
     var body: some View {
         
@@ -60,9 +63,13 @@ struct AddRepairView: View {
             
             TextField("Amount", value: $repairViewModel.amount, formatter: numberFormatterForCoast())
                 .keyboardType(.decimalPad)
-            
+                .onChange(of: repairViewModel.amount) {_, newValue in
+                    repairViewModel.amount = validForAmount(newValue)}
+ 
             TextField("Mileage", value: $repairViewModel.repairMileage, formatter: numberFormatterForMileage())
                     .keyboardType(.numberPad)
+                    .onChange(of: repairViewModel.repairMileage) {_, newValue in
+                        repairViewModel.repairMileage = validForMileage(newValue)}
       
             DatePicker("Date of repair", selection: $repairViewModel.repairDate, displayedComponents: [.date])
             

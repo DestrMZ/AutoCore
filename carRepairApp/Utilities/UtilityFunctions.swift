@@ -53,7 +53,24 @@ func copyToClipboard(text: String) {
 }
 
 func provideHapticFeedback() {
-    let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+    let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     impactFeedbackGenerator.prepare()
     impactFeedbackGenerator.impactOccurred()
+}
+
+func validForAmount(_ amount: Int32) -> Int32 {
+    if amount < 0 || amount > 10_000_000 {
+        return 1_000_000
+    } else {
+        return amount
+    }
+}
+
+
+func validForMileage(_ mileage: Int32) -> Int32 {
+    if mileage < 0 || mileage > 1_000_000 {
+        return 1_000_000
+    } else {
+        return mileage
+    }
 }
