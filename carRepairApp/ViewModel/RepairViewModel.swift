@@ -17,8 +17,8 @@ class RepairViewModel: ObservableObject {
     
     @Published var repairDate = Date()
     @Published var partReplaced = ""
-    @Published var amount: Int32 = 0
-    @Published var repairMileage: Int32 = 0
+    @Published var amount: Int32? = nil
+    @Published var repairMileage: Int32? = nil
     @Published var notes: String = ""
     @Published var photoRepair: Data = Data()
     @Published var repairCategory: RepairCategory = .service

@@ -40,13 +40,13 @@ struct AddCarView: View {
                             
                             CustomUITextField(text: $carViewModel.nameModel, title: "Модель")
                             CustomUITextField(text: Binding(
-                                get: { String(carViewModel.year) },
+                                get: { String(carViewModel.year ?? 0) },
                                 set: { carViewModel.year = Int16($0) ?? 0 }
                             ), title: "Year")
                             CustomUITextField(text: $carViewModel.vinNumber, title: "VIN")
                             CustomUITextField(text: $carViewModel.color, title: "Цвет")
                             CustomUITextField(text: Binding(
-                                get: { String(carViewModel.mileage) },
+                                get: { String(carViewModel.mileage ?? 0) },
                                 set: { carViewModel.mileage = Int32($0) ?? 0 }
                             ), title: "Mileage")
                             

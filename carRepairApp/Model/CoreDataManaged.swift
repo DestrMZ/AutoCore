@@ -45,14 +45,14 @@ class CoreDataManaged {
     
     // MARK: Methods for creating models
     
-    func creatingCar(nameModel: String?, year: Int16, vinNumber: String?, color: String?, mileage: Int32, engineType: String?, transmissionType: String?, photoCar: Data?) {
+    func creatingCar(nameModel: String?, year: Int16?, vinNumber: String?, color: String?, mileage: Int32?, engineType: String?, transmissionType: String?, photoCar: Data?) {
         
         let car = Car(context: CoreDataManaged.shared.context)
         car.nameModel = nameModel ?? "Unknow"
-        car.year = year
+        car.year = year ?? 1990
         car.vinNumber = vinNumber ?? "Unknow VIN Number"
         car.color = color ?? "Unknow Color"
-        car.mileage = mileage
+        car.mileage = mileage ?? 0
         car.engineType = engineType ?? "Unknow Engine Type"
         car.transmissionType = transmissionType ?? "Unknow Transmission Type"
         car.photoCar = photoCar
@@ -62,14 +62,14 @@ class CoreDataManaged {
         print("INFO: Create new car: \(String(describing: car.nameModel)) -> (CoreDataModel)")
     }
     
-    func creatingRepair(repairDate: Date?, partReplaced: String?, amount: Int32, repairMileage: Int32, notes: String?, photoRepair: Data?, repairCategory: String, car: Car?, partsDict: [String: String]?) {
+    func creatingRepair(repairDate: Date?, partReplaced: String?, amount: Int32?, repairMileage: Int32?, notes: String?, photoRepair: Data?, repairCategory: String, car: Car?, partsDict: [String: String]?) {
         
         let repair = Repair(context: CoreDataManaged.shared.context)
         
         repair.repairDate = repairDate ?? Date()
         repair.partReplaced = partReplaced ?? "Unknow Part Replaced"
-        repair.amount = amount
-        repair.repairMileage = repairMileage
+        repair.amount = amount ?? 0
+        repair.repairMileage = repairMileage ?? 0
         repair.notes = notes ?? "Unknow Notes"
         repair.photoRepair = photoRepair
         repair.repairCategory = repairCategory

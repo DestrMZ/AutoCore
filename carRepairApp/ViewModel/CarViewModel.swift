@@ -16,10 +16,10 @@ class CarViewModel: ObservableObject {
     private var db = CoreDataManaged.shared
     
     @Published var nameModel: String = ""
-    @Published var year: Int16 = 1990
+    @Published var year: Int16? = nil
     @Published var vinNumber: String = ""
     @Published var color: String = ""
-    @Published var mileage: Int32 = 100
+    @Published var mileage: Int32? = nil
     @Published var engineType: EngineTypeEnum = .gasoline
     @Published var transmissionType: TransmissionTypeEnum = .manual
     @Published var photoCar: Data = Data()

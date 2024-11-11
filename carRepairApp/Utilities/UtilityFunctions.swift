@@ -16,9 +16,25 @@ func isValidForm(carViewModel: CarViewModel) -> Bool {
         !carViewModel.color.isEmpty &&
         !carViewModel.engineType.rawValue.isEmpty &&
         !carViewModel.transmissionType.rawValue.isEmpty &&
-        carViewModel.year > 0 &&
-        carViewModel.mileage > 0
+        carViewModel.year ?? 0 >= 0 &&
+        carViewModel.mileage ?? 0 >= 0
     
+}
+
+func yearFormatter() -> NumberFormatter {
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .none
+    formatter.maximumFractionDigits = 4
+    return formatter
+}
+
+func mileageFormatter() -> NumberFormatter {
+    let formatter = NumberFormatter()
+    formatter.isLenient = true
+    formatter.numberStyle = .decimal
+    formatter.maximumFractionDigits = 0
+    formatter.usesGroupingSeparator = false
+    return formatter
 }
 
 func dateFormatter() -> DateFormatter {
@@ -32,7 +48,7 @@ func numberFormatterForCoast() -> NumberFormatter {
     formatter.isLenient = true
     formatter.numberStyle = .decimal
     formatter.maximumFractionDigits = 0
-    formatter.positiveSuffix = " RUB"
+//    formatter.positiveSuffix = " RUB"
     return formatter
     }
 
@@ -42,7 +58,7 @@ func numberFormatterForMileage() -> NumberFormatter {
     formatter.numberStyle = .decimal
     formatter.maximumFractionDigits = 0
     formatter.usesGroupingSeparator = false
-    formatter.positiveSuffix = " KM"
+//    formatter.positiveSuffix = " KM"
     return formatter
 }
 
@@ -60,7 +76,7 @@ func provideHapticFeedback() {
 
 func validForAmount(_ amount: Int32) -> Int32 {
     if amount < 0 || amount > 10_000_000 {
-        return 1_000_000
+        return 10_000_000
     } else {
         return amount
     }

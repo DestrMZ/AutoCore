@@ -37,7 +37,7 @@ struct AddRepairView: View {
                                     print("Repair successfully saved for \(String(describing: selectedCar.nameModel))")
                                     print("Parts: \(repairViewModel.partsDictionary)")
                                 }
-                            }.disabled(repairViewModel.partReplaced.isEmpty || repairViewModel.amount <= 0 || repairViewModel.repairMileage <= 0)
+                            }.disabled(repairViewModel.partReplaced.isEmpty || repairViewModel.amount ?? 0 <= 0 || repairViewModel.repairMileage ?? 0 <= 0)
                         }
                         ToolbarItem(placement: .cancellationAction) {
                             Button("Cancel") {
@@ -64,12 +64,18 @@ struct AddRepairView: View {
             TextField("Amount", value: $repairViewModel.amount, formatter: numberFormatterForCoast())
                 .keyboardType(.decimalPad)
                 .onChange(of: repairViewModel.amount) {_, newValue in
-                    repairViewModel.amount = validForAmount(newValue)}
+                    if let newValue = newValue {
+                        repairViewModel.amount = validForAmount(newValue)
+                    } else { repairViewModel.amount = nil}
+                }
  
             TextField("Mileage", value: $repairViewModel.repairMileage, formatter: numberFormatterForMileage())
-                    .keyboardType(.numberPad)
-                    .onChange(of: repairViewModel.repairMileage) {_, newValue in
-                        repairViewModel.repairMileage = validForMileage(newValue)}
+                .keyboardType(.numberPad)
+                .onChange(of: repairViewModel.repairMileage) {_, newValue in
+                    if let newValue = newValue {
+                        repairViewModel.repairMileage = validForMileage(newValue)
+                    } else { repairViewModel.repairMileage = nil }
+                }
       
             DatePicker("Date of repair", selection: $repairViewModel.repairDate, displayedComponents: [.date])
             
