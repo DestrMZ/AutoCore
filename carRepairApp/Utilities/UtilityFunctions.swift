@@ -8,19 +8,15 @@
 import Foundation
 import UIKit
 
-func isValidForm(carViewModel: CarViewModel) -> Bool {
-    
-    return
-        !carViewModel.nameModel.isEmpty &&
-        !carViewModel.vinNumber.isEmpty &&
-        !carViewModel.color.isEmpty &&
-        !carViewModel.engineType.rawValue.isEmpty &&
-        !carViewModel.transmissionType.rawValue.isEmpty &&
-        carViewModel.year ?? 0 >= 0 &&
-        carViewModel.mileage ?? 0 >= 0
-    
+/// Проверяет, является ли форма добавления автомобиля валидной.
+/// - Parameter carViewModel: Экземпляр `CarViewModel`, содержащий данные об автомобиле.
+/// - Returns: Булево значение, указывающее, заполнены ли все необходимые поля.
+func isFormIncomplete(nameModel: String, vinNumber: String, year: Int16?, mileage: Int32?) -> Bool {
+    return nameModel.isEmpty || vinNumber.isEmpty || (year ?? 0) <= 0 || (mileage ?? 0) <= 0
 }
 
+/// Возвращает настроенный форматтер для ввода года.
+/// - Returns: Объект `NumberFormatter` с числовым стилем и без дробных значений.
 func yearFormatter() -> NumberFormatter {
     let formatter = NumberFormatter()
     formatter.numberStyle = .none
@@ -28,6 +24,8 @@ func yearFormatter() -> NumberFormatter {
     return formatter
 }
 
+/// Возвращает форматтер для ввода пробега.
+/// - Returns: Объект `NumberFormatter` с настройками для ввода целых чисел без разделителя тысяч.
 func mileageFormatter() -> NumberFormatter {
     let formatter = NumberFormatter()
     formatter.isLenient = true
@@ -37,43 +35,54 @@ func mileageFormatter() -> NumberFormatter {
     return formatter
 }
 
+/// Возвращает форматтер для отображения даты в коротком формате.
+/// - Returns: Объект `DateFormatter` с настройкой стиля даты на `medium`.
 func dateFormatter() -> DateFormatter {
     let formatter = DateFormatter()
     formatter.dateStyle = .medium
     return formatter
-    }
+}
 
+/// Возвращает форматтер для отображения цены.
+/// - Returns: Объект `NumberFormatter` с десятичным стилем и без дробных значений.
 func numberFormatterForCoast() -> NumberFormatter {
     let formatter = NumberFormatter()
     formatter.isLenient = true
     formatter.numberStyle = .decimal
     formatter.maximumFractionDigits = 0
-//    formatter.positiveSuffix = " RUB"
+    // formatter.positiveSuffix = " RUB"
     return formatter
-    }
+}
 
+/// Возвращает форматтер для отображения пробега.
+/// - Returns: Объект `NumberFormatter` с настройкой для целых чисел без разделителя тысяч.
 func numberFormatterForMileage() -> NumberFormatter {
     let formatter = NumberFormatter()
     formatter.isLenient = true
     formatter.numberStyle = .decimal
     formatter.maximumFractionDigits = 0
     formatter.usesGroupingSeparator = false
-//    formatter.positiveSuffix = " KM"
+    // formatter.positiveSuffix = " KM"
     return formatter
 }
 
+/// Копирует переданный текст в буфер обмена.
+/// - Parameter text: Текст, который нужно скопировать в буфер обмена.
 func copyToClipboard(text: String) {
     UIPasteboard.general.string = text
     print("INFO: \(text) скопирован в буфер обмена")
-
 }
 
+/// Выполняет тактильную отдачу (haptic feedback) с тяжелым стилем.
 func provideHapticFeedback() {
     let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     impactFeedbackGenerator.prepare()
     impactFeedbackGenerator.impactOccurred()
 }
 
+/// Ограничивает значение количества до заданного диапазона (0–10 000 000).
+/// - Parameter amount: Проверяемое значение количества.
+/// - Returns: Значение, находящееся в допустимом диапазоне.
 func validForAmount(_ amount: Int32) -> Int32 {
     if amount < 0 || amount > 10_000_000 {
         return 10_000_000
@@ -82,7 +91,9 @@ func validForAmount(_ amount: Int32) -> Int32 {
     }
 }
 
-
+/// Ограничивает значение пробега до заданного диапазона (0–1 000 000).
+/// - Parameter mileage: Проверяемое значение пробега.
+/// - Returns: Значение пробега в пределах допустимого диапазона.
 func validForMileage(_ mileage: Int32) -> Int32 {
     if mileage < 0 || mileage > 1_000_000 {
         return 1_000_000

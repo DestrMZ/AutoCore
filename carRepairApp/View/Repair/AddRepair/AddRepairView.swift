@@ -190,6 +190,22 @@ extension View {
 }
 
 
+struct AddButtonRepairView: View {
+    
+    @Binding var isPresented: Bool
+    
+    var body: some View {
+        Button(action: {
+            isPresented = true
+        }) {
+            Image(systemName: "plus.circle.fill")
+                .resizable()
+                .frame(width: 50, height: 50)
+                .foregroundColor(.red)
+        }
+    }
+}
+
 #Preview {
     AddRepairView()
         .environmentObject(CarViewModel())

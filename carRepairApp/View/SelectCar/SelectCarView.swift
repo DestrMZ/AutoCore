@@ -38,6 +38,9 @@ struct SelectCarView: View {
                             }
                         }
                     }
+                    .sheet(isPresented: $showAddCar) {
+                        AddCarView()
+                    }
                 
                 
                 Spacer()

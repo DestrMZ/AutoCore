@@ -58,17 +58,18 @@ class CarViewModel: ObservableObject {
     }
     
     // Создает новый автомобиль с введенными данными.
-    func createNewCar() {
+    func createNewCar(nameModel: String, year: Int16?, vinNumber: String?, color: String?, mileage: Int32?, engineType: EngineTypeEnum, transmissionType: TransmissionTypeEnum, photoCar: UIImage) {
+        
         // Создаем новый автомобиль в базе данных
         db.creatingCar(
-            nameModel: self.nameModel,
-            year: self.year,
-            vinNumber: self.vinNumber,
-            color: self.color,
-            mileage: self.mileage,
-            engineType: self.engineType.rawValue,
-            transmissionType: self.transmissionType.rawValue,
-            photoCar: self.photoCar
+            nameModel: nameModel,
+            year: year,
+            vinNumber: vinNumber,
+            color: color,
+            mileage: mileage,
+            engineType: engineType.rawValue,
+            transmissionType: transmissionType.rawValue,
+            photoCar: photoCar.jpegData(compressionQuality: 0.8) ?? Data()
         )
         
         db.saveContent() 
