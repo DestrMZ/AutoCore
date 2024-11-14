@@ -22,6 +22,7 @@ struct AddCarView: View {
     
     @State var buttonToNext: Bool = false
     @State var showAlert: Bool = false
+    @State var alertMessageVIN: Bool = false
     @State private var selectionImageCar: PhotosPickerItem?
     @State private var avatarImage: UIImage?
     
@@ -47,17 +48,23 @@ struct AddCarView: View {
                 .toolbar {
                     ToolbarItem(placement: .confirmationAction) {
                         Button("Save") {
-                            carViewModel.createNewCar(
-                                nameModel: tempNameModel,
-                                year: tempYear,
-                                vinNumber: tempVinNumber,
-                                color: "",
-                                mileage: tempMileage,
-                                engineType: tempEngineType,
-                                transmissionType: tempTransmissionType,
-                                photoCar: avatarImage ?? UIImage()
-                            )
-                            dismiss()
+                            if carViewModel.existingVinNumbers.contains(tempVinNumber) {
+                                alertMessageVIN = true
+                            } else {
+                                carViewModel.createNewCar(
+                                    nameModel: tempNameModel,
+                                    year: tempYear,
+                                    vinNumber: tempVinNumber,
+                                    color: "",
+                                    mileage: tempMileage,
+                                    engineType: tempEngineType,
+                                    transmissionType: tempTransmissionType,
+                                    photoCar: avatarImage ?? UIImage()
+                                )
+                                carViewModel.existingVinNumbers.append(tempVinNumber)
+                                dismiss()
+                                print("\(carViewModel.existingVinNumbers)")
+                            }
                         }
                         .disabled(isFormIncomplete(nameModel: tempNameModel, vinNumber: tempVinNumber, year: tempYear, mileage: tempMileage))
                     }
@@ -65,12 +72,19 @@ struct AddCarView: View {
                     ToolbarItem(placement: .cancellationAction) {
                         Button("Cancel") {
                             dismiss()
-                        }
-                        
                     }
+                    
                 }
             }
         }
+        .alert(isPresented: $alertMessageVIN) {
+            Alert(
+                title: Text("Oops"),
+                message: Text("This VIN number already exists"),
+                dismissButton: .default(Text("Okey"))
+                )
+        }
+    }
     
     var broadScreen: some View {
         ScrollView {
@@ -81,12 +95,20 @@ struct AddCarView: View {
                 
                 TextField("Year", value: $tempYear, formatter: yearFormatter())
                     .textFieldStyle(.roundedBorder)
+                    .onChange(of: tempYear) {_, newValue in
+                        if let newValue = newValue {
+                            tempYear = validForYear(newValue)
+                        } else { tempYear = nil }}
                 
                 TextField("VIN", text: $tempVinNumber)
                     .textFieldStyle(.roundedBorder)
                 
-                TextField("Mileage", value: $tempMileage, formatter: mileageFormatter())
+                TextField("Mileage", value: $tempMileage, formatter: numberFormatterForMileage())
                     .textFieldStyle(.roundedBorder)
+                    .onChange(of: tempMileage) {_, newValue in
+                        if let newValue = newValue {
+                            tempMileage = validForMileage(newValue)
+                        } else { tempVinNumber = ""}}
                 
                 Picker("Engine type", selection: $tempEngineType) {
                     ForEach(EngineTypeEnum.allCases, id: \.self) {

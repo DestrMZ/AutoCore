@@ -56,7 +56,6 @@ class CoreDataManaged {
         car.engineType = engineType ?? "Unknow Engine Type"
         car.transmissionType = transmissionType ?? "Unknow Transmission Type"
         car.photoCar = photoCar
-    
         
         saveContent()
         print("INFO: Create new car: \(String(describing: car.nameModel)) -> (CoreDataModel)")
@@ -76,13 +75,8 @@ class CoreDataManaged {
         repair.cars = car
         repair.parts = partsDict
         
-        if let partsDict = partsDict, !partsDict.isEmpty {
-            print("DEBUG: Сохраняемые запчасти \(partsDict)")
-        } else {
-            print("DEBUG: Нет данных для сохранения запчастей!")
-        }
-        
         saveContent()
+        print("IFNO: Create new repair: \(String(describing: repair.partReplaced)) for \(String(describing: repair.cars))")
     }
  
     // MARK: Methods for get models

@@ -101,3 +101,12 @@ func validForMileage(_ mileage: Int32) -> Int32 {
         return mileage
     }
 }
+
+func validForYear(_ year: Int16) -> Int16 {
+    if year < 0 || year > 2024 {
+        return 2024
+    } else {
+        return year
+    }
+}
+

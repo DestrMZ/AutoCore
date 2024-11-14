@@ -2,7 +2,7 @@
 //  Car+CoreDataProperties.swift
 //  carRepairApp
 //
-//  Created by Ivan Maslennikov on 07.11.2024.
+//  Created by Ivan Maslennikov on 14.11.2024.
 //
 //
 
@@ -24,6 +24,7 @@ extension Car {
     @NSManaged public var transmissionType: String?
     @NSManaged public var vinNumber: String?
     @NSManaged public var year: Int16
+    @NSManaged public var existingVinNumbers: [String]?
     @NSManaged public var repairs: NSSet?
 
 }

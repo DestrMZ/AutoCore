@@ -43,9 +43,7 @@ struct ListRepairView: View {
                 .padding(.horizontal, 15)
             }
             
-                if !repairViewModel.repairArray.isEmpty {
-                    addButton
-                }
+                addButton
         }
         }
         .navigationTitle("Repairs")

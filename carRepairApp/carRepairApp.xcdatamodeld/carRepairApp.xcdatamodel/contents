@@ -3,6 +3,7 @@
     <entity name="Car" representedClassName="Car" syncable="YES">
         <attribute name="color" attributeType="String"/>
         <attribute name="engineType" attributeType="String"/>
+        <attribute name="existingVinNumbers" optional="YES" attributeType="Transformable"/>
         <attribute name="mileage" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="nameModel" attributeType="String"/>
         <attribute name="photoCar" optional="YES" attributeType="Binary"/>

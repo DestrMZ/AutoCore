@@ -25,7 +25,6 @@ class RepairViewModel: ObservableObject {
     
     // Автомобиль, для которого делается ремонт.
     @Published var car: Car? = nil
-    
     // Список всех ремонтов для данного автомобиля.
     @Published var repairArray: [Repair] = []
     // Словарь для записей деталей [article: name]
@@ -51,7 +50,7 @@ class RepairViewModel: ObservableObject {
             partsDict: self.partsDictionary
         )
         
-        // Сохраняет списко деталей в словарь
+        // Сохраняет списко деталей в массив
         savePart()
         // Сохраняем изменения в базе данных
         db.saveContent()
@@ -130,6 +129,7 @@ class RepairViewModel: ObservableObject {
     }
     
     func getParts(for repair: Repair) -> [(article: String, name: String)] {
-        return partsDictionary.map { ($0.key, $0.value) }
+        return partsDictionary.map { ($0.key, $0.value)
+        }
     }
 }

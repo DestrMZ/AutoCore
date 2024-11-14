@@ -26,7 +26,8 @@ class CarViewModel: ObservableObject {
     
     // Список всех автомобилей.
     @Published var allCars: [Car] = []
-    
+    // Список уникальных VIN Number, для проверки при добавлении нового Car
+    @Published var existingVinNumbers: [String] = []
     // Выбранный автомобиль.
     @Published var selectedCar: Car? {
         didSet {
@@ -72,7 +73,7 @@ class CarViewModel: ObservableObject {
             photoCar: photoCar.jpegData(compressionQuality: 0.8) ?? Data()
         )
         
-        db.saveContent() 
+        db.saveContent()
         getAllCars()
     }
     
