@@ -53,12 +53,10 @@ struct ListRepairView: View {
             }
         }
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                if let selectedCar = carViewModel.selectedCar {
-                    repairViewModel.getAllRepair(for: selectedCar)
-                } else {
-                    print("Car not found (ListRepairView)")
-                }
+            if let selectedCar = carViewModel.selectedCar {
+                repairViewModel.getRepairs(for: selectedCar)
+            } else {
+                print("Car not found (ListRepairView)")
             }
         }
     }

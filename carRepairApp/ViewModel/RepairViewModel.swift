@@ -7,6 +7,7 @@
 
 import Foundation
 import PhotosUI
+import CoreData
 
 
 // Этот класс помогает создавать, получать и удалять записи о ремонте.
@@ -55,21 +56,20 @@ class RepairViewModel: ObservableObject {
         // Сохраняем изменения в базе данных
         db.saveContent()
         // Получаем все ремонты для данного автомобиля
-        getAllRepair(for: car)
-
-        // Выводим сообщение о успешном создании ремонта
-        print("INFO: Ремонт был успешно создан, для авто: \(String(describing: car.nameModel))")
-        print("DEBUG is 'part' -> \(part)")
-        print("DEBUG is 'partDict' -> \(partsDictionary)")
+        getRepairs(for: car)
     }
     
     // Получает все ремонты для указанного автомобиля.
     //
     // - Parameter car: Автомобиль, для которого требуется ремонты.
-    func getAllRepair(for car: Car) {
-        let requstAllRepair = db.fetchAllRepair(for: car)
-        self.repairArray = requstAllRepair // Обновляем список ремонтов
-        print("INFO: Все repairs для авто -> \(String(describing: car.nameModel))")
+    func getRepairs(for car: Car) {
+        let requestRepairs = db.fetchAllRepairs(for: car)
+        
+        do {
+            DispatchQueue.main.async {
+                self.repairArray = requestRepairs
+            }
+        }
     }
     
     // Получает фотографию ремонта.

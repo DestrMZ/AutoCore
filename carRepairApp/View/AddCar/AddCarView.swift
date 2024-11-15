@@ -48,7 +48,8 @@ struct AddCarView: View {
                 .toolbar {
                     ToolbarItem(placement: .confirmationAction) {
                         Button("Save") {
-                            if carViewModel.existingVinNumbers.contains(tempVinNumber) {
+                            
+                            if let vinNumbers = carViewModel.getAllVinArray(), vinNumbers.contains(tempVinNumber) {
                                 alertMessageVIN = true
                             } else {
                                 carViewModel.createNewCar(
@@ -61,9 +62,7 @@ struct AddCarView: View {
                                     transmissionType: tempTransmissionType,
                                     photoCar: avatarImage ?? UIImage()
                                 )
-                                carViewModel.existingVinNumbers.append(tempVinNumber)
                                 dismiss()
-                                print("\(carViewModel.existingVinNumbers)")
                             }
                         }
                         .disabled(isFormIncomplete(nameModel: tempNameModel, vinNumber: tempVinNumber, year: tempYear, mileage: tempMileage))

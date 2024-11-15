@@ -18,7 +18,6 @@ struct ContentView: View {
         VStack {
             
             if carViewModel.allCars.isEmpty {
-//                WelcomeCarView()
                 MainView()
             } else {
                 MainView()

@@ -23,4 +23,7 @@
         <attribute name="repairMileage" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="cars" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Car" inverseName="repairs" inverseEntity="Car"/>
     </entity>
+    <entity name="VinStore" representedClassName="VinStore" syncable="YES">
+        <attribute name="allVinNumbers" optional="YES" attributeType="Transformable"/>
+    </entity>
 </model>

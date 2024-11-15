@@ -20,10 +20,7 @@ struct carRepairAppApp: App {
                 .environmentObject(repairViewModel)
                 .onAppear {
                     carViewModel.getAllCars()
-                    DispatchQueue.main.async {
-                        carViewModel.loadLastSelectCar()
-
-                }
+                    carViewModel.loadLastAuto()
             }
         }
     }

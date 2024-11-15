@@ -56,6 +56,7 @@ class CoreDataManaged {
         car.engineType = engineType ?? "Unknow Engine Type"
         car.transmissionType = transmissionType ?? "Unknow Transmission Type"
         car.photoCar = photoCar
+        saveVinNumber(vinNumber ?? "")
         
         saveContent()
         print("INFO: Create new car: \(String(describing: car.nameModel)) -> (CoreDataModel)")
@@ -103,7 +104,7 @@ class CoreDataManaged {
         }
     }
     
-    func fetchAllRepair(for car: Car) -> [Repair] {
+    func fetchAllRepairs(for car: Car) -> [Repair] {
         let requestRepair: NSFetchRequest<Repair> = Repair.fetchRequest()
         requestRepair.predicate = NSPredicate(format: "cars == %@", car)
         do {
@@ -114,6 +115,89 @@ class CoreDataManaged {
         }
     }
     
+    // MARK: Methods for working with VinStore
+    // Для управления, удаления и конроля всех Vin-номеров авто, для избежания дубликатов, и для более удобного построения логики программы
+    
+//    func saveVinNumber(_ vinNumber: String) {
+//        let requestVinNumber: NSFetchRequest<VinStore> = VinStore.fetchRequest()
+//        
+//        do {
+//            let vinStores = try context.fetch(requestVinNumber)
+//            
+//            if let vinStore = vinStores.first {
+//                var vinNumbers = vinStore.allVinNumbers ?? []
+//                vinNumbers.append(vinNumber)
+//                vinStore.allVinNumbers = vinNumbers
+//                print("INFO: VIN-номер \(vinNumber) добавлен.")
+//                print("INFO: Массив \(String(describing: vinStore.allVinNumbers))")
+//            } else { print("Error!") }
+//        } catch {
+//            print("ERROR: Ошибка при добавлении VIN-номера: \(error.localizedDescription)")
+//        }
+//    }
+    
+    
+    // FIXME: Переписать метод
+    func saveVinNumber(_ vinNumber: String) {
+        let requestVinNumber: NSFetchRequest<VinStore> = VinStore.fetchRequest()
+        
+        do {
+            let vinStore: VinStore
+            
+            let vinStores = try context.fetch(requestVinNumber)
+            
+            if let existingVinStore = vinStores.first {
+                vinStore = existingVinStore
+            } else {
+                vinStore = VinStore(context: context)
+            }
+            
+            var vinNumbers = vinStore.allVinNumbers ?? []
+            vinNumbers.append(vinNumber)
+            vinStore.allVinNumbers = vinNumbers
+            print("INFO: VIN-номер \(vinNumber) добавлен.")
+            print("INFO: Массив \(String(describing: vinStore.allVinNumbers))")
+        } catch {
+            print("ERROR: Ошибка при добавлении VIN-номера: \(error.localizedDescription)")
+        }
+    }
+    
+    
+    
+    
+    func removeVinNumber(_ vinNumber: String) {
+        let requestVinNumber: NSFetchRequest<VinStore> = VinStore.fetchRequest()
+        
+        do {
+            let vinStores = try context.fetch(requestVinNumber)
+            
+            if let vinStore = vinStores.first {
+                if var _ = vinStore.allVinNumbers, let index = vinStore.allVinNumbers?.firstIndex(of: vinNumber) {
+                    vinStore.allVinNumbers?.remove(at: index)
+                    print("INFO: Vin-номер \(vinNumber) был удален. По индексу \(index).")
+                    print("UPDATE: Новый массив \(String(describing: vinStore.allVinNumbers))")
+                }
+            }
+        } catch {
+            print("ERROR: Ошибка при удалении VIN-номера: \(error.localizedDescription)")
+
+        }
+    }
+    
+    func fetchAllVinNumbers() -> [String] {
+        let requestVinNumbers: NSFetchRequest<VinStore> = VinStore.fetchRequest()
+        do {
+            let vinNumbers = try context.fetch(requestVinNumbers)
+            if vinNumbers.first != nil {
+                print("Все VIN-номера \(vinNumbers)")
+                return vinNumbers.first?.allVinNumbers ?? []
+            } else { return [] }
+        } catch {
+            print("ERROR: Ошибка при извлечении VIN-номеров: \(error.localizedDescription)")
+            return []
+        }
+    }
+
     // MARK: Сохранение изображения ремонта в Core Data
     
     func saveImageCarToCoreData(image: UIImage, for car: Car?) {
@@ -162,6 +246,9 @@ class CoreDataManaged {
     // MARK: Methods for delete from CoreData
     
     func deleteCar(car: Car) {
+        if let vinNumber = car.vinNumber {
+            removeVinNumber(vinNumber)
+        }
         persistentContainer.viewContext.delete(car)
         saveContent()
     }

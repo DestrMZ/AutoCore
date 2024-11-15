@@ -26,34 +26,35 @@ class CarViewModel: ObservableObject {
     
     // Список всех автомобилей.
     @Published var allCars: [Car] = []
-    // Список уникальных VIN Number, для проверки при добавлении нового Car
-    @Published var existingVinNumbers: [String] = []
     // Выбранный автомобиль.
     @Published var selectedCar: Car? {
         didSet {
             if let car = selectedCar {
+                saveLastSelectAuto()
                 loadCarInfo(for: car) // Загружаем информацию о выбранном автомобиле
                 print("INFO: Выбран: \(String(describing: car.nameModel)) -> (CarViewModel)")
-                saveLastSelectCar()
             }
         }
     }
     
+    func getAllVinArray() -> [String]? {
+        let vinNumbers = db.fetchAllVinNumbers()
+        print("INFO: Все VIN: \(vinNumbers)")
+        return vinNumbers
+    }
+    
     // Метод для сохраениния в UserDefaults последний выбранный автомобиль
-    func saveLastSelectCar() {
-        if let lastSelectCar = selectedCar {
-            UserDefaults.standard.set(lastSelectCar.vinNumber, forKey: "lastSelectedCarVIN")
+    func saveLastSelectAuto() {
+        if let selectedCar = selectedCar {
+            UserDefaults.standard.set(selectedCar.vinNumber, forKey: "currentAuto")
         }
     }
     
     // При запуске приложения, подгружает последни выбранный автомобиль
-    func loadLastSelectCar() {
-        if let lastSelectCar = UserDefaults.standard.string(forKey: "lastSelectedCarVIN") {
-            if let car = allCars.first(where: { $0.vinNumber == lastSelectCar }) {
-                print("INFO: При запуске приложения, загружен авто \(String(describing: car.nameModel))")
-                DispatchQueue.main.async {
-                    self.selectedCar = car // Вариант решения проблемы с тестом на реальном устройстве
-                }
+    func loadLastAuto() {
+        if let lastSelectAuto = UserDefaults.standard.string(forKey: "currentAuto") {
+            if let car = allCars.first(where: { $0.vinNumber == lastSelectAuto}) {
+                self.selectedCar = car
             }
         }
     }
