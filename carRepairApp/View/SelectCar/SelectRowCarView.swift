@@ -10,6 +10,7 @@ import SwiftUI
 struct SelectRowCarView: View {
     
     @EnvironmentObject var carViewModel: CarViewModel
+    @State var blackRed: Color = Color("blackRed")
     
     var car: Car
     
@@ -29,6 +30,14 @@ struct SelectRowCarView: View {
                                 .mask {
                                     RoundedRectangle(cornerRadius: 8, style: .continuous)
                                 }
+                                .overlay(
+                                       RoundedRectangle(cornerRadius: 8)
+                                           .stroke(carViewModel.selectedCar?.id == car.id ? Color.blackRed : Color.clear, lineWidth: 2)
+                                           .animation(.easeInOut(duration: 0.3), value: carViewModel.selectedCar?.id)
+                                   )
+                                .shadow(color: carViewModel.selectedCar?.id == car.id ? Color.gray.opacity(1) : Color.clear, radius: 10)
+                                .saturation(carViewModel.selectedCar?.id == car.id ? 1 : 0)
+                            
                         } else {
                             Circle()
                                 .fill(Color.gray.opacity(0.3))

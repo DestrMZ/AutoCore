@@ -30,9 +30,9 @@ class CarViewModel: ObservableObject {
     @Published var selectedCar: Car? {
         didSet {
             if let car = selectedCar {
-                saveLastSelectAuto()
+                saveLastSelectAuto() // Сохраняем в UserDefauil последне выбранный автомобиль, для загрузки его при перезапуске приложения
                 loadCarInfo(for: car) // Загружаем информацию о выбранном автомобиле
-                print("INFO: Выбран: \(String(describing: car.nameModel)) -> (CarViewModel)")
+                print("UPDATE: предыдущие значение \(String(describing: oldValue?.nameModel ?? "")), новое значение \(car.nameModel ?? "")")
             }
         }
     }
@@ -94,10 +94,10 @@ class CarViewModel: ObservableObject {
     // Получает первый автомобиль из базы данных.
     //
     // - Returns: Автомобиль или `nil`, если он не найден.
-    func getFirstCarArray() -> Car? {
-        let requestCar = db.fetchFirstCar()
-        return requestCar
-    }
+//    func getFirstCarArray() -> Car? {
+//        let requestCar = db.fetchFirstCar()
+//        return requestCar
+//    }
     
     // Загружает все автомобили из базы данных.
     func getAllCars() {
@@ -126,14 +126,14 @@ class CarViewModel: ObservableObject {
     }
     
     // Удаляет текущий автомобиль из базы данных.
-    func deleteCar() {
-        guard let car = getFirstCarArray() else {
-            print("WARNING: Авто для удаления не найдено -> (CarViewModel)")
-            return
-        }
-        db.deleteCar(car: car) // Удаляем автомобиль
-        print("INFO: Авто успешно удалено -> (CarViewModel)")
-    }
+//    func deleteCar() {
+//        guard let car = getFirstCarArray() else {
+//            print("WARNING: Авто для удаления не найдено -> (CarViewModel)")
+//            return
+//        }
+//        db.deleteCar(car: car) // Удаляем автомобиль
+//        print("INFO: Авто успешно удалено -> (CarViewModel)")
+//    }
     
     // Удаляет автомобили из списка по указанным индексам.
     //

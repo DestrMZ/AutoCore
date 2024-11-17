@@ -17,10 +17,17 @@ struct AddRepairView: View {
     
     @State private var selectedImageRepair: PhotosPickerItem?
     @State private var repairImage: UIImage?
-    @State private var showSuccessMessage: Bool = false
     
-    @State private var isValidAmount: Bool = true
-    @State private var isValidMileage: Bool = true
+    @State private var nameRepair: String = ""
+    @State private var amountRepair: Int32? = nil
+    @State private var mileageRepair: Int32? = nil
+    @State private var dateOfRepair: Date = Date()
+    @State private var notesRepair: String = ""
+    @State private var photoRepair: Data? = nil
+    @State private var repairCategory: RepairCategory = .service
+    @State private var parts: [Part] = [Part(article: "", name: "")]
+
+    @State private var showSuccessMessage: Bool = false
         
     var body: some View {
         
@@ -31,13 +38,21 @@ struct AddRepairView: View {
                         ToolbarItem(placement: .confirmationAction) {
                             Button("Save") {
                                 if let selectedCar = carViewModel.selectedCar {
-                                    repairViewModel.savePart()
-                                    repairViewModel.createNewRepair(for: selectedCar)
+                                    
+                                    repairViewModel.createNewRepair(
+                                        for: selectedCar,
+                                        partReplaced: nameRepair,
+                                        amount: amountRepair,
+                                        repairDate: dateOfRepair,
+                                        repairMileage: mileageRepair,
+                                        notes: notesRepair,
+                                        photoRepair: photoRepair,
+                                        repairCategory: repairCategory,
+                                        partsDict: repairViewModel.savePart(parts: parts))
+                                    
                                     dismiss()
-                                    print("Repair successfully saved for \(String(describing: selectedCar.nameModel))")
-                                    print("Parts: \(repairViewModel.partsDictionary)")
                                 }
-                            }.disabled(repairViewModel.partReplaced.isEmpty || repairViewModel.amount ?? 0 <= 0 || repairViewModel.repairMileage ?? 0 <= 0)
+                            }.disabled(nameRepair.isEmpty || amountRepair ?? 0 <= 0 || mileageRepair ?? 0 <= 0)
                         }
                         ToolbarItem(placement: .cancellationAction) {
                             Button("Cancel") {
@@ -54,32 +69,32 @@ struct AddRepairView: View {
     var formView: some View {
         
         VStack(spacing: 20) {
-            TextField("Name repair", text: $repairViewModel.partReplaced)
+            TextField("Name repair", text: $nameRepair)
                 .disableAutocorrection(true)
                 .underlineTextField()
                 .shadow(radius: 5)
             
             selectCategory // <- Select category
             
-            TextField("Amount", value: $repairViewModel.amount, formatter: numberFormatterForCoast())
+            TextField("Amount", value: $amountRepair, formatter: numberFormatterForCoast())
                 .keyboardType(.decimalPad)
-                .onChange(of: repairViewModel.amount) {_, newValue in
+                .onChange(of: amountRepair) {_, newValue in
                     if let newValue = newValue {
-                        repairViewModel.amount = validForAmount(newValue)
-                    } else { repairViewModel.amount = nil}
+                        amountRepair = validForAmount(newValue)
+                    } else { amountRepair = nil}
                 }
  
-            TextField("Mileage", value: $repairViewModel.repairMileage, formatter: numberFormatterForMileage())
+            TextField("Mileage", value: $mileageRepair, formatter: numberFormatterForMileage())
                 .keyboardType(.numberPad)
-                .onChange(of: repairViewModel.repairMileage) {_, newValue in
+                .onChange(of: mileageRepair) {_, newValue in
                     if let newValue = newValue {
-                        repairViewModel.repairMileage = validForMileage(newValue)
-                    } else { repairViewModel.repairMileage = nil }
+                        mileageRepair = validForMileage(newValue)
+                    } else { mileageRepair = nil }
                 }
       
-            DatePicker("Date of repair", selection: $repairViewModel.repairDate, displayedComponents: [.date])
+            DatePicker("Date of repair", selection: $dateOfRepair, displayedComponents: [.date])
             
-            TextField("Description (optional)", text: $repairViewModel.notes)
+            TextField("Description (optional)", text: $notesRepair)
                 .disableAutocorrection(true)
                 
             partsRow // MARK: Adding parts view
@@ -100,7 +115,7 @@ struct AddRepairView: View {
                                 if let imageData = imageData {
                                     DispatchQueue.main.async {
                                         self.repairImage = UIImage(data: imageData)
-                                        self.repairViewModel.photoRepair = imageData
+                                        self.photoRepair = imageData
                                     }
                                     self.showSuccessMessage = true
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
@@ -130,20 +145,20 @@ struct AddRepairView: View {
     var partsRow: some View {
         VStack(alignment: .leading) {
             Text("Parts:")
-            ForEach(repairViewModel.part.indices, id: \.self) { index in
+            ForEach(parts.indices, id: \.self) { index in // indices - диапазон индексов в массиве
                 HStack {
-                    PartsRowView(part: $repairViewModel.part[index])
+                    PartsRowView(part: $parts[index])
                     
                     if index == 0 {
                         Button(action: {
-                            repairViewModel.addPart()
+                            repairViewModel.addPart(for: &parts)
                         }) {
                             Image(systemName: "plus.circle.fill")
                                 .foregroundStyle(.green)
                         }
                     } else {
                         Button(action: {
-                            repairViewModel.removePart(from: index)
+                            repairViewModel.removePart(for: &parts, to: index)
                         }) {
                             Image(systemName: "minus.circle.fill")
                                 .foregroundStyle(.red)
@@ -160,7 +175,7 @@ struct AddRepairView: View {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 15), count: 3), spacing: 20) {
                 ForEach(RepairCategory.allCases, id: \.self) { category in
                     Button(action: {
-                        repairViewModel.repairCategory = category
+                        repairCategory = category
                     }) {
                         VStack {
                             Image(category.imageIcon)
@@ -168,11 +183,11 @@ struct AddRepairView: View {
                                 .renderingMode(.template)
                                 .scaledToFit()
                                 .frame(width: 30, height: 30)
-                                .foregroundColor(repairViewModel.repairCategory == category ? Color.black : Color.gray)
+                                .foregroundColor(repairCategory == category ? Color.black : Color.gray)
                             
                             Text(category.rawValue)
                                 .font(.caption)
-                                .foregroundColor(repairViewModel.repairCategory == category ? Color.black : Color.gray)
+                                .foregroundColor(repairCategory == category ? Color.black : Color.gray)
                         }
                     }
                 }

@@ -29,32 +29,26 @@ class RepairViewModel: ObservableObject {
     // Список всех ремонтов для данного автомобиля.
     @Published var repairArray: [Repair] = []
     // Словарь для записей деталей [article: name]
-    @Published var part: [Part] = [Part(article: "", name: "")]
     @Published var partsDictionary: [String: String] = [:]
     
     // Создает новый ремонт для указанного автомобиля.
     //
     // - Parameter car: Автомобиль, для которого создается ремонт.
-    func createNewRepair(for car: Car?) {
+    func createNewRepair(for car: Car?, partReplaced: String, amount: Int32?, repairDate: Date?, repairMileage: Int32?, notes: String, photoRepair: Data?, repairCategory: RepairCategory, partsDict: [String: String]) {
         guard let car = car else { return }
         
         // Создаем новый repair в базе данных
         db.creatingRepair(
-            repairDate: self.repairDate,
-            partReplaced: self.partReplaced,
-            amount: self.amount,
-            repairMileage: self.repairMileage,
-            notes: self.notes,
-            photoRepair: self.photoRepair,
-            repairCategory: self.repairCategory.rawValue,
+            repairDate: repairDate,
+            partReplaced: partReplaced,
+            amount: amount,
+            repairMileage: repairMileage,
+            notes: notes,
+            photoRepair: photoRepair,
+            repairCategory: repairCategory.rawValue,
             car: car,
-            partsDict: self.partsDictionary
-        )
+            partsDict: partsDict)
         
-        // Сохраняет списко деталей в массив
-        savePart()
-        // Сохраняем изменения в базе данных
-        db.saveContent()
         // Получаем все ремонты для данного автомобиля
         getRepairs(for: car)
     }
@@ -104,28 +98,29 @@ class RepairViewModel: ObservableObject {
     func deteteRepairFromList(at offset: IndexSet) {
         offset.forEach { index in
             let repair = self.repairArray[index]
-            db.deleteRepair(repair: repair) // Удаляем ремонт
-            self.repairArray.remove(at: index) // Удаляем его из списка
+            db.deleteRepair(repair: repair)
+            self.repairArray.remove(at: index)
         }
-        
         db.saveContent() // Сохраняем изменения
         print("INFO: Ремонт успешно удален -> (RepairViewModel)")
     }
     
     // MARK: Method for working with dictionary(Parts)
     
-    func addPart() {
-        part.append(Part(article: "", name: ""))
+    func addPart(for parts: inout [Part]) {
+        parts.append(Part(article: "", name: ""))
     }
     
-    func removePart(from index: Int) {
-        part.remove(at: index)
+    func removePart(for parts: inout [Part], to index: Int) {
+        parts.remove(at: index)
     }
     
-    func savePart() {
-        for part in part {
-            partsDictionary[part.article] = part.name
+    func savePart(parts: [Part]) -> [String: String] {
+        var partsDict: [String: String] = [:]
+        for part in parts {
+            partsDict[part.article] = part.name
         }
+        return partsDict
     }
     
     func getParts(for repair: Repair) -> [(article: String, name: String)] {

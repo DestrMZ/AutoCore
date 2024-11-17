@@ -20,7 +20,7 @@ class CoreDataManaged {
         let container = NSPersistentContainer(name: "carRepairApp")
         container.loadPersistentStores { storeDescription, error in
             if let error = error as? NSError {
-                print("Ошибка загрузки Persistent Container: \(error), \(error.userInfo)")
+                print("WARNING: Ошибка загрузки Persistent Container: \(error), \(error.userInfo)")
             }
         }
         return container
@@ -56,7 +56,7 @@ class CoreDataManaged {
         car.engineType = engineType ?? "Unknow Engine Type"
         car.transmissionType = transmissionType ?? "Unknow Transmission Type"
         car.photoCar = photoCar
-        saveVinNumber(vinNumber ?? "")
+        saveVin(vinNumber: vinNumber ?? "")
         
         saveContent()
         print("INFO: Create new car: \(String(describing: car.nameModel)) -> (CoreDataModel)")
@@ -77,7 +77,7 @@ class CoreDataManaged {
         repair.parts = partsDict
         
         saveContent()
-        print("IFNO: Create new repair: \(String(describing: repair.partReplaced)) for \(String(describing: repair.cars))")
+        print("IFNO: Create new repair: \(String(describing: repair.partReplaced))")
     }
  
     // MARK: Methods for get models
@@ -118,53 +118,18 @@ class CoreDataManaged {
     // MARK: Methods for working with VinStore
     // Для управления, удаления и конроля всех Vin-номеров авто, для избежания дубликатов, и для более удобного построения логики программы
     
-//    func saveVinNumber(_ vinNumber: String) {
-//        let requestVinNumber: NSFetchRequest<VinStore> = VinStore.fetchRequest()
-//        
-//        do {
-//            let vinStores = try context.fetch(requestVinNumber)
-//            
-//            if let vinStore = vinStores.first {
-//                var vinNumbers = vinStore.allVinNumbers ?? []
-//                vinNumbers.append(vinNumber)
-//                vinStore.allVinNumbers = vinNumbers
-//                print("INFO: VIN-номер \(vinNumber) добавлен.")
-//                print("INFO: Массив \(String(describing: vinStore.allVinNumbers))")
-//            } else { print("Error!") }
-//        } catch {
-//            print("ERROR: Ошибка при добавлении VIN-номера: \(error.localizedDescription)")
-//        }
-//    }
-    
-    
-    // FIXME: Переписать метод
-    func saveVinNumber(_ vinNumber: String) {
-        let requestVinNumber: NSFetchRequest<VinStore> = VinStore.fetchRequest()
+    func saveVin(vinNumber: String) {
+        let requesVinStore: NSFetchRequest<VinStore> = VinStore.fetchRequest()
         
-        do {
-            let vinStore: VinStore
-            
-            let vinStores = try context.fetch(requestVinNumber)
-            
-            if let existingVinStore = vinStores.first {
-                vinStore = existingVinStore
-            } else {
-                vinStore = VinStore(context: context)
-            }
-            
-            var vinNumbers = vinStore.allVinNumbers ?? []
-            vinNumbers.append(vinNumber)
-            vinStore.allVinNumbers = vinNumbers
-            print("INFO: VIN-номер \(vinNumber) добавлен.")
-            print("INFO: Массив \(String(describing: vinStore.allVinNumbers))")
-        } catch {
-            print("ERROR: Ошибка при добавлении VIN-номера: \(error.localizedDescription)")
-        }
+    
+        let vinStore = try? context.fetch(requesVinStore).first ?? VinStore(context: context)
+        var vinNumbers = vinStore?.allVinNumbers ?? []
+        vinNumbers.append(vinNumber)
+        vinStore?.allVinNumbers = vinNumbers
+        print("INFO: VIN-номер \(vinNumber) добавлен.")
+        print("INFO: Массив \(String(describing: vinStore?.allVinNumbers))")
     }
-    
-    
-    
-    
+        
     func removeVinNumber(_ vinNumber: String) {
         let requestVinNumber: NSFetchRequest<VinStore> = VinStore.fetchRequest()
         
@@ -174,12 +139,11 @@ class CoreDataManaged {
             if let vinStore = vinStores.first {
                 if var _ = vinStore.allVinNumbers, let index = vinStore.allVinNumbers?.firstIndex(of: vinNumber) {
                     vinStore.allVinNumbers?.remove(at: index)
-                    print("INFO: Vin-номер \(vinNumber) был удален. По индексу \(index).")
                     print("UPDATE: Новый массив \(String(describing: vinStore.allVinNumbers))")
                 }
             }
         } catch {
-            print("ERROR: Ошибка при удалении VIN-номера: \(error.localizedDescription)")
+            print("WARNING: Ошибка при удалении VIN-номера: \(error.localizedDescription)")
 
         }
     }
@@ -189,11 +153,10 @@ class CoreDataManaged {
         do {
             let vinNumbers = try context.fetch(requestVinNumbers)
             if vinNumbers.first != nil {
-                print("Все VIN-номера \(vinNumbers)")
                 return vinNumbers.first?.allVinNumbers ?? []
             } else { return [] }
         } catch {
-            print("ERROR: Ошибка при извлечении VIN-номеров: \(error.localizedDescription)")
+            print("WARNING: Ошибка при извлечении VIN-номеров: \(error.localizedDescription)")
             return []
         }
     }

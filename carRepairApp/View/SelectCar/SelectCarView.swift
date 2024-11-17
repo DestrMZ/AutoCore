@@ -31,7 +31,7 @@ struct SelectCarView: View {
                         }
                         ToolbarItem(placement: .confirmationAction) {
                             Button(action: {
-                                showAddCar.toggle() // TODO: Add func for create new car
+                                showAddCar.toggle()
                             }) {
                                 Image(systemName: "plus.circle")
                                     .foregroundStyle(.red)
@@ -79,24 +79,41 @@ struct SelectCarView: View {
                     
                     Spacer()
                     
-                    if carViewModel.selectedCar == car {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(.red)
-                            .font(.title3)
-                            .padding(.trailing, 16)
-                    }
+                    Image(systemName: "list.dash")
+                        .font(.title3)
+                        .foregroundStyle(.gray)
+                        .padding(.trailing, 16)
+                        .contextMenu {
+                            
+                            Button {
+                                
+                            } label: {
+                                Label("Edit", systemImage: "pencil")
+                            }
+                            
+                            Button {
+                                 
+                            } label: {
+                                Label("Copy VIN-Number", systemImage: "doc.circle.fill")
+                            }
+                            
+                            Button {
+                                print(car.id)
+                                if let indexCar = carViewModel.allCars.firstIndex(where: { $0.id == car.id }) {
+                                    carIndexForDelete = IndexSet(integer: indexCar)
+                                    tabSelect = car.nameModel ?? "Not found"
+                                    showDeleteConfirmantion = true
+                                }
+                                // FIXME:
+                                
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+                        }
                 }
                 .padding(.horizontal, 20)
                 .onTapGesture {
                     selectCar(for: car)
-                }
-                .onLongPressGesture {
-                    selectedCar = car
-                    if let indexCar = carViewModel.allCars.firstIndex(where: { $0.id == car.id }) {
-                        carIndexForDelete = IndexSet(integer: indexCar)
-                        tabSelect = car.nameModel ?? "Not found"
-                    }
-                    showDeleteConfirmantion = true
                 }
             }
         }
@@ -106,7 +123,6 @@ struct SelectCarView: View {
         selectedCar = car
         carViewModel.selectedCar = car
         carViewModel.loadCarInfo(for: car)
-        print("Select car: \(car.nameModel ?? "Not found")")
     }
 }
 

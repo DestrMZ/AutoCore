@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import _PhotosUI_SwiftUI
+import PhotosUI
 
 struct AddCarView: View {
     
@@ -94,6 +94,7 @@ struct AddCarView: View {
                 
                 TextField("Year", value: $tempYear, formatter: yearFormatter())
                     .textFieldStyle(.roundedBorder)
+                    .keyboardType(.numberPad)
                     .onChange(of: tempYear) {_, newValue in
                         if let newValue = newValue {
                             tempYear = validForYear(newValue)
@@ -104,6 +105,7 @@ struct AddCarView: View {
                 
                 TextField("Mileage", value: $tempMileage, formatter: numberFormatterForMileage())
                     .textFieldStyle(.roundedBorder)
+                    .keyboardType(.numberPad)
                     .onChange(of: tempMileage) {_, newValue in
                         if let newValue = newValue {
                             tempMileage = validForMileage(newValue)
