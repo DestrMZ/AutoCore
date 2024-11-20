@@ -9,6 +9,7 @@ import SwiftUI
 import PhotosUI
 import Combine
 
+
 struct AddRepairView: View {
     
     @EnvironmentObject var repairViewModel: RepairViewModel
@@ -64,6 +65,18 @@ struct AddRepairView: View {
                 Spacer()
             }
         }
+        .toast(isPresenting: $showSuccessMessage) {
+            AlertToast(
+                displayMode: .hud,
+                type: .complete(.black),
+                title: "Good!",
+                subTitle: "Photo added",
+                style: .style(backgroundColor: .teaGreen.opacity(0.3),
+                              titleColor: .black,
+                              subTitleColor: .black,
+                              titleFont: .headline,
+                              subTitleFont: .subheadline))
+        }
     }
     
     var formView: some View {
@@ -99,6 +112,7 @@ struct AddRepairView: View {
                 
             partsRow // MARK: Adding parts view
             
+
             HStack {
                 Text("Photo")
                 Spacer()
@@ -107,6 +121,7 @@ struct AddRepairView: View {
                         .font(.largeTitle)
                         .foregroundStyle(.dimGray)
                 }
+                
                 .onChange(of: selectedImageRepair) { _, newItem in
                     if let newItem = newItem {
                         newItem.loadTransferable(type: Data.self) { result in
@@ -125,19 +140,12 @@ struct AddRepairView: View {
                                 }
                             case .failure(let error):
                                 print("Error uploading photo repair: \(error.localizedDescription)")
+                            }
                         }
                     }
                 }
             }
         }
-            
-            if showSuccessMessage {
-                Text("Photo successfully uploaded!")
-                    .foregroundColor(.green)
-                    .transition(.opacity)
-                    .animation(.easeInOut, value: showSuccessMessage)
-            }
-    }
         .padding()
         .padding(.vertical, 25)
     }
@@ -183,11 +191,11 @@ struct AddRepairView: View {
                                 .renderingMode(.template)
                                 .scaledToFit()
                                 .frame(width: 30, height: 30)
-                                .foregroundColor(repairCategory == category ? Color.black : Color.gray)
+                                .foregroundColor(repairCategory == category ? Color.primary : Color.secondary)
                             
                             Text(category.rawValue)
                                 .font(.caption)
-                                .foregroundColor(repairCategory == category ? Color.black : Color.gray)
+                                .foregroundColor(repairCategory == category ? Color.primary : Color.secondary)
                         }
                     }
                 }

@@ -21,6 +21,8 @@ struct ListRowView: View {
                     let repairCategory = RepairCategory(rawValue: repairCategoryString) {
                     Image(repairCategory.imageIcon)
                         .resizable()
+                        .renderingMode(.template)
+                        .foregroundStyle(.primary)
                         .frame(width: 30, height: 30)
                         .padding(.trailing, 8)
                 }

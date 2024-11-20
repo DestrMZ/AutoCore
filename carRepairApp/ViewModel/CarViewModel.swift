@@ -91,14 +91,6 @@ class CarViewModel: ObservableObject {
         self.transmissionType = TransmissionTypeEnum(rawValue: car.transmissionType ?? "") ?? .manual
     }
     
-    // Получает первый автомобиль из базы данных.
-    //
-    // - Returns: Автомобиль или `nil`, если он не найден.
-//    func getFirstCarArray() -> Car? {
-//        let requestCar = db.fetchFirstCar()
-//        return requestCar
-//    }
-    
     // Загружает все автомобили из базы данных.
     func getAllCars() {
         let requestAllCars = db.fetchAllCars()
@@ -125,15 +117,9 @@ class CarViewModel: ObservableObject {
         return image // Возвращаем найденную фотографию
     }
     
-    // Удаляет текущий автомобиль из базы данных.
-//    func deleteCar() {
-//        guard let car = getFirstCarArray() else {
-//            print("WARNING: Авто для удаления не найдено -> (CarViewModel)")
-//            return
-//        }
-//        db.deleteCar(car: car) // Удаляем автомобиль
-//        print("INFO: Авто успешно удалено -> (CarViewModel)")
-//    }
+    func editCar(for car: Car?) {
+        
+    }
     
     // Удаляет автомобили из списка по указанным индексам.
     //

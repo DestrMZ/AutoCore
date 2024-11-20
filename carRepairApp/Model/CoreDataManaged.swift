@@ -82,18 +82,6 @@ class CoreDataManaged {
  
     // MARK: Methods for get models
     
-    func fetchFirstCar() -> Car? {
-        let requestCar: NSFetchRequest<Car> = Car.fetchRequest()
-        requestCar.fetchLimit = 1
-        do {
-            let car = try context.fetch(requestCar)
-            return car.first
-        } catch {
-            print("WARNING: Ошибка при запросе к CoreData, нет найденного автомобиля")
-            return nil
-        }
-    }
-    
     func fetchAllCars() -> [Car] {
         let requestCar: NSFetchRequest<Car> = Car.fetchRequest()
         do {

@@ -86,13 +86,17 @@ struct SelectCarView: View {
                         .contextMenu {
                             
                             Button {
-                                
+                                // TODO: Make edit func
                             } label: {
                                 Label("Edit", systemImage: "pencil")
                             }
                             
                             Button {
-                                 
+                                if let vinNumberIndex = carViewModel.allCars.firstIndex( where: { $0.vinNumber == car.vinNumber }) {
+                                    let currencyCar = carViewModel.allCars[vinNumberIndex]
+                                    copyToClipboard(text: currencyCar.vinNumber ?? "")
+                                    provideHapticFeedback()
+                                }
                             } label: {
                                 Label("Copy VIN-Number", systemImage: "doc.circle.fill")
                             }
