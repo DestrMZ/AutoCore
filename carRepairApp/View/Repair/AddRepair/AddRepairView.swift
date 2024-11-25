@@ -67,15 +67,16 @@ struct AddRepairView: View {
         }
         .toast(isPresenting: $showSuccessMessage) {
             AlertToast(
-                displayMode: .hud,
+                displayMode: .banner(.pop),
                 type: .complete(.black),
                 title: "Good!",
                 subTitle: "Photo added",
-                style: .style(backgroundColor: .teaGreen.opacity(0.3),
+                style: .style(backgroundColor: .blackRed.opacity(0.3),
                               titleColor: .black,
                               subTitleColor: .black,
                               titleFont: .headline,
                               subTitleFont: .subheadline))
+            
         }
     }
     
@@ -91,7 +92,7 @@ struct AddRepairView: View {
             
             TextField("Amount", value: $amountRepair, formatter: numberFormatterForCoast())
                 .keyboardType(.decimalPad)
-                .onChange(of: amountRepair) {_, newValue in
+                .onChange(of: amountRepair) {newValue in
                     if let newValue = newValue {
                         amountRepair = validForAmount(newValue)
                     } else { amountRepair = nil}
@@ -99,7 +100,7 @@ struct AddRepairView: View {
  
             TextField("Mileage", value: $mileageRepair, formatter: numberFormatterForMileage())
                 .keyboardType(.numberPad)
-                .onChange(of: mileageRepair) {_, newValue in
+                .onChange(of: mileageRepair) {newValue in
                     if let newValue = newValue {
                         mileageRepair = validForMileage(newValue)
                     } else { mileageRepair = nil }
@@ -122,7 +123,7 @@ struct AddRepairView: View {
                         .foregroundStyle(.dimGray)
                 }
                 
-                .onChange(of: selectedImageRepair) { _, newItem in
+                .onChange(of: selectedImageRepair) {newItem in
                     if let newItem = newItem {
                         newItem.loadTransferable(type: Data.self) { result in
                             switch result {

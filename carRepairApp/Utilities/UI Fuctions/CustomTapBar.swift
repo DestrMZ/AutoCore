@@ -122,7 +122,7 @@ struct CustomTapBar: View {
     }
 }
 
-#Preview {
-    @Previewable @State var selectedTab: CustomTapBar.TabItems = .cars
-    CustomTapBar(selectedTab: $selectedTab)
-}
+//#Preview {
+//    @Previewable @State var selectedTab: CustomTapBar.TabItems = .cars
+//    CustomTapBar(selectedTab: $selectedTab)
+//}

@@ -95,7 +95,7 @@ struct AddCarView: View {
                 TextField("Year", value: $tempYear, formatter: yearFormatter())
                     .textFieldStyle(.roundedBorder)
                     .keyboardType(.numberPad)
-                    .onChange(of: tempYear) {_, newValue in
+                    .onChange(of: tempYear) {newValue in
                         if let newValue = newValue {
                             tempYear = validForYear(newValue)
                         } else { tempYear = nil }}
@@ -106,7 +106,7 @@ struct AddCarView: View {
                 TextField("Mileage", value: $tempMileage, formatter: numberFormatterForMileage())
                     .textFieldStyle(.roundedBorder)
                     .keyboardType(.numberPad)
-                    .onChange(of: tempMileage) {_, newValue in
+                    .onChange(of: tempMileage) {newValue in
                         if let newValue = newValue {
                             tempMileage = validForMileage(newValue)
                         } else { tempVinNumber = ""}}
@@ -151,7 +151,7 @@ struct AddCarView: View {
                             .foregroundStyle(.white)
                     
                     }
-                    .onChange(of: selectionImageCar) { _, newValue in
+                    .onChange(of: selectionImageCar) {newValue in
                         if let newValue = newValue {
                             newValue.loadTransferable(type: Data.self) { result in
                                 switch result {
