@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		5C1A6FDC2CFB8F3600BBAD84 /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 5C1A6FDB2CFB8F3600BBAD84 /* DGCharts */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		5C2005062CB714BB0058D993 /* carRepairApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = carRepairApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C1A6FDC2CFB8F3600BBAD84 /* DGCharts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = carRepairApp;
 			packageProductDependencies = (
+				5C1A6FDB2CFB8F3600BBAD84 /* DGCharts */,
 			);
 			productName = carRepairApp;
 			productReference = 5C2005062CB714BB0058D993 /* carRepairApp.app */;
@@ -95,6 +101,7 @@
 			mainGroup = 5C2004FD2CB714BA0058D993;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				5C1A6FDA2CFB8F3600BBAD84 /* XCRemoteSwiftPackageReference "Charts" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5C2005072CB714BB0058D993 /* Products */;
@@ -328,6 +335,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5C1A6FDA2CFB8F3600BBAD84 /* XCRemoteSwiftPackageReference "Charts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/danielgindi/Charts.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5C1A6FDB2CFB8F3600BBAD84 /* DGCharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5C1A6FDA2CFB8F3600BBAD84 /* XCRemoteSwiftPackageReference "Charts" */;
+			productName = DGCharts;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5C2004FE2CB714BA0058D993 /* Project object */;
 }

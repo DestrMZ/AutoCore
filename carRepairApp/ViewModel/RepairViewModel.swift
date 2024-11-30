@@ -8,6 +8,7 @@
 import Foundation
 import PhotosUI
 import CoreData
+import DGCharts
 
 
 // Этот класс помогает создавать, получать и удалять записи о ремонте.
@@ -125,6 +126,25 @@ class RepairViewModel: ObservableObject {
     
     func getParts(for repair: Repair) -> [(article: String, name: String)] {
         return partsDictionary.map { ($0.key, $0.value)
+        }
+    }
+    
+    func getValueCategoriesAndAmount(for car: Car) -> [PieChartDataEntry] { // [(categories: String, amount: Int)]
+        var categoriesAmount: [String: Int] = [:]
+
+        for repair in repairArray {
+            let categories = repair.repairCategory ?? "nil"
+            let amount = Int(repair.amount)
+
+            if let existingKey = categoriesAmount[categories] {
+                categoriesAmount[categories] = existingKey + Int(amount)
+            } else {
+                categoriesAmount[categories] = Int(amount)
+            }
+        }
+
+        return categoriesAmount.map { (key, value) in
+            PieChartDataEntry(value: Double(value), label: key)
         }
     }
 }
