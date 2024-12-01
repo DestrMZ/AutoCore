@@ -110,3 +110,10 @@ func validForYear(_ year: Int16) -> Int16 {
     }
 }
 
+func percentFormatter() -> NumberFormatter {
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .percent
+    formatter.maximumFractionDigits = 1
+    formatter.multiplier = 1
+    return formatter
+}

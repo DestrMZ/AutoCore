@@ -68,3 +68,12 @@ enum RepairCategory: String, CaseIterable {
         }
     }
 }
+
+
+enum FilterDate: Hashable {
+    case allTime
+    case week
+    case month
+    case year
+    case custom(startDate: Date, endDate: Date)
+}

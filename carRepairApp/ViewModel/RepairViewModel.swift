@@ -8,6 +8,7 @@
 import Foundation
 import PhotosUI
 import CoreData
+import DGCharts
 
 
 // Этот класс помогает создавать, получать и удалять записи о ремонте.
@@ -50,13 +51,13 @@ class RepairViewModel: ObservableObject {
             partsDict: partsDict)
         
         // Получаем все ремонты для данного автомобиля
-        getRepairs(for: car)
+        updateRepairs(for: car)
     }
     
     // Получает все ремонты для указанного автомобиля.
     //
     // - Parameter car: Автомобиль, для которого требуется ремонты.
-    func getRepairs(for car: Car) {
+    func updateRepairs(for car: Car) {
         let requestRepairs = db.fetchAllRepairs(for: car)
         
         do {
@@ -107,24 +108,139 @@ class RepairViewModel: ObservableObject {
     
     // MARK: Method for working with dictionary(Parts)
     
+    // Метод добавляет новый элемент Part с пустыми значениями в массив parts
     func addPart(for parts: inout [Part]) {
+        // Добавляем новый элемент Part с пустыми значениями артикула и названия
         parts.append(Part(article: "", name: ""))
     }
     
+    // Метод удаляет элемент из массива parts по индексу
     func removePart(for parts: inout [Part], to index: Int) {
+        // Удаляем элемент по указанному индексу
         parts.remove(at: index)
     }
     
+    // Метод сохраняет массив Part в словарь, где ключ — артикул, а значение — название
     func savePart(parts: [Part]) -> [String: String] {
         var partsDict: [String: String] = [:]
+        
+        // Проходим по массиву и создаем словарь, где ключ — артикул, а значение — название запчасти
         for part in parts {
             partsDict[part.article] = part.name
         }
+        
         return partsDict
     }
     
+    // Метод возвращает массив кортежей (артикул, название) из partsDictionary
     func getParts(for repair: Repair) -> [(article: String, name: String)] {
-        return partsDictionary.map { ($0.key, $0.value)
+        // Преобразуем словарь partsDictionary в массив кортежей (артикул, название)
+        return partsDictionary.map { ($0.key, $0.value) }
+    }
+    
+    // Метод возвращает массив PieChartDataEntry, содержащий категории ремонтов и их суммы для заданного периода
+    func getRepairCategoriesAndAmounts(for car: Car, selectPeriod: FilterDate) -> [PieChartDataEntry] {
+        var categoriesAmount: [String: Int] = [:]
+        let filter = filterRepairs(filter: selectPeriod)
+        
+        // Для каждого ремонта за отфильтрованный период добавляем сумму по категории
+        for repair in filter {
+            let categories = repair.repairCategory ?? "nil" // Получаем категорию ремонта, если она есть
+            let amount = Int(repair.amount) // Получаем сумму ремонта
+            
+            // Если категория уже существует в словаре, добавляем сумму, иначе создаем новую запись
+            if let existingKey = categoriesAmount[categories] {
+                categoriesAmount[categories] = existingKey + amount
+            } else {
+                categoriesAmount[categories] = amount
+            }
+        }
+        
+        let sorterDict = categoriesAmount.sorted { $0.key < $1.key }
+        // Преобразуем словарь категорий и их сумм в массив PieChartDataEntry
+        return sorterDict.map { (key, value) in
+            PieChartDataEntry(value: Double(value), label: key)
+        }
+    }
+    
+    // Метод возвращает массив BarChartDataEntry для построения графика, показывающего суммы ремонтов по месяцам
+    func getRepairMonthAndAmounts(for car: Car) -> [BarChartDataEntry] {
+        var monthAmount: [Int: Double] = [:]
+        let repairs = repairArray
+        
+        // Проходим по массиву ремонтов и суммируем их по месяцам
+        for repair in repairs {
+            let date = Calendar.current.component(.month, from: repair.repairDate ?? Date()) // Извлекаем месяц из даты
+            let amount = Double(repair.amount) // Получаем сумму ремонта
+            
+            // Если месяц уже есть в словаре, добавляем сумму, иначе создаем новый ключ
+            if let existingKey = monthAmount[date] {
+                monthAmount[date] = existingKey + amount
+            } else {
+                monthAmount[date] = amount
+            }
+        }
+        
+        // Сортируем по ключу (месяцу) и преобразуем в массив BarChartDataEntry
+        let sortArray = monthAmount.sorted { $0.key < $1.key }
+        return sortArray.map { (key, value) in
+            BarChartDataEntry(x: Double(key), y: value)
+        }
+    }
+    
+    // Метод возвращает словарь категорий ремонтов и их сумм для заданного периода
+    func getRepairsCategoriesAndAmount(for car: Car, selectedPeriod: FilterDate) -> [String: Int] {
+        var categoriesAndAmount: [String: Int] = [:]
+        let filterCategoriesAndAmount = filterRepairs(filter: selectedPeriod)
+        
+        // Для каждого ремонта за отфильтрованный период добавляем сумму по категории
+        for repair in filterCategoriesAndAmount {
+            let cat = repair.repairCategory ?? "nil" // Получаем категорию ремонта
+            let amount = Int(repair.amount) // Получаем сумму ремонта
+            
+            // Если категория уже существует в словаре, добавляем сумму, иначе создаем новую запись
+            if let existingKey = categoriesAndAmount[cat] {
+                categoriesAndAmount[cat] = existingKey + amount
+            } else {
+                categoriesAndAmount[cat] = amount
+            }
+        }
+        
+        return categoriesAndAmount
+    }
+    
+    // Метод возвращает общую сумму ремонтов за заданный период
+    func totalAmountFilter(for car: Car, selectedPeriod: FilterDate) -> Int {
+        var amount: Int = 0
+        let filterRepairForAmount = filterRepairs(filter: selectedPeriod)
+        
+        // Проходим по отфильтрованным ремонтам и суммируем их значения
+        for repair in filterRepairForAmount {
+            amount += Int(repair.amount)
+        }
+        return amount
+    }
+    
+    // Метод фильтрует ремонты по выбранному периоду времени
+    func filterRepairs(filter: FilterDate) -> [Repair] {
+        let currentDate = Date()
+        
+        // В зависимости от выбранного периода времени создаем фильтр для ремонтов
+        switch filter {
+        case .week:
+            let oneWeekAgo = Calendar.current.date(byAdding: .day, value: -7, to: currentDate) ?? Date()
+            return repairArray.filter { $0.repairDate ?? Date() > oneWeekAgo && $0.repairDate ?? Date() <= currentDate }
+        case .month:
+            let oneMonthAgo = Calendar.current.date(byAdding: .month, value: -1, to: currentDate) ?? Date()
+            return repairArray.filter { $0.repairDate ?? Date() > oneMonthAgo && $0.repairDate ?? Date() <= currentDate }
+        case .year:
+            let oneYearAgo = Calendar.current.date(byAdding: .year, value: -1, to: currentDate) ?? Date()
+            return repairArray.filter { $0.repairDate ?? Date() > oneYearAgo && $0.repairDate ?? Date() <= currentDate }
+        case .allTime:
+            let allTimeAgo = Calendar.current.date(byAdding: .year, value: -3, to: currentDate) ?? Date()
+            return repairArray.filter { $0.repairDate ?? Date() > allTimeAgo }
+        case .custom(startDate: let startDate, endDate: let endDate):
+            return repairArray.filter { $0.repairDate ?? Date() > startDate && $0.repairDate ?? Date() <= endDate }
         }
     }
 }

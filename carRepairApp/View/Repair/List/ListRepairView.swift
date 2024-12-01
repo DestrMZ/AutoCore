@@ -54,7 +54,7 @@ struct ListRepairView: View {
         }
         .onAppear {
             if let selectedCar = carViewModel.selectedCar {
-                repairViewModel.getRepairs(for: selectedCar)
+                repairViewModel.updateRepairs(for: selectedCar)
             } else {
                 print("Car not found (ListRepairView)")
             }
