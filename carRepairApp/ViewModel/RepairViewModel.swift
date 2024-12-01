@@ -243,4 +243,23 @@ class RepairViewModel: ObservableObject {
             return repairArray.filter { $0.repairDate ?? Date() > startDate && $0.repairDate ?? Date() <= endDate }
         }
     }
+    
+    func getValueCategoriesAndAmount(for car: Car) -> [PieChartDataEntry] { // [(categories: String, amount: Int)]
+        var categoriesAmount: [String: Int] = [:]
+
+        for repair in repairArray {
+            let categories = repair.repairCategory ?? "nil"
+            let amount = Int(repair.amount)
+
+            if let existingKey = categoriesAmount[categories] {
+                categoriesAmount[categories] = existingKey + Int(amount)
+            } else {
+                categoriesAmount[categories] = Int(amount)
+            }
+        }
+
+        return categoriesAmount.map { (key, value) in
+            PieChartDataEntry(value: Double(value), label: key)
+        }
+    }
 }
