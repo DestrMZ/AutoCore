@@ -164,7 +164,7 @@ class RepairViewModel: ObservableObject {
     }
     
     // Метод возвращает массив BarChartDataEntry для построения графика, показывающего суммы ремонтов по месяцам
-    func getRepairMonthAndAmounts(for car: Car) -> [BarChartDataEntry] {
+    func getMonthlyExpenses(for car: Car) -> [BarChartDataEntry] {
         var monthAmount: [Int: Double] = [:]
         let repairs = repairArray
         
@@ -185,6 +185,24 @@ class RepairViewModel: ObservableObject {
         let sortArray = monthAmount.sorted { $0.key < $1.key }
         return sortArray.map { (key, value) in
             BarChartDataEntry(x: Double(key), y: value)
+        }
+    }
+    
+    func getTrendLine(for car: Car, period: Int = 3) -> [ChartDataEntry] {
+        let monthlyExpenses = getMonthlyExpenses(for: car)
+        let expensesValue = monthlyExpenses.map { $0.y }
+        
+        var trendValues: [Double] = []
+        for i in 0..<expensesValue.count {
+            if i < period {
+                trendValues.append(expensesValue[i])
+            } else {
+                let sum = expensesValue[(i - period + 1)...i].reduce(0, +)
+                trendValues.append(sum / Double(period))
+            }
+        }
+        return trendValues.enumerated().map { index, value in
+            ChartDataEntry(x: Double(index + 1), y: value)
         }
     }
     
@@ -241,25 +259,6 @@ class RepairViewModel: ObservableObject {
             return repairArray.filter { $0.repairDate ?? Date() > allTimeAgo }
         case .custom(startDate: let startDate, endDate: let endDate):
             return repairArray.filter { $0.repairDate ?? Date() > startDate && $0.repairDate ?? Date() <= endDate }
-        }
-    }
-    
-    func getValueCategoriesAndAmount(for car: Car) -> [PieChartDataEntry] { // [(categories: String, amount: Int)]
-        var categoriesAmount: [String: Int] = [:]
-
-        for repair in repairArray {
-            let categories = repair.repairCategory ?? "nil"
-            let amount = Int(repair.amount)
-
-            if let existingKey = categoriesAmount[categories] {
-                categoriesAmount[categories] = existingKey + Int(amount)
-            } else {
-                categoriesAmount[categories] = Int(amount)
-            }
-        }
-
-        return categoriesAmount.map { (key, value) in
-            PieChartDataEntry(value: Double(value), label: key)
         }
     }
 }

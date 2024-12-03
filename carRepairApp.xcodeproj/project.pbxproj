@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5C1A6FDC2CFB8F3600BBAD84 /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 5C1A6FDB2CFB8F3600BBAD84 /* DGCharts */; };
+		5CAC12622CFB98FB00543574 /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 5CAC12612CFB98FB00543574 /* DGCharts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5C1A6FDC2CFB8F3600BBAD84 /* DGCharts in Frameworks */,
+				5CAC12622CFB98FB00543574 /* DGCharts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,7 +70,7 @@
 			);
 			name = carRepairApp;
 			packageProductDependencies = (
-				5C1A6FDB2CFB8F3600BBAD84 /* DGCharts */,
+				5CAC12612CFB98FB00543574 /* DGCharts */,
 			);
 			productName = carRepairApp;
 			productReference = 5C2005062CB714BB0058D993 /* carRepairApp.app */;
@@ -101,7 +101,7 @@
 			mainGroup = 5C2004FD2CB714BA0058D993;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				5C1A6FDA2CFB8F3600BBAD84 /* XCRemoteSwiftPackageReference "Charts" */,
+				5CAC12602CFB98FB00543574 /* XCRemoteSwiftPackageReference "Charts" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5C2005072CB714BB0058D993 /* Products */;
@@ -337,7 +337,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		5C1A6FDA2CFB8F3600BBAD84 /* XCRemoteSwiftPackageReference "Charts" */ = {
+		5CAC12602CFB98FB00543574 /* XCRemoteSwiftPackageReference "Charts" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/danielgindi/Charts.git";
 			requirement = {
@@ -348,9 +348,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		5C1A6FDB2CFB8F3600BBAD84 /* DGCharts */ = {
+		5CAC12612CFB98FB00543574 /* DGCharts */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 5C1A6FDA2CFB8F3600BBAD84 /* XCRemoteSwiftPackageReference "Charts" */;
+			package = 5CAC12602CFB98FB00543574 /* XCRemoteSwiftPackageReference "Charts" */;
 			productName = DGCharts;
 		};
 /* End XCSwiftPackageProductDependency section */
