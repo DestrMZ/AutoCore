@@ -3,7 +3,7 @@
     <entity name="Car" representedClassName="Car" syncable="YES">
         <attribute name="color" attributeType="String"/>
         <attribute name="engineType" attributeType="String"/>
-        <attribute name="existingVinNumbers" optional="YES" attributeType="Transformable"/>
+        <attribute name="existingVinNumbers" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData"/>
         <attribute name="mileage" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="nameModel" attributeType="String"/>
         <attribute name="photoCar" optional="YES" attributeType="Binary"/>
@@ -16,7 +16,7 @@
         <attribute name="amount" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="notes" optional="YES" attributeType="String"/>
         <attribute name="partReplaced" attributeType="String"/>
-        <attribute name="parts" optional="YES" attributeType="Transformable"/>
+        <attribute name="parts" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData"/>
         <attribute name="photoRepair" optional="YES" attributeType="Binary"/>
         <attribute name="repairCategory" optional="YES" attributeType="String"/>
         <attribute name="repairDate" attributeType="Date" usesScalarValueType="NO"/>
@@ -24,6 +24,6 @@
         <relationship name="cars" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Car" inverseName="repairs" inverseEntity="Car"/>
     </entity>
     <entity name="VinStore" representedClassName="VinStore" syncable="YES">
-        <attribute name="allVinNumbers" optional="YES" attributeType="Transformable"/>
+        <attribute name="allVinNumbers" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData"/>
     </entity>
 </model>

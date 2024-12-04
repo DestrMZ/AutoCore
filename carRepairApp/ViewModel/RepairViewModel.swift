@@ -165,22 +165,20 @@ class RepairViewModel: ObservableObject {
     
     // Метод возвращает массив BarChartDataEntry для построения графика, показывающего суммы ремонтов по месяцам
     func getMonthlyExpenses(for car: Car) -> [BarChartDataEntry] {
-        var monthAmount: [Int: Double] = [:]
+        var monthAmount: [Int: Double] = [
+            1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0
+        ]
         let repairs = repairArray
+        print("Init var 'monthAmount' -> \(monthAmount)")
         
         // Проходим по массиву ремонтов и суммируем их по месяцам
         for repair in repairs {
             let date = Calendar.current.component(.month, from: repair.repairDate ?? Date()) // Извлекаем месяц из даты
             let amount = Double(repair.amount) // Получаем сумму ремонта
             
-            // Если месяц уже есть в словаре, добавляем сумму, иначе создаем новый ключ
-            if let existingKey = monthAmount[date] {
-                monthAmount[date] = existingKey + amount
-            } else {
-                monthAmount[date] = amount
-            }
+            monthAmount[date] = amount
         }
-        
+        print("result 'monthAmount' -> \(monthAmount)")
         // Сортируем по ключу (месяцу) и преобразуем в массив BarChartDataEntry
         let sortArray = monthAmount.sorted { $0.key < $1.key }
         return sortArray.map { (key, value) in
