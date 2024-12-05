@@ -18,7 +18,9 @@ struct StatisticsView: View {
     @State var endDate: Date = Date()
     @State var isDatePickerVisabillity: Bool = false
     
-    var selectedCar: Car { carViewModel.selectedCar! }
+    var selectedCar: Car {
+        carViewModel.selectedCar! } // FIXME: Исправить
+    
     var dictRepairs: [String: Int] { repairViewModel.getRepairsCategoriesAndAmount(for: selectedCar, selectedPeriod: selectPeriod)}
 
     var entityForPie: [PieChartDataEntry] {

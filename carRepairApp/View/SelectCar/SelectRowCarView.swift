@@ -51,7 +51,7 @@ struct SelectRowCarView: View {
                         Text("\(car.nameModel ?? "Unknown")")
                             .font(.title3)
                             .bold()
-                        Text("Mileage: \(String(car.mileage)) km")
+                        Text("Current mileage: \(String(car.mileage)) km")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         Text("VIN Number: \(car.vinNumber ?? "Unknown")")

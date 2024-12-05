@@ -62,21 +62,29 @@ class CoreDataManaged {
         print("INFO: Create new car: \(String(describing: car.nameModel)) -> (CoreDataModel)")
     }
     
-    func creatingRepair(repairDate: Date?, partReplaced: String?, amount: Int32?, repairMileage: Int32?, notes: String?, photoRepair: Data?, repairCategory: String, car: Car?, partsDict: [String: String]?) {
+    func creatingRepair(repairDate: Date?, partReplaced: String?, amount: Int32?, repairMileage: Int32?, notes: String?, photoRepair: [Data]?, repairCategory: String, car: Car?, partsDict: [String: String]?) {
         
         let repair = Repair(context: CoreDataManaged.shared.context)
         
         repair.repairDate = repairDate ?? Date()
         repair.partReplaced = partReplaced ?? "Unknow Part Replaced"
         repair.amount = amount ?? 0
-        repair.repairMileage = repairMileage ?? 0
+        repair.repairMileage = repairMileage ?? 0 // FIXME: Сделать проверку на пробег авто!
         repair.notes = notes ?? "Unknow Notes"
         repair.photoRepair = photoRepair
         repair.repairCategory = repairCategory
         repair.cars = car
         repair.parts = partsDict
         
+        // Обновление данных пробега авто
+        if let repairMileage = repairMileage, let carMileage = car?.mileage {
+            if repairMileage > carMileage {
+                car?.mileage = repairMileage
+            }
+        }
+        
         saveContent()
+        print("IMAGES: \(String(describing: repair.photoRepair?.count))")
         print("IFNO: Create new repair: \(String(describing: repair.partReplaced))")
     }
  
@@ -167,11 +175,34 @@ class CoreDataManaged {
     
     // MARK: Получение изображения автомобиля из Core Data
     
-    func saveImageRepairToCoreData(image: UIImage) {
-        guard let imageDataRepair = image.jpegData(compressionQuality: 0.1) else { return }
+//    func saveImageRepairToCoreData(image: [UIImage]) {
+//        guard let imageDataRepair = image.jpegData(compressionQuality: 0.1) else { return }
+//        
+//        let repair = Repair(context: CoreDataManaged.shared.context)
+//        repair.photoRepair = imageDataRepair
+//        
+//        do {
+//            try CoreDataManaged.shared.context.save()
+//        } catch {
+//            print("WARNING: Ошибка сохранения изображения поломки: \(error.localizedDescription)")
+//        }
+//    }
+    
+    func saveImagesRepairToCoreData(images: [UIImage]) {
+        var tempArray: [Data] = []
+        
+        guard !images.isEmpty else {
+                print("WARNING: Передан пустой массив изображений.")
+                return
+            }
+        
+        for image in images {
+            let imageData = image.jpegData(compressionQuality: 0.1)
+            tempArray.append(imageData!)
+        }
         
         let repair = Repair(context: CoreDataManaged.shared.context)
-        repair.photoRepair = imageDataRepair
+        repair.photoRepair = tempArray
         
         do {
             try CoreDataManaged.shared.context.save()
@@ -187,11 +218,24 @@ class CoreDataManaged {
         return nil
     }
     
-    func fetchImageRepairCoreData(repair: Repair) -> UIImage? {
-        if let imageData = repair.photoRepair {
-            return UIImage(data: imageData)
+//    func fetchImageRepairCoreData(repair: Repair) -> UIImage? {
+//        if let imageData = repair.photoRepair {
+//            return UIImage(data: imageData)
+//        }
+//        return nil
+//    }
+    
+    func fetchImagesRepairCoreData(repair: Repair) -> [UIImage] {
+        var tempArray: [UIImage] = []
+        if let imagesData = repair.photoRepair {
+            
+            for image in imagesData {
+                if let imageData = UIImage(data: image) {
+                    tempArray.append(imageData)
+                }
+            }
         }
-        return nil
+        return tempArray
     }
     
     // MARK: Methods for delete from CoreData

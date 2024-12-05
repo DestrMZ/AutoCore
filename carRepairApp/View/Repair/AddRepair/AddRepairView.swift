@@ -16,15 +16,14 @@ struct AddRepairView: View {
     @EnvironmentObject var carViewModel: CarViewModel
     @Environment(\.dismiss) var dismiss
     
-    @State private var selectedImageRepair: PhotosPickerItem?
-    @State private var repairImage: UIImage?
+    @State private var selectedImagesRepair: [PhotosPickerItem] = []
     
     @State private var nameRepair: String = ""
     @State private var amountRepair: Int32? = nil
     @State private var mileageRepair: Int32? = nil
     @State private var dateOfRepair: Date = Date()
     @State private var notesRepair: String = ""
-    @State private var photoRepair: Data? = nil
+    @State private var photoRepair: [Data] = []
     @State private var repairCategory: RepairCategory = .service
     @State private var parts: [Part] = [Part(article: "", name: "")]
 
@@ -70,7 +69,7 @@ struct AddRepairView: View {
                 displayMode: .banner(.pop),
                 type: .complete(.black),
                 title: "Good!",
-                subTitle: "Photo added",
+                subTitle: "Photo's added",
                 style: .style(backgroundColor: .blackRed.opacity(0.3),
                               titleColor: .black,
                               subTitleColor: .black,
@@ -117,30 +116,19 @@ struct AddRepairView: View {
             HStack {
                 Text("Photo")
                 Spacer()
-                PhotosPicker(selection: $selectedImageRepair, matching: .images) {
+                PhotosPicker(selection: $selectedImagesRepair, matching: .images, photoLibrary: .shared()) {
                     Image(systemName: "photo.badge.plus")
                         .font(.largeTitle)
                         .foregroundStyle(.dimGray)
                 }
-                
-                .onChange(of: selectedImageRepair) {newItem in
-                    if let newItem = newItem {
-                        newItem.loadTransferable(type: Data.self) { result in
-                            switch result {
-                            case .success(let imageData):
-                                if let imageData = imageData {
-                                    DispatchQueue.main.async {
-                                        self.repairImage = UIImage(data: imageData)
-                                        self.photoRepair = imageData
-                                    }
+                .onChange(of: selectedImagesRepair) {_ in
+                    Task {
+                        for image in selectedImagesRepair {
+                            if let data = try? await image.loadTransferable(type: Data.self) {
+                                DispatchQueue.main.async {
+                                    self.photoRepair.append(data)
                                     self.showSuccessMessage = true
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                        self.showSuccessMessage = false
-                                    }
-                                    print("Photo repair successfully uploaded")
                                 }
-                            case .failure(let error):
-                                print("Error uploading photo repair: \(error.localizedDescription)")
                             }
                         }
                     }

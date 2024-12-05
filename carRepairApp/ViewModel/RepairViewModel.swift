@@ -22,7 +22,7 @@ class RepairViewModel: ObservableObject {
     @Published var amount: Int32? = nil
     @Published var repairMileage: Int32? = nil
     @Published var notes: String = ""
-    @Published var photoRepair: Data = Data()
+    @Published var photoRepair: [Data] = [Data()]
     @Published var repairCategory: RepairCategory = .service
     
     // Автомобиль, для которого делается ремонт.
@@ -35,7 +35,7 @@ class RepairViewModel: ObservableObject {
     // Создает новый ремонт для указанного автомобиля.
     //
     // - Parameter car: Автомобиль, для которого создается ремонт.
-    func createNewRepair(for car: Car?, partReplaced: String, amount: Int32?, repairDate: Date?, repairMileage: Int32?, notes: String, photoRepair: Data?, repairCategory: RepairCategory, partsDict: [String: String]) {
+    func createNewRepair(for car: Car?, partReplaced: String, amount: Int32?, repairDate: Date?, repairMileage: Int32?, notes: String, photoRepair: [Data]?, repairCategory: RepairCategory, partsDict: [String: String]) {
         guard let car = car else { return }
         
         // Создаем новый repair в базе данных
@@ -71,9 +71,14 @@ class RepairViewModel: ObservableObject {
     //
     // - Parameter repair: Ремонт, для которого нужна фотография.
     // - Returns: Фотография или `nil`, если она не найдена.
-    func getPhotoRepair(repair: Repair) -> UIImage? {
-        let image = db.fetchImageRepairCoreData(repair: repair)
-        return image // Возвращаем найденную фотографию
+//    func getPhotoRepair(repair: Repair) -> UIImage? {
+//        let image = db.fetchImageRepairCoreData(repair: repair)
+//        return image // Возвращаем найденную фотографию
+//    }
+    
+    func getPhotosRepair(repair: Repair) -> [UIImage]? {
+        let images = db.fetchImagesRepairCoreData(repair: repair)
+        return images
     }
     
     // Удаляет указанный ремонт из базы данных.
@@ -169,16 +174,14 @@ class RepairViewModel: ObservableObject {
             1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0
         ]
         let repairs = repairArray
-        print("Init var 'monthAmount' -> \(monthAmount)")
         
         // Проходим по массиву ремонтов и суммируем их по месяцам
         for repair in repairs {
             let date = Calendar.current.component(.month, from: repair.repairDate ?? Date()) // Извлекаем месяц из даты
             let amount = Double(repair.amount) // Получаем сумму ремонта
             
-            monthAmount[date] = amount
+            monthAmount[date, default: 0] += amount
         }
-        print("result 'monthAmount' -> \(monthAmount)")
         // Сортируем по ключу (месяцу) и преобразуем в массив BarChartDataEntry
         let sortArray = monthAmount.sorted { $0.key < $1.key }
         return sortArray.map { (key, value) in

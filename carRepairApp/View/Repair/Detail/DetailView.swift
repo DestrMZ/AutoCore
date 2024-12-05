@@ -10,7 +10,7 @@ import SwiftUI
 struct DetailView: View {
     
     @EnvironmentObject var repairViewModel: RepairViewModel
-    @State private var imageRepair: UIImage? = nil
+    @State private var imagesRepair: [UIImage]? = []
     @State private var currenctCopyMessage: Bool = false
     @State private var isTitleMessage: String = "Parts"
     
@@ -85,12 +85,20 @@ struct DetailView: View {
                 Divider()
                 
                 VStack(alignment: .center) {
-                    if let imageRepair = imageRepair {
-                        Image(uiImage: imageRepair)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .clipped()
+                    
+                    HStack {
+                        ScrollView {
+                            if let imagesRepair = imagesRepair {
+                                
+                                ForEach(imagesRepair, id: \.self) { image in
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                        .clipped()
+                                }
+                            }
+                        }
                     }
                 }
                 
@@ -99,12 +107,10 @@ struct DetailView: View {
             }
             .padding(.horizontal, 20)
             .onAppear {
-                if let image = repairViewModel.getPhotoRepair(repair: repair) {
-                    imageRepair = image
-                    print("INFO: Изображение ремонта загружено")
-                } else {
-                    print("Изображение ремонта не найдено")
-                }
+                if let repairImages = repairViewModel.getPhotosRepair(repair: repair) {
+                    imagesRepair = repairImages
+                    print("INFO: Изображения ремонта успешно загружены")
+                } else {print("WARNING: Изображения ремонта не найдено")}
             }
         }
     }
