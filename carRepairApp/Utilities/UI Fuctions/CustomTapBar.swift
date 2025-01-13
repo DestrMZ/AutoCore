@@ -7,14 +7,13 @@
 
 import SwiftUI
 
-/// `CustomTapBar` - это пользовательский компонент таб-бара для навигации по различным разделам приложения.
+
 struct CustomTapBar: View {
     
-    /// Перечисление для определения доступных вкладок в таб-баре.
     enum TabItems: Int, Identifiable {
         var id: Int { self.rawValue } // Уникальный идентификатор для каждой вкладки.
         
-        case cars = 0          // Вкладка "Автомобили".
+        case cars              // Вкладка "Автомобили".
         case repair            // Вкладка "Ремонт".
         case statistics        // Вкладка "Статистика".
         case settings          // Вкладка "Настройки".

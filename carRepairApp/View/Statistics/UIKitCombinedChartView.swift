@@ -26,8 +26,8 @@ struct UIKitCombinedChartView: UIViewRepresentable {
     
     func updateUIView(_ uiView: CombinedChartView, context: Context) {
 
-        let barDataSet = BarChartDataSet(entries: entityForBar, label: "Expenses for the month")
-        let lineDataSet = LineChartDataSet(entries: entityForLine, label: "Trand")
+        let barDataSet = BarChartDataSet(entries: entityForBar, label: NSLocalizedString("Expenses for the month", comment: ""))
+        let lineDataSet = LineChartDataSet(entries: entityForLine, label: NSLocalizedString("Trand", comment: ""))
         let combinedData = CombinedChartData()
         
         combinedData.barData = BarChartData(dataSet: barDataSet)

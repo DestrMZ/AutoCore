@@ -119,7 +119,7 @@ struct AddRepairView: View {
                 PhotosPicker(selection: $selectedImagesRepair, matching: .images, photoLibrary: .shared()) {
                     Image(systemName: "photo.badge.plus")
                         .font(.largeTitle)
-                        .foregroundStyle(.dimGray)
+                        .foregroundStyle(.blackRed)
                 }
                 .onChange(of: selectedImagesRepair) {_ in
                     Task {
@@ -182,7 +182,7 @@ struct AddRepairView: View {
                                 .frame(width: 30, height: 30)
                                 .foregroundColor(repairCategory == category ? Color.primary : Color.secondary)
                             
-                            Text(category.rawValue)
+                            Text(NSLocalizedString(category.rawValue, comment: ""))
                                 .font(.caption)
                                 .foregroundColor(repairCategory == category ? Color.primary : Color.secondary)
                         }

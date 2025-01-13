@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C5942AD2D32FC76005C2AEF /* DatePickerRange in Frameworks */ = {isa = PBXBuildFile; productRef = 5C5942AC2D32FC76005C2AEF /* DatePickerRange */; };
 		5CAC12622CFB98FB00543574 /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 5CAC12612CFB98FB00543574 /* DGCharts */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +28,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C5942AD2D32FC76005C2AEF /* DatePickerRange in Frameworks */,
 				5CAC12622CFB98FB00543574 /* DGCharts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -71,6 +73,7 @@
 			name = carRepairApp;
 			packageProductDependencies = (
 				5CAC12612CFB98FB00543574 /* DGCharts */,
+				5C5942AC2D32FC76005C2AEF /* DatePickerRange */,
 			);
 			productName = carRepairApp;
 			productReference = 5C2005062CB714BB0058D993 /* carRepairApp.app */;
@@ -84,7 +87,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1600;
-				LastUpgradeCheck = 1600;
+				LastUpgradeCheck = 1620;
 				TargetAttributes = {
 					5C2005052CB714BA0058D993 = {
 						CreatedOnToolsVersion = 16.0;
@@ -97,11 +100,13 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 5C2004FD2CB714BA0058D993;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				5CAC12602CFB98FB00543574 /* XCRemoteSwiftPackageReference "Charts" */,
+				5C5942AB2D32FC76005C2AEF /* XCRemoteSwiftPackageReference "DatePickerRange" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5C2005072CB714BB0058D993 /* Products */;
@@ -139,6 +144,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -193,6 +199,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -202,6 +209,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -249,6 +257,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -337,6 +346,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		5C5942AB2D32FC76005C2AEF /* XCRemoteSwiftPackageReference "DatePickerRange" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/DestrMZ/DatePickerRange";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.4;
+			};
+		};
 		5CAC12602CFB98FB00543574 /* XCRemoteSwiftPackageReference "Charts" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/danielgindi/Charts.git";
@@ -348,6 +365,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5C5942AC2D32FC76005C2AEF /* DatePickerRange */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5C5942AB2D32FC76005C2AEF /* XCRemoteSwiftPackageReference "DatePickerRange" */;
+			productName = DatePickerRange;
+		};
 		5CAC12612CFB98FB00543574 /* DGCharts */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 5CAC12602CFB98FB00543574 /* XCRemoteSwiftPackageReference "Charts" */;

@@ -9,7 +9,6 @@ import Foundation
 
 
 struct Part: Codable, Hashable {
-    
     var article: String
     var name: String
 }

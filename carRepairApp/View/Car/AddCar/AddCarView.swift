@@ -114,7 +114,7 @@ struct AddCarView: View {
                 Picker("Engine type", selection: $tempEngineType) {
                     ForEach(EngineTypeEnum.allCases, id: \.self) {
                         engineType in
-                        Text(engineType.rawValue.capitalized)
+                        Text(NSLocalizedString(engineType.rawValue.capitalized, comment: ""))
                             .tag(engineType)
                     }
                 }
@@ -123,7 +123,7 @@ struct AddCarView: View {
                 
                 Picker("Transmission type", selection: $tempTransmissionType) {
                     ForEach(TransmissionTypeEnum.allCases, id: \.self) { transmissionType in
-                        Text(transmissionType.rawValue.capitalized)
+                        Text(NSLocalizedString(transmissionType.rawValue.capitalized, comment: ""))
                             .tag(transmissionType)
                     }
                 }

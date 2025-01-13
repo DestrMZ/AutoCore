@@ -54,17 +54,17 @@ enum RepairCategory: String, CaseIterable {
     var imageIcon: String {
         switch self {
         case .service:
-            return "service"
+            return "image_service"
         case .fuel:
-            return "fuel"
+            return "image_fuel"
         case .wash:
-            return "wash"
+            return "image_wash"
         case .parking:
-            return "parking"
+            return "image_parking"
         case .insurance:
-            return "insurance"
+            return "image_insurance"
         case .other:
-            return "other"
+            return "image_other"
         }
     }
 }

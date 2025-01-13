@@ -10,6 +10,7 @@ import SwiftUI
 struct ListRowView: View {
     
     @EnvironmentObject var repairViewModel: RepairViewModel
+    @EnvironmentObject var settingsViewModel: SettingsViewModel
     
     var repair: Repair
     
@@ -34,7 +35,7 @@ struct ListRowView: View {
                         .bold()
                         .lineLimit(1)
                     
-                    Text("Amount: \(repair.amount.formatted())")
+                    Text("Amount: \(repair.amount.formatted()) \(settingsViewModel.currency)")
                         .font(.subheadline)
                         .lineLimit(1)
                     

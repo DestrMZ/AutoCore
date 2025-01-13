@@ -8,10 +8,9 @@
 import Foundation
 import PhotosUI
 
-// `CarViewModel` управляет информацией об автомобиле.
-// Этот класс помогает создавать, загружать и удалять автомобили.
+// CarViewModel управляет информацией об автомобиле.
 class CarViewModel: ObservableObject {
-
+    
     // Экземпляр базы данных для работы с данными.
     private var db = CoreDataManaged.shared
     
@@ -24,22 +23,46 @@ class CarViewModel: ObservableObject {
     @Published var transmissionType: TransmissionTypeEnum = .manual
     @Published var photoCar: Data = Data()
     
-    // Список всех автомобилей.
     @Published var allCars: [Car] = []
-    // Выбранный автомобиль.
+    
     @Published var selectedCar: Car? {
         didSet {
             if let car = selectedCar {
-                saveLastSelectAuto() // Сохраняем в UserDefauil последне выбранный автомобиль, для загрузки его при перезапуске приложения
-                loadCarInfo(for: car) // Загружаем информацию о выбранном автомобиле
-                print("UPDATE: предыдущие значение \(String(describing: oldValue?.nameModel ?? "")), новое значение \(car.nameModel ?? "")")
+                saveLastSelectAuto()
+                loadCarInfo(for: car)
+            }
+            else if !allCars.isEmpty {
+                selectedCar = allCars.last
             }
         }
     }
     
+    // Метод для инициализации приложения и логика работы с selectedCar
+    func initializeCarRepairApp() {
+        getAllCars()
+        
+        if allCars.isEmpty {
+            print("WARNING: No cars found in database")
+            return
+        }
+        
+        if let lastSelectAuto = UserDefaults.standard.string(forKey: "currentAuto") {
+            if let car = allCars.first( where: { $0.vinNumber == lastSelectAuto}) {
+                self.selectedCar = car
+                print("Successfully loaded last selected car: \(car.nameModel ?? "Unknown"), VIN: \(car.vinNumber ?? "Unknown")")
+            } else {
+                if !allCars.isEmpty {
+                    print("WARNING: Saved VIN \(lastSelectAuto) not found in current cars")
+                    self.selectedCar = allCars.last
+                }
+            }
+        }
+        
+    }
+    
+    // Получаем весь массив VIN номеров из CoreData
     func getAllVinArray() -> [String]? {
         let vinNumbers = db.fetchAllVinNumbers()
-        print("INFO: Все VIN: \(vinNumbers)")
         return vinNumbers
     }
     
@@ -47,22 +70,13 @@ class CarViewModel: ObservableObject {
     func saveLastSelectAuto() {
         if let selectedCar = selectedCar {
             UserDefaults.standard.set(selectedCar.vinNumber, forKey: "currentAuto")
+            print("Saved VIN: \(selectedCar.vinNumber ?? "Unknown")")
         }
     }
     
-    // При запуске приложения, подгружает последни выбранный автомобиль
-    func loadLastAuto() {
-        if let lastSelectAuto = UserDefaults.standard.string(forKey: "currentAuto") {
-            if let car = allCars.first(where: { $0.vinNumber == lastSelectAuto}) {
-                self.selectedCar = car
-            }
-        }
-    }
-    
-    // Создает новый автомобиль с введенными данными.
+    // Создает новый автомобиль
     func createNewCar(nameModel: String, year: Int16?, vinNumber: String?, color: String?, mileage: Int32?, engineType: EngineTypeEnum, transmissionType: TransmissionTypeEnum, photoCar: UIImage) {
         
-        // Создаем новый автомобиль в базе данных
         db.creatingCar(
             nameModel: nameModel,
             year: year,
@@ -76,11 +90,13 @@ class CarViewModel: ObservableObject {
         
         db.saveContent()
         getAllCars()
+        
+        if let newCar = allCars.last {
+            selectedCar = newCar
+        }
     }
     
     // Загружает информацию о конкретном автомобиле.
-    //
-    // - Parameter car: Автомобиль, информацию о котором нужно загрузить.
     func loadCarInfo(for car: Car) {
         self.nameModel = car.nameModel ?? ""
         self.year = car.year
@@ -94,43 +110,38 @@ class CarViewModel: ObservableObject {
     // Загружает все автомобили из базы данных.
     func getAllCars() {
         let requestAllCars = db.fetchAllCars()
-        self.allCars = requestAllCars // Обновляем список автомобилей
+        self.allCars = requestAllCars
     }
     
     // Сохраняет фотографию автомобиля в базе данных.
-    //
-    // - Parameter imageSelection: Фотография автомобиля.
     func saveImageCar(imageSelection: UIImage) {
         if let car = selectedCar {
-            db.saveImageCarToCoreData(image: imageSelection, for: car) // Сохраняем изображение для первого автомобиля
+            db.saveImageCarToCoreData(image: imageSelection, for: car)
         } else {
-            print("WARNING: Нет авто для сохранения изображения -> (CarViewModel).")
+            print("WARNING: Нет авто для сохранения изображения.")
         }
     }
     
     // Получает фотографию автомобиля.
-    //
-    // - Parameter car: Автомобиль, для которого нужна фотография.
-    // - Returns: Фотография или `nil`, если она не найдена.
     func getImageCar(for car: Car) -> UIImage? {
         let image = db.fetchImageCarFromCoreData(car: car)
-        return image // Возвращаем найденную фотографию
+        return image
     }
     
     func editCar(for car: Car?) {
-        
+        // MAKE:
     }
     
     // Удаляет автомобили из списка по указанным индексам.
-    //
-    // - Parameter offset: Индексы автомобилей, которые нужно удалить.
     func deleteCarFromList(at offset: IndexSet) {
-        print("INFO: Авто на удаление -> \(nameModel)")
+        print("INFO: Автомобиль \(nameModel) удален.")
         offset.forEach { index in
             let car = self.allCars[index]
-            db.deleteCar(car: car) // Удаляем автомобиль
-            self.allCars.remove(at: index) // Удаляем его из списка
+            db.deleteCar(car: car)
+            self.allCars.remove(at: index)
+            selectedCar = nil
+
         }
-        db.saveContent() // Сохраняем изменения
+        db.saveContent()
     }
 }

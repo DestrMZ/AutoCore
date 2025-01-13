@@ -16,14 +16,7 @@ struct ContentView: View {
     var body: some View {
         
         VStack {
-            
-            if carViewModel.allCars.isEmpty {
-                MainView()
-            } else {
-                MainView()
-            }
-        }.onAppear {
-            carViewModel.getAllCars()
+            MainView()
         }
     }
 }

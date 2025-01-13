@@ -1,5 +1,5 @@
 {
-  "originHash" : "5eb0f656e06a40820fec6812eae8af4928b616690cc47c4dbf8e837c7590a821",
+  "originHash" : "9935aea0133d02a634294f68836961286f9b8e2b53d92dd373d5f5068d26f0a2",
   "pins" : [
     {
       "identity" : "charts",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "dd9c72e3d7e751e769971092a6bd72d39198ae63",
         "version" : "5.1.0"
+      }
+    },
+    {
+      "identity" : "datepickerrange",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/DestrMZ/DatePickerRange.git",
+      "state" : {
+        "revision" : "03c6e4a6a5b1677d7fa1316032386acc9f5ef725",
+        "version" : "1.1.4"
       }
     }
   ],

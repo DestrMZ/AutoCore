@@ -12,8 +12,10 @@ struct MainView: View {
     @Namespace private var animationNamespace
     @EnvironmentObject var carViewModel: CarViewModel
     @EnvironmentObject var repairViewModel: RepairViewModel
+    @EnvironmentObject var settingsViewModel: SettingsViewModel
     
-    @State private var selectedTab: CustomTapBar.TabItems = .repair
+    
+    @State private var selectedTab: CustomTapBar.TabItems = .cars
     @State private var showTapBar: Bool = true
     
     var body: some View {

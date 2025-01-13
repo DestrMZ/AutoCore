@@ -20,50 +20,59 @@ struct ListRepairView: View {
     @State var isPresented: Bool = false
     
     var body: some View {
-        NavigationStack {
-            ZStack(alignment: .bottomTrailing) {
-            ScrollView {
-                VStack {
-                    if repairViewModel.repairArray.isEmpty {
-                        emptyRepairList
-                    } else {
-                        VStack {
-                            Text("\(carViewModel.nameModel)")
-                                .font(.headline)
-                                .foregroundColor(.secondary)
-                                .padding(.bottom, 10)
-                            
-                            SearchBar(text: $searchText, keyboardHeight: $searchBarHeight, placeholder: "Search repair")
-
-                            listRepairView
-                                .padding(.bottom, 1)
-                        }
-                    }
-                }
-                .padding(.horizontal, 15)
-            }
+        
+        if carViewModel.allCars.isEmpty {
             
-                addButton
-        }
-        }
-        .navigationTitle("Repairs")
-        .sheet(isPresented: $isPresented) {
-            if carViewModel.selectedCar != nil {
-                AddRepairView()
+            EmptyCarList()
+            
+        } else {
+            
+            NavigationStack {
+                ZStack(alignment: .bottomTrailing) {
+                    ScrollView {
+                        VStack {
+                            
+                            if repairViewModel.repairArray.isEmpty {
+                                emptyRepairList
+                            } else {
+                                VStack {
+                                    Text("\(carViewModel.nameModel)")
+                                        .font(.headline)
+                                        .foregroundColor(.secondary)
+                                        .padding(.bottom, 10)
+                                    
+                                    SearchBar(text: $searchText, keyboardHeight: $searchBarHeight, placeholder: NSLocalizedString("Search repair", comment: ""))
+                                    
+                                    listRepairView
+                                        .padding(.bottom, 1)
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 15)
+                    }
+                    
+                    addButton
+                }
             }
-        }
-        .onAppear {
-            if let selectedCar = carViewModel.selectedCar {
-                repairViewModel.updateRepairs(for: selectedCar)
-            } else {
-                print("Car not found (ListRepairView)")
+            .navigationTitle("Repairs")
+            .sheet(isPresented: $isPresented) {
+                if carViewModel.selectedCar != nil {
+                    AddRepairView()
+                }
+            }
+            .onAppear {
+                if let selectedCar = carViewModel.selectedCar {
+                    repairViewModel.getAllRepairs(for: selectedCar)
+                } else {
+                    print("Repairs для автомобиля \(carViewModel.nameModel) не найдены.")
+                }
             }
         }
     }
     
     private var filteredRepairs: [Repair] {
         if searchText.isEmpty {
-            return repairViewModel.repairArray
+            return repairViewModel.repairArray.reversed()
         } else {
             return repairViewModel.repairArray.filter { repair in
                 repair.partReplaced!.lowercased().contains(searchText.lowercased())
@@ -73,20 +82,20 @@ struct ListRepairView: View {
     
     
     private var emptyRepairList: some View {
-        VStack {
+        VStack(alignment: .center) {
             VStack(spacing: 8) {
                 Text("🛠️ Go add your first expanses?")
                     .font(.title2)
                     .fontWeight(.semibold)
                     .padding(.bottom, 1)
-                Text("Take control of your car expenses effortlessly! Tap " + "+" + " to log each cost and keep everything on track.")
+                Text(NSLocalizedString("car_expenses_control", comment: ""))
                     .font(.subheadline)
                     .multilineTextAlignment(.center)
                     .padding()
             }
             .padding(.top, 300)
         }
-        .frame(maxHeight: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
     private var listRepairView: some View {

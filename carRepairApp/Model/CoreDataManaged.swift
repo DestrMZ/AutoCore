@@ -30,7 +30,7 @@ class CoreDataManaged {
         return persistentContainer.viewContext
     }
     
-    // MARK: Method for save model in CoreData
+    // MARK: Метод для сохранения данных в CoreData
     
     func saveContent() {
         let context = persistentContainer.viewContext
@@ -43,7 +43,7 @@ class CoreDataManaged {
         }
     }
     
-    // MARK: Methods for creating models
+    // MARK: Методы для создания модели
     
     func creatingCar(nameModel: String?, year: Int16?, vinNumber: String?, color: String?, mileage: Int32?, engineType: String?, transmissionType: String?, photoCar: Data?) {
         
@@ -84,11 +84,10 @@ class CoreDataManaged {
         }
         
         saveContent()
-        print("IMAGES: \(String(describing: repair.photoRepair?.count))")
         print("IFNO: Create new repair: \(String(describing: repair.partReplaced))")
     }
  
-    // MARK: Methods for get models
+    // MARK: Методы для получения данных из CoreData
     
     func fetchAllCars() -> [Car] {
         let requestCar: NSFetchRequest<Car> = Car.fetchRequest()
@@ -122,8 +121,7 @@ class CoreDataManaged {
         var vinNumbers = vinStore?.allVinNumbers ?? []
         vinNumbers.append(vinNumber)
         vinStore?.allVinNumbers = vinNumbers
-        print("INFO: VIN-номер \(vinNumber) добавлен.")
-        print("INFO: Массив \(String(describing: vinStore?.allVinNumbers))")
+        print("INFO: VIN Number сохранен -> \(String(describing: vinNumber))")
     }
         
     func removeVinNumber(_ vinNumber: String) {
@@ -149,6 +147,7 @@ class CoreDataManaged {
         do {
             let vinNumbers = try context.fetch(requestVinNumbers)
             if vinNumbers.first != nil {
+                print("INFO: Все VIN: \(vinNumbers)")
                 return vinNumbers.first?.allVinNumbers ?? []
             } else { return [] }
         } catch {
@@ -173,20 +172,6 @@ class CoreDataManaged {
         }
     }
     
-    // MARK: Получение изображения автомобиля из Core Data
-    
-//    func saveImageRepairToCoreData(image: [UIImage]) {
-//        guard let imageDataRepair = image.jpegData(compressionQuality: 0.1) else { return }
-//        
-//        let repair = Repair(context: CoreDataManaged.shared.context)
-//        repair.photoRepair = imageDataRepair
-//        
-//        do {
-//            try CoreDataManaged.shared.context.save()
-//        } catch {
-//            print("WARNING: Ошибка сохранения изображения поломки: \(error.localizedDescription)")
-//        }
-//    }
     
     func saveImagesRepairToCoreData(images: [UIImage]) {
         var tempArray: [Data] = []
@@ -217,13 +202,6 @@ class CoreDataManaged {
         }
         return nil
     }
-    
-//    func fetchImageRepairCoreData(repair: Repair) -> UIImage? {
-//        if let imageData = repair.photoRepair {
-//            return UIImage(data: imageData)
-//        }
-//        return nil
-//    }
     
     func fetchImagesRepairCoreData(repair: Repair) -> [UIImage] {
         var tempArray: [UIImage] = []

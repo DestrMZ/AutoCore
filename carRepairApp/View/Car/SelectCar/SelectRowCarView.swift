@@ -10,6 +10,8 @@ import SwiftUI
 struct SelectRowCarView: View {
     
     @EnvironmentObject var carViewModel: CarViewModel
+    @EnvironmentObject var settingsViewModel: SettingsViewModel
+    
     @State var blackRed: Color = Color("blackRed")
     
     var car: Car
@@ -51,7 +53,7 @@ struct SelectRowCarView: View {
                         Text("\(car.nameModel ?? "Unknown")")
                             .font(.title3)
                             .bold()
-                        Text("Current mileage: \(String(car.mileage)) km")
+                        Text("Current mileage: \(String(car.mileage)) \(settingsViewModel.distanceUnit)")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         Text("VIN Number: \(car.vinNumber ?? "Unknown")")
@@ -68,6 +70,7 @@ struct SelectRowCarView: View {
     let context = CoreDataManaged.shared.context
     
     let car1 = Car(context: context)
+//    car1.photoCar = UIImage(named: "car2")?.pngData()
     car1.nameModel = "Audi"
     car1.mileage = 100_000
     car1.vinNumber = "123456789"

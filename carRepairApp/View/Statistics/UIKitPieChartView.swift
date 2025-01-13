@@ -26,7 +26,6 @@ struct UIKitPieChartView: UIViewRepresentable {
         dataSet.sliceSpace = 3
         dataSet.label = nil
         dataSet.drawValuesEnabled = false
-//        dataSet.valueFont = .boldSystemFont(ofSize: 12)
     
         
         uiView.drawHoleEnabled = true

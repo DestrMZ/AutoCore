@@ -12,16 +12,18 @@ struct carRepairAppApp: App {
     
     @StateObject var carViewModel: CarViewModel = CarViewModel()
     @StateObject var repairViewModel: RepairViewModel = RepairViewModel()
+    @StateObject var settingsViewModel: SettingsViewModel = SettingsViewModel()
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(carViewModel)
                 .environmentObject(repairViewModel)
+                .environmentObject(settingsViewModel)
                 .onAppear {
-                    carViewModel.getAllCars()
-                    carViewModel.loadLastAuto()
+                    carViewModel.initializeCarRepairApp()
             }
+                .preferredColorScheme(settingsViewModel.changeColorScheme())
         }
     }
 }

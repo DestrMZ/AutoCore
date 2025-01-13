@@ -10,9 +10,12 @@ import SwiftUI
 struct DetailView: View {
     
     @EnvironmentObject var repairViewModel: RepairViewModel
+    @EnvironmentObject var settingsViewModel: SettingsViewModel
+
     @State private var imagesRepair: [UIImage]? = []
     @State private var currenctCopyMessage: Bool = false
-    @State private var isTitleMessage: String = "Parts"
+    @State private var isTitleMessageParts: String = "Parts"
+//    @State private var isTitleSuccesfulCopy: String = "Article copy!"
     
     var repair: Repair
     
@@ -41,7 +44,7 @@ struct DetailView: View {
                     Text("Amount: ")
                         .font(.headline)
                         .bold()
-                    Text("\(repair.amount) RUB")
+                    Text("\(repair.amount) \(settingsViewModel.currency)")
                         .foregroundStyle(.secondary)
                 }
                 
@@ -49,7 +52,7 @@ struct DetailView: View {
                     Text("Mileage: ")
                         .font(.headline)
                         .bold()
-                    Text("\(repair.repairMileage) KM")
+                    Text("\(repair.repairMileage) \(settingsViewModel.distanceUnit)")
                         .foregroundStyle(.secondary)
                 }
                 
@@ -118,7 +121,7 @@ struct DetailView: View {
     var partsDetail: some View {
         VStack {
             HStack {
-                Text("\(isTitleMessage)")
+                Text("\(NSLocalizedString(isTitleMessageParts, comment: ""))")
                     .font(.headline)
             }
             if let parts = repair.parts {
@@ -130,14 +133,14 @@ struct DetailView: View {
                                 Button(action: {
                                     copyToClipboard(text: part.key)
                                     provideHapticFeedback()
-                                    isTitleMessage = "Article copy!"
+                                    isTitleMessageParts = "Article copy!"
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                        isTitleMessage = "Parts"
+                                        isTitleMessageParts = "Parts"
                                     }
                                 }) {
                                     Text("Article: \(part.key)")
                                         .font(.headline)
-                                        .foregroundStyle(.black)
+                                        .foregroundStyle(.gray)
                                         .padding(5)
                                         .cornerRadius(5)
                                         .overlay(
@@ -149,7 +152,7 @@ struct DetailView: View {
                                 
                                 Text("\(part.value)")
                                     .font(.headline)
-                                    .foregroundStyle(.black)
+                                    .foregroundStyle(.secondary)
                             }
                         }
                         .padding(.vertical, 10)
