@@ -12,7 +12,6 @@ struct ListRepairView: View {
     
     @EnvironmentObject var repairViewModel: RepairViewModel
     @EnvironmentObject var carViewModel: CarViewModel
-//    @EnvironmentObject var phoneViewModel: PhoneSessionViewModel
     
     @State var searchText: String = ""
     @State private var searchBarHeight: CGFloat = 0
@@ -82,7 +81,6 @@ struct ListRepairView: View {
         }
     }
     
-    
     private var emptyRepairList: some View {
         VStack(alignment: .center) {
             VStack(spacing: 8) {
@@ -102,7 +100,7 @@ struct ListRepairView: View {
     
     private var listRepairView: some View {
         ForEach(filteredRepairs) { repair in
-            NavigationLink(destination: DetailView(repair: repair)
+            NavigationLink(destination: DetailRepairView(repair: repair)
                 .onAppear { showTapBar = false }
                 .onDisappear { showTapBar = true }) {
                 ListRowView(repair: repair)

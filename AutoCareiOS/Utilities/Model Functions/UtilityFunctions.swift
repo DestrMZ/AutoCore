@@ -74,7 +74,7 @@ func copyToClipboard(text: String) {
 }
 
 /// Выполняет тактильную отдачу (haptic feedback) с тяжелым стилем.
-func provideHapticFeedback() {
+func provideHapticFeedbackHeavy() {
     let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     impactFeedbackGenerator.prepare()
     impactFeedbackGenerator.impactOccurred()
@@ -122,4 +122,10 @@ func percentFormatter() -> NumberFormatter {
 
 func hideKeyboard() {
     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+}
+
+
+func saveImageToDevice(image: UIImage?) {
+    guard let image = image else { return }
+    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
 }

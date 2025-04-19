@@ -52,7 +52,7 @@ struct FinalExpensView: View {
 
 #Preview {
     
-    var viewModel = ExpensesViewModel()
+    let viewModel = ExpensesViewModel()
     viewModel.amount = 100
     viewModel.nameRepair = "Change break"
     viewModel.category = RepairCategoryForWatchOS.service

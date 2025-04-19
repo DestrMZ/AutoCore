@@ -24,23 +24,6 @@
         }
       }
     },
-    "%d %@" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$d %2$@"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$d %2$@"
-          }
-        }
-      }
-    },
     "%lld" : {
       "localizations" : {
         "ru" : {
@@ -107,6 +90,17 @@
         }
       }
     },
+    "Add Photo" : {
+      "comment" : "Detail View",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить изображение"
+          }
+        }
+      }
+    },
     "Add repair" : {
       "localizations" : {
         "ru" : {
@@ -138,22 +132,12 @@
       }
     },
     "Amount" : {
+      "comment" : "AmountENG",
       "localizations" : {
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Цена"
-          }
-        }
-      }
-    },
-    "Amount: " : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Цена:"
           }
         }
       }
@@ -204,9 +188,6 @@
         }
       }
     },
-    "Article %@ copied!" : {
-
-    },
     "Article copy!" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -220,17 +201,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Артикул скопирован!"
-          }
-        }
-      }
-    },
-    "Article: %@" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Артикул: %@"
           }
         }
       }
@@ -273,13 +243,23 @@
         }
       }
     },
-    "Category:" : {
-      "extractionState" : "stale",
+    "Categories" : {
       "localizations" : {
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Категория:"
+            "value" : "Категории"
+          }
+        }
+      }
+    },
+    "Category" : {
+      "comment" : "InfoCard",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Категория"
           }
         }
       }
@@ -370,17 +350,6 @@
         }
       }
     },
-    "Date: " : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Дата:"
-          }
-        }
-      }
-    },
     "Delete" : {
       "localizations" : {
         "ru" : {
@@ -412,7 +381,15 @@
       }
     },
     "Description" : {
-
+      "comment" : "InfoCard",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Описание"
+          }
+        }
+      }
     },
     "Description (optional)" : {
       "localizations" : {
@@ -420,28 +397,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Описание (необязательно)"
-          }
-        }
-      }
-    },
-    "Description: " : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Описание:"
-          }
-        }
-      }
-    },
-    "Detail" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Детали ремонта"
           }
         }
       }
@@ -565,6 +520,36 @@
         }
       }
     },
+    "Enter a new name" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введите новое имя"
+          }
+        }
+      }
+    },
+    "Enter description" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введите описание работ"
+          }
+        }
+      }
+    },
+    "Enter value" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сумма"
+          }
+        }
+      }
+    },
     "EURO" : {
       "localizations" : {
         "ru" : {
@@ -598,6 +583,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Экспортировать"
+          }
+        }
+      }
+    },
+    "Failed to load image!" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ошибка! Изображение не удалось загрузись."
           }
         }
       }
@@ -650,6 +645,16 @@
         }
       }
     },
+    "Great, the image has been added to the gallery." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отлично, изображение добавлено в галерею."
+          }
+        }
+      }
+    },
     "Hybrid" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -684,6 +689,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Страховка"
+          }
+        }
+      }
+    },
+    "Invalid Input" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Некорректные значения"
           }
         }
       }
@@ -740,22 +755,12 @@
       }
     },
     "Mileage" : {
+      "comment" : "InfoCard",
       "localizations" : {
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Пробег"
-          }
-        }
-      }
-    },
-    "Mileage: " : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Пробег:"
           }
         }
       }
@@ -811,22 +816,12 @@
       }
     },
     "Name repair" : {
+      "extractionState" : "manual",
       "localizations" : {
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Что было сделано?"
-          }
-        }
-      }
-    },
-    "Name: " : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Название:"
           }
         }
       }
@@ -878,6 +873,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Упс"
+          }
+        }
+      }
+    },
+    "Ops... Value must be greater than zero." : {
+      "comment" : "InfoCardEND",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ой... Значение должно быть больше нуля."
           }
         }
       }
@@ -964,7 +970,14 @@
       }
     },
     "Photos" : {
-
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изображения"
+          }
+        }
+      }
     },
     "Please restart the app for the changes to take effect." : {
       "localizations" : {
@@ -1044,6 +1057,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Поиск"
+          }
+        }
+      }
+    },
+    "Select a new date" : {
+      "comment" : "Datail view",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выберите новую дату"
           }
         }
       }
@@ -1264,6 +1288,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Неделя"
+          }
+        }
+      }
+    },
+    "What did you do?" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Что было сделано?"
           }
         }
       }

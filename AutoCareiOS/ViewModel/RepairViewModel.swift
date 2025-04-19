@@ -26,7 +26,6 @@ class RepairViewModel: ObservableObject {
     @Published var photoRepair: [Data] = [Data()]
     @Published var repairCategory: RepairCategory = .service
     
-    
     @Published var car: Car? = nil
     
     @Published var repairArray: [Repair] = []
@@ -124,6 +123,12 @@ class RepairViewModel: ObservableObject {
         var partsDict: [String: String] = [:]
         
         for part in parts {
+            let partArticle = part.article
+            let partName = part.name
+            
+            if partArticle.trimmingCharacters(in: .whitespaces).isEmpty && partName.trimmingCharacters(in: .whitespaces).isEmpty {
+                continue
+            }
             partsDict[part.article] = part.name
         }
         

@@ -103,7 +103,7 @@ struct SelectCarView: View {
                                 if let vinNumberIndex = carViewModel.allCars.firstIndex( where: { $0.vinNumber == car.vinNumber }) {
                                     let currencyCar = carViewModel.allCars[vinNumberIndex]
                                     copyToClipboard(text: currencyCar.vinNumber ?? "")
-                                    provideHapticFeedback()
+                                    provideHapticFeedbackHeavy()
                                 }
                             } label: {
                                 Label("Copy VIN-Number", systemImage: "doc.circle.fill")

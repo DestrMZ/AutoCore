@@ -87,7 +87,7 @@ struct AddRepairView: View {
     var formView: some View {
         
         VStack(spacing: 20) {
-            TextField("Name repair", text: $nameRepair)
+            TextField("What did you do?", text: $nameRepair)
                 .disableAutocorrection(true)
                 .underlineTextField()
                 .shadow(radius: 5)
@@ -235,8 +235,8 @@ struct AddButtonRepairView: View {
         }) {
             Image(systemName: "plus.circle.fill")
                 .resizable()
-                .frame(width: 50, height: 50)
-                .foregroundColor(.red)
+                .frame(width: 60, height: 60)
+                .foregroundColor(.primary)
         }
     }
 }

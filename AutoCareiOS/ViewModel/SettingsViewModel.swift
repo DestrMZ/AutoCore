@@ -12,7 +12,7 @@ import SwiftUI
 class SettingsViewModel: ObservableObject {
     
     @AppStorage("theme") var theme: String = "System"
-    @AppStorage("distanceUnit") var distanceUnit: String = "km"
+    @AppStorage("distanceUnit") var distanceUnit: String = "км"
     @AppStorage("currency") var currency: String = "USD"
     @AppStorage("language") var language: String = "English" {
         didSet {

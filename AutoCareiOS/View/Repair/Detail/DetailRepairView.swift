@@ -1,0 +1,121 @@
+//
+//  DetailRepairView.swift
+//  AutoCareiOS
+//
+//  Created by Ivan Maslennikov on 24.03.2025.
+//
+
+import SwiftUI
+import PhotosUI
+
+struct DetailRepairView: View {
+    
+    @EnvironmentObject var repairViewModel: RepairViewModel
+    @EnvironmentObject var settingsViewModel: SettingsViewModel
+    
+    @State private var isRepairEditing: Bool = false
+    
+    @State private var editedPartName: String = ""
+    @State private var editedRepairDate: Date = Date.now
+    @State private var editedCost: Int? = nil
+    @State private var editedMileage: Int? = nil
+    @State private var editCategory: RepairCategory = .fuel
+    @State private var editedNotes: String = ""
+    @State private var editPartsRepair: [Part] = []
+    @State private var editedPhotoRepair: [Data] = []
+    
+    var repair: Repair
+    
+    private func loadRepairForEditing() {
+        editedPartName = repair.partReplaced ?? ""
+        editedRepairDate = repair.repairDate ?? Date()
+        editedCost = Int(repair.amount)
+        editedMileage = Int(repair.repairMileage)
+        editCategory = RepairCategory(rawValue: repair.repairCategory ?? RepairCategory.service.rawValue) ?? .service
+        editedNotes = repair.notes ?? ""
+        editedPhotoRepair = repair.photoRepair ?? []
+    }
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24) {
+            
+                HeaderView(
+                    isRepairEditing: $isRepairEditing,
+                    partName: $editedPartName,
+                    repairDate: $editedRepairDate,
+                    repair: repair)
+                
+                InfoCardView(
+                    isRepairEditing: $isRepairEditing,
+                    cost: $editedCost,
+                    mileage: $editedMileage,
+                    category: $editCategory,
+                    notes: $editedNotes,
+                    repair: repair)
+                
+                if isRepairEditing || !(repair.parts?.isEmpty ?? true) {
+                    PartsView(
+                        isRepairEditing: $isRepairEditing,
+                        partsList: $editPartsRepair,
+                        repair: repair)
+                }
+                
+                Divider()
+                
+                if isRepairEditing || !(repair.photoRepair?.isEmpty ?? true) {
+                    ImageView(
+                        isRepairEditing: $isRepairEditing,
+                        photoRepair: $editedPhotoRepair,
+                        repair: repair)
+                }
+            }
+            .padding()
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(isRepairEditing ? "Save" : "Edit", action: {
+                    if isRepairEditing {
+                        repairViewModel.editingRepair(
+                            for: repair,
+                            partReplaced: editedPartName,
+                            amount: Int32(editedCost ?? 0),
+                            repairDate: editedRepairDate,
+                            repairMileage: Int32(editedMileage ?? 0),
+                            notes: editedNotes,
+                            photoRepair: editedPhotoRepair,
+                            repairCategory: editCategory,
+                            partsDict: Dictionary(uniqueKeysWithValues: editPartsRepair.map {( $0.article, $0.name )}))
+                    }
+                    isRepairEditing.toggle()
+                })
+                .foregroundStyle(.primary)
+            }
+        }
+        .onChange(of: isRepairEditing) { newValue in
+            if newValue {
+                loadRepairForEditing()
+            }
+        } // При переходе в режим редактирования, загружаем информацию в edit-свойства
+    }
+}
+
+
+#Preview {
+    let context = CoreDataManaged.shared.context
+    
+    let repair = Repair(context: context)
+    repair.partReplaced = "Brake pads"
+    repair.amount = 100_000
+    repair.repairMileage = 123_000
+    repair.repairDate = Date()
+    repair.notes = "Brake pads were replaced"
+    repair.parts = ["EF31": "Generator", "E531": "Generator"]
+    repair.repairCategory = "Service"
+    
+    return DetailRepairView(repair: repair)
+        .environmentObject(RepairViewModel())
+        .environmentObject(SettingsViewModel())
+}
+
+
