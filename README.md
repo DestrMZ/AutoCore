@@ -1,4 +1,4 @@
-<h1 align="center">🚘 AutoCore</h1>
+<h1 align="center">🚘 AutoCare</h1>
 
 <p align="center">
   iOS-приложение для учёта автомобильных расходов — от техобслуживания до страховки и бензина.
