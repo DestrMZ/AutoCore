@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5C5942AD2D32FC76005C2AEF /* DatePickerRange in Frameworks */ = {isa = PBXBuildFile; productRef = 5C5942AC2D32FC76005C2AEF /* DatePickerRange */; };
-		5CAC12622CFB98FB00543574 /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 5CAC12612CFB98FB00543574 /* DGCharts */; };
+		5C158F512DC74DB000BEC527 /* DatePickerRange in Frameworks */ = {isa = PBXBuildFile; productRef = 5C158F502DC74DB000BEC527 /* DatePickerRange */; };
+		5C158F542DC74DBD00BEC527 /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 5C158F532DC74DBD00BEC527 /* DGCharts */; };
 		5CF673BD2D80929E00BC73C8 /* AutoCareWatchOS.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 5CF673B02D80929C00BC73C8 /* AutoCareWatchOS.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -42,6 +42,136 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		5C18EE1E2DB567B5009BE4ED /* Exceptions for "AutoCareiOS" folder in "AutoCareiOS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"App /AutoCareiOS.swift",
+				"App /ContentView.swift",
+				"App /MainView.swift",
+				"Core/CoreData/Car/Car+CoreDataClass.swift",
+				"Core/CoreData/Car/Car+CoreDataProperties.swift",
+				Core/CoreData/carRepairApp.xcdatamodeld,
+				Core/CoreData/CoreDataStack.swift,
+				"Core/CoreData/Repair/Repair+CoreDataClass.swift",
+				"Core/CoreData/Repair/Repair+CoreDataProperties.swift",
+				"Core/CoreData/VinStore/VinStore+CoreDataClass.swift",
+				"Core/CoreData/VinStore/VinStore+CoreDataProperties.swift",
+				Core/Errors/CarServiceError.swift,
+				Core/Errors/RepairServiceError.swift,
+				Core/Service/CarService.swift,
+				Core/Service/RepairService.swift,
+				Core/Service/VinService.swift,
+				Core/UserPreferences/EnumModel.swift,
+				Core/UserPreferences/Parts.swift,
+				Core/WatchSession/PhoneSessionManager.swift,
+				Core/WatchSession/PhoneSessionViewModel.swift,
+				"Features /Car/Add/AddCarView.swift",
+				"Features /Car/Edit/EditCarView.swift",
+				"Features /Car/Select/EmptyCarList.swift",
+				"Features /Car/Select/SelectCarView.swift",
+				"Features /Car/Select/SelectRowCarView.swift",
+				"Features /Car/ViewModels/CarViewModel.swift",
+				"Features /Repair/Add/AddRepairView.swift",
+				"Features /Repair/Common/ImageMapper.swift",
+				"Features /Repair/Common/PartsMapper.swift",
+				"Features /Repair/Detail/Detail repair/HeaderView.swift",
+				"Features /Repair/Detail/Detail repair/ImageView.swift",
+				"Features /Repair/Detail/Detail repair/InfoCardView.swift",
+				"Features /Repair/Detail/Detail repair/PartsView.swift",
+				"Features /Repair/Detail/DetailRepairView.swift",
+				"Features /Repair/List/ListRepairView.swift",
+				"Features /Repair/List/ListRowView.swift",
+				"Features /Repair/Parts/PartsRowView.swift",
+				"Features /Repair/ViewModels/RepairViewModel.swift",
+				"Features /Settings/ViewModels/SettingsViewModel.swift",
+				"Features /Settings/Views/SettingsView.swift",
+				"Features /Statistics/Charts/UIKitCombinedChartView.swift",
+				"Features /Statistics/Charts/UIKitPieChartView.swift",
+				"Features /Statistics/Filters/SelectDateView.swift",
+				"Features /Statistics/View/StatisticsView.swift",
+				"Features /Statistics/ViewModels/RepairStatsViewModel.swift",
+				Resources/Assets.xcassets,
+				Resources/Localizable.xcstrings,
+				"Resources/Preview Assets.xcassets",
+				"Shared /AlertTest.swift",
+				"Shared /AlertToast/ActivityIndicator.swift",
+				"Shared /AlertToast/AlertView.swift",
+				"Shared /AlertToast/BlurView.swift",
+				"Shared /UIComponents /CustomPickerField.swift",
+				"Shared /UIComponents /CustomTapBar.swift",
+				"Shared /UIComponents /CustomUITextField.swift",
+				"Shared /UIComponents /FullScreenImageView.swift",
+				"Shared /UIComponents /SearchBar.swift",
+				"Shared /Utilities /UtilityFunctions.swift",
+				Task.md,
+				"Template !!!! .swift",
+			);
+			target = 5C2005052CB714BA0058D993 /* AutoCareiOS */;
+		};
+		5C18EE202DB567B5009BE4ED /* Exceptions for "AutoCareiOS" folder in "AutoCareWatchOS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"App /AutoCareiOS.swift",
+				"App /ContentView.swift",
+				"App /MainView.swift",
+				"Core/CoreData/Car/Car+CoreDataClass.swift",
+				"Core/CoreData/Car/Car+CoreDataProperties.swift",
+				Core/CoreData/carRepairApp.xcdatamodeld,
+				Core/CoreData/CoreDataStack.swift,
+				"Core/CoreData/Repair/Repair+CoreDataClass.swift",
+				"Core/CoreData/Repair/Repair+CoreDataProperties.swift",
+				"Core/CoreData/VinStore/VinStore+CoreDataClass.swift",
+				"Core/CoreData/VinStore/VinStore+CoreDataProperties.swift",
+				Core/Service/CarService.swift,
+				Core/Service/RepairService.swift,
+				Core/Service/VinService.swift,
+				Core/UserPreferences/EnumModel.swift,
+				Core/UserPreferences/Parts.swift,
+				Core/WatchSession/PhoneSessionManager.swift,
+				Core/WatchSession/PhoneSessionViewModel.swift,
+				"Features /Car/Add/AddCarView.swift",
+				"Features /Car/Edit/EditCarView.swift",
+				"Features /Car/Select/EmptyCarList.swift",
+				"Features /Car/Select/SelectCarView.swift",
+				"Features /Car/Select/SelectRowCarView.swift",
+				"Features /Car/ViewModels/CarViewModel.swift",
+				"Features /Repair/Add/AddRepairView.swift",
+				"Features /Repair/Common/PartsMapper.swift",
+				"Features /Repair/Detail/Detail repair/HeaderView.swift",
+				"Features /Repair/Detail/Detail repair/ImageView.swift",
+				"Features /Repair/Detail/Detail repair/InfoCardView.swift",
+				"Features /Repair/Detail/Detail repair/PartsView.swift",
+				"Features /Repair/Detail/DetailRepairView.swift",
+				"Features /Repair/List/ListRepairView.swift",
+				"Features /Repair/List/ListRowView.swift",
+				"Features /Repair/Parts/PartsRowView.swift",
+				"Features /Repair/ViewModels/RepairViewModel.swift",
+				"Features /Settings/ViewModels/SettingsViewModel.swift",
+				"Features /Settings/Views/SettingsView.swift",
+				"Features /Statistics/Charts/UIKitCombinedChartView.swift",
+				"Features /Statistics/Charts/UIKitPieChartView.swift",
+				"Features /Statistics/Filters/SelectDateView.swift",
+				"Features /Statistics/View/StatisticsView.swift",
+				"Features /Statistics/ViewModels/RepairStatsViewModel.swift",
+				Info.plist,
+				Resources/Assets.xcassets,
+				Resources/Localizable.xcstrings,
+				"Resources/Preview Assets.xcassets",
+				"Shared /AlertTest.swift",
+				"Shared /AlertToast/ActivityIndicator.swift",
+				"Shared /AlertToast/AlertView.swift",
+				"Shared /AlertToast/BlurView.swift",
+				"Shared /UIComponents /CustomPickerField.swift",
+				"Shared /UIComponents /CustomTapBar.swift",
+				"Shared /UIComponents /CustomUITextField.swift",
+				"Shared /UIComponents /FullScreenImageView.swift",
+				"Shared /UIComponents /SearchBar.swift",
+				"Shared /Utilities /UtilityFunctions.swift",
+				Task.md,
+				"Template !!!! .swift",
+			);
+			target = 5CF673AF2D80929C00BC73C8 /* AutoCareWatchOS */;
+		};
 		5C7321992D9F0F7300DF9AAA /* Exceptions for "AutoCareWatchOS" folder in "AutoCareWatchOS" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -49,20 +179,14 @@
 			);
 			target = 5CF673AF2D80929C00BC73C8 /* AutoCareWatchOS */;
 		};
-		5C86F6122D86DCFF00B43FE1 /* Exceptions for "AutoCareiOS" folder in "AutoCareiOS" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 5C2005052CB714BA0058D993 /* AutoCareiOS */;
-		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		5C2005082CB714BB0058D993 /* AutoCareiOS */ = {
+		5C18EDEA2DB567B5009BE4ED /* AutoCareiOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				5C86F6122D86DCFF00B43FE1 /* Exceptions for "AutoCareiOS" folder in "AutoCareiOS" target */,
+				5C18EE1E2DB567B5009BE4ED /* Exceptions for "AutoCareiOS" folder in "AutoCareiOS" target */,
+				5C18EE202DB567B5009BE4ED /* Exceptions for "AutoCareiOS" folder in "AutoCareWatchOS" target */,
 			);
 			path = AutoCareiOS;
 			sourceTree = "<group>";
@@ -82,8 +206,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5C5942AD2D32FC76005C2AEF /* DatePickerRange in Frameworks */,
-				5CAC12622CFB98FB00543574 /* DGCharts in Frameworks */,
+				5C158F542DC74DBD00BEC527 /* DGCharts in Frameworks */,
+				5C158F512DC74DB000BEC527 /* DatePickerRange in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,7 +224,7 @@
 		5C2004FD2CB714BA0058D993 = {
 			isa = PBXGroup;
 			children = (
-				5C2005082CB714BB0058D993 /* AutoCareiOS */,
+				5C18EDEA2DB567B5009BE4ED /* AutoCareiOS */,
 				5CF673B12D80929C00BC73C8 /* AutoCareWatchOS */,
 				5C2005072CB714BB0058D993 /* Products */,
 			);
@@ -132,13 +256,10 @@
 			dependencies = (
 				5CF673BC2D80929E00BC73C8 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				5C2005082CB714BB0058D993 /* AutoCareiOS */,
-			);
 			name = AutoCareiOS;
 			packageProductDependencies = (
-				5CAC12612CFB98FB00543574 /* DGCharts */,
-				5C5942AC2D32FC76005C2AEF /* DatePickerRange */,
+				5C158F502DC74DB000BEC527 /* DatePickerRange */,
+				5C158F532DC74DBD00BEC527 /* DGCharts */,
 			);
 			productName = carRepairApp;
 			productReference = 5C2005062CB714BB0058D993 /* AutoCareiOS.app */;
@@ -157,6 +278,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				5C18EDEA2DB567B5009BE4ED /* AutoCareiOS */,
 				5CF673B12D80929C00BC73C8 /* AutoCareWatchOS */,
 			);
 			name = AutoCareWatchOS;
@@ -195,8 +317,8 @@
 			mainGroup = 5C2004FD2CB714BA0058D993;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				5CAC12602CFB98FB00543574 /* XCRemoteSwiftPackageReference "Charts" */,
-				5C5942AB2D32FC76005C2AEF /* XCRemoteSwiftPackageReference "DatePickerRange" */,
+				5C158F4F2DC74DB000BEC527 /* XCRemoteSwiftPackageReference "DatePickerRange" */,
+				5C158F522DC74DBD00BEC527 /* XCRemoteSwiftPackageReference "Charts" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5C2005072CB714BB0058D993 /* Products */;
@@ -383,7 +505,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"AutoCareiOS/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"AutoCareiOS/Resources\"";
 				DEVELOPMENT_TEAM = CHU99933X5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -395,6 +517,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "";
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -423,7 +546,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"AutoCareiOS/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"AutoCareiOS/Resources\"";
 				DEVELOPMENT_TEAM = CHU99933X5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -435,6 +558,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "";
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -463,7 +587,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"AutoCareWatchOS/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"AutoCareWatchOS\"";
 				DEVELOPMENT_TEAM = CHU99933X5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -471,6 +595,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = AutoCare;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.ivanMaslennikov.AutoCare;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -495,7 +620,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"AutoCareWatchOS/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"AutoCareWatchOS\"";
 				DEVELOPMENT_TEAM = CHU99933X5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -503,6 +628,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = AutoCare;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.ivanMaslennikov.AutoCare;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -552,7 +678,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		5C5942AB2D32FC76005C2AEF /* XCRemoteSwiftPackageReference "DatePickerRange" */ = {
+		5C158F4F2DC74DB000BEC527 /* XCRemoteSwiftPackageReference "DatePickerRange" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/DestrMZ/DatePickerRange";
 			requirement = {
@@ -560,7 +686,7 @@
 				minimumVersion = 1.1.4;
 			};
 		};
-		5CAC12602CFB98FB00543574 /* XCRemoteSwiftPackageReference "Charts" */ = {
+		5C158F522DC74DBD00BEC527 /* XCRemoteSwiftPackageReference "Charts" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/danielgindi/Charts.git";
 			requirement = {
@@ -571,14 +697,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		5C5942AC2D32FC76005C2AEF /* DatePickerRange */ = {
+		5C158F502DC74DB000BEC527 /* DatePickerRange */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 5C5942AB2D32FC76005C2AEF /* XCRemoteSwiftPackageReference "DatePickerRange" */;
+			package = 5C158F4F2DC74DB000BEC527 /* XCRemoteSwiftPackageReference "DatePickerRange" */;
 			productName = DatePickerRange;
 		};
-		5CAC12612CFB98FB00543574 /* DGCharts */ = {
+		5C158F532DC74DBD00BEC527 /* DGCharts */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 5CAC12602CFB98FB00543574 /* XCRemoteSwiftPackageReference "Charts" */;
+			package = 5C158F522DC74DBD00BEC527 /* XCRemoteSwiftPackageReference "Charts" */;
 			productName = DGCharts;
 		};
 /* End XCSwiftPackageProductDependency section */
