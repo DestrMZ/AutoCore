@@ -41,7 +41,8 @@ AutoCore позволяет отслеживать затраты на один 
 
 | Главный экран | Редактирование машины | Графики и статистика |
 |---------------|------------------------|------------------------|
-| ![cars](https://github.com/user-attachments/assets/21170abd-4eed-4ee7-9ea6-230b89051083) | ![edit-car](https://github.com/user-attachments/assets/2742cfa5-a434-4e1e-90d1-06d71afdc36a) | ![stats](https://github.com/user-attachments/assets/faa8de89-8be2-4b42-98ff-785286d1d01a) |
+| ![cars](https://github.com/user-attachments/assets/653c0060-6f85-4b52-8edf-75261c16863c) | ![edit-car](https://github.com/user-attachments/assets/7cc27c46-20b3-41b6-aa5a-a7d3fa859b22) | ![stats](https://github.com/user-attachments/assets/e0d6c50a-b1fb-4d28-8bad-98a82791bb95) |
+
 
 ---
 
