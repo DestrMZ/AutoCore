@@ -1,8 +1,8 @@
 //
 //  VinStore+CoreDataClass.swift
-//  carRepairApp
+//  AutoCareiOS
 //
-//  Created by Ivan Maslennikov on 15.11.2024.
+//  Created by Ivan Maslennikov on 13.06.2025.
 //
 //
 

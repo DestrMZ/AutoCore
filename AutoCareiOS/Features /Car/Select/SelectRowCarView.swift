@@ -12,62 +12,55 @@ struct SelectRowCarView: View {
     @EnvironmentObject var carViewModel: CarViewModel
     @EnvironmentObject var settingsViewModel: SettingsViewModel
     
-    @State var blackRed: Color = Color("RedBlack")
-    
     var car: Car
     
     var body: some View {
         
-        NavigationStack {
-            VStack(alignment: .leading) {
-                HStack {
-                    if let imageData = car.photoCar, let image = UIImage(data: imageData) {
-                        Image(uiImage: image)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 60, height: 60)
-                            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(
-                                        carViewModel.selectedCar?.id == car.id ? Color.blackRed : Color.clear,
-                                        lineWidth: 2
-                                    )
-                                    .animation(.easeInOut(duration: 0.3), value: carViewModel.selectedCar?.id)
-                            )
-                            .shadow(
-                                color: carViewModel.selectedCar?.id == car.id ? Color.gray.opacity(0.6) : Color.clear,
-                                radius: 6
-                            )
-                    } else {
-                        Circle()
-                            .fill(Color.gray.opacity(0.2))
-                            .frame(width: 60, height: 60)
-                            .overlay(
-                                Circle()
-                                    .stroke(
-                                        carViewModel.selectedCar?.id == car.id ? Color.blackRed : Color.gray.opacity(0.4),
-                                        lineWidth: 2
-                                    )
-                                    .animation(.easeInOut(duration: 0.3), value: carViewModel.selectedCar?.id)
-                            )
-                            .shadow(
-                                color: carViewModel.selectedCar?.id == car.id ? Color.gray.opacity(0.6) : Color.clear,
-                                radius: 6
-                            )
-                    }
-                    
-                    VStack(alignment: .leading) {
-                        Text("\(car.nameModel ?? "Unknown")")
-                            .font(.title3)
-                            .bold()
-                        Text("Current mileage: \(String(car.mileage)) \(settingsViewModel.distanceUnit)")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                        Text("VIN Number: \(car.vinNumber ?? "Unknown")")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
+        VStack(alignment: .leading) {
+            HStack {
+                if let imageData = car.photoCar, let image = UIImage(data: imageData) {
+                    Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 50, height: 50)
+                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(
+                                    carViewModel.selectedCar?.id == car.id ? Color.blackRed : Color.clear,
+                                    lineWidth: 2
+                                )
+                                .animation(.easeInOut(duration: 0.3), value: carViewModel.selectedCar?.id)
+                        )
+                        .shadow(
+                            color: carViewModel.selectedCar?.id == car.id ? Color.gray.opacity(0.6) : Color.clear,
+                            radius: 6
+                        )
+                } else {
+                    Circle()
+                        .fill(Color.gray.opacity(0.2))
+                        .frame(width: 50, height: 50)
+                        .overlay(
+                            Circle()
+                                .stroke(
+                                    carViewModel.selectedCar?.id == car.id ? Color.blackRed : Color.gray.opacity(0.4),
+                                    lineWidth: 2
+                                )
+                                .animation(.easeInOut(duration: 0.3), value: carViewModel.selectedCar?.id)
+                        )
+                        .shadow(
+                            color: carViewModel.selectedCar?.id == car.id ? Color.gray.opacity(0.6) : Color.clear,
+                            radius: 6
+                        )
+                }
+                
+                VStack(alignment: .leading) {
+                    Text("\(car.nameModel ?? "Unknown")")
+                        .font(.title3)
+                        .bold()
+                    Text("VIN Number: \(car.vinNumber ?? "Unknown")")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                 }
             }
         }
@@ -78,7 +71,6 @@ struct SelectRowCarView: View {
     let context = CoreDataStack.shared.context
     
     let car1 = Car(context: context)
-//    car1.photoCar = UIImage(named: "car2")?.pngData()
     car1.nameModel = "Audi"
     car1.mileage = 100_000
     car1.vinNumber = "123456789"

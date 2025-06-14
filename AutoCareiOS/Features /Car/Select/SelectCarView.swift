@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SelectCarView: View {
+struct SelectCarView: View { // Legacy
     
     @EnvironmentObject var carViewModel: CarViewModel
     

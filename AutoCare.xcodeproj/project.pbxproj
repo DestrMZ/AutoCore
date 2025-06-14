@@ -52,13 +52,19 @@
 				"Core/CoreData/Car/Car+CoreDataProperties.swift",
 				Core/CoreData/carRepairApp.xcdatamodeld,
 				Core/CoreData/CoreDataStack.swift,
+				"Core/CoreData/Insurance/Insurance+CoreDataClass.swift",
+				"Core/CoreData/Insurance/Insurance+CoreDataProperties.swift",
 				"Core/CoreData/Repair/Repair+CoreDataClass.swift",
 				"Core/CoreData/Repair/Repair+CoreDataProperties.swift",
 				"Core/CoreData/VinStore/VinStore+CoreDataClass.swift",
 				"Core/CoreData/VinStore/VinStore+CoreDataProperties.swift",
 				Core/Errors/CarServiceError.swift,
+				Core/Errors/InsuranceErrorStatus.swift,
 				Core/Errors/RepairServiceError.swift,
+				Core/Errors/UpdateMileageError.swift,
 				Core/Service/CarService.swift,
+				Core/Service/InsuranceService.swift,
+				Core/Service/NotificationService.swift,
 				Core/Service/RepairService.swift,
 				Core/Service/VinService.swift,
 				Core/UserPreferences/EnumModel.swift,
@@ -66,14 +72,33 @@
 				Core/WatchSession/PhoneSessionManager.swift,
 				Core/WatchSession/PhoneSessionViewModel.swift,
 				"Features /Car/Add/AddCarView.swift",
+				"Features /Car/Dashboard/CarProfileView.swift",
+				"Features /Car/Dashboard/CarTabContainerView.swift",
+				"Features /Car/Dashboard/Common/AddNewCarView.swift",
+				"Features /Car/Dashboard/Common/CarAvatarView.swift",
+				"Features /Car/Dashboard/Common/CarDrawerView.swift",
+				"Features /Car/Dashboard/Common/CardView.swift",
+				"Features /Car/Dashboard/Common/CarPlaceholderView.swift",
+				"Features /Car/Dashboard/Common/LicensePlateView.swift",
+				"Features /Car/Dashboard/Common/MaintenanceView.swift",
+				"Features /Car/Dashboard/Common/MileageCardView.swift",
+				"Features /Car/Dashboard/Common/RefuelCardView.swift",
+				"Features /Car/Dashboard/Common/SheetUpdateMileageView.swift",
+				"Features /Car/Dashboard/Insurance/AddInsuranceSheet.swift",
+				"Features /Car/Dashboard/Insurance/InsuranceCardView.swift",
+				"Features /Car/Dashboard/Insurance/InsuranceListSelection.swift",
+				"Features /Car/Dashboard/WebKit/WebView.swift",
+				"Features /Car/Dashboard/WebKit/WebViewScreen.swift",
 				"Features /Car/Edit/EditCarView.swift",
 				"Features /Car/Select/EmptyCarList.swift",
 				"Features /Car/Select/SelectCarView.swift",
 				"Features /Car/Select/SelectRowCarView.swift",
 				"Features /Car/ViewModels/CarViewModel.swift",
+				"Features /Car/ViewModels/InsuranceViewModel.swift",
 				"Features /Repair/Add/AddRepairView.swift",
 				"Features /Repair/Common/ImageMapper.swift",
 				"Features /Repair/Common/PartsMapper.swift",
+				"Features /Repair/Common/RepairGroup.swift",
 				"Features /Repair/Detail/Detail repair/HeaderView.swift",
 				"Features /Repair/Detail/Detail repair/ImageView.swift",
 				"Features /Repair/Detail/Detail repair/InfoCardView.swift",
@@ -118,11 +143,15 @@
 				"Core/CoreData/Car/Car+CoreDataProperties.swift",
 				Core/CoreData/carRepairApp.xcdatamodeld,
 				Core/CoreData/CoreDataStack.swift,
+				"Core/CoreData/Insurance/Insurance+CoreDataClass.swift",
+				"Core/CoreData/Insurance/Insurance+CoreDataProperties.swift",
 				"Core/CoreData/Repair/Repair+CoreDataClass.swift",
 				"Core/CoreData/Repair/Repair+CoreDataProperties.swift",
 				"Core/CoreData/VinStore/VinStore+CoreDataClass.swift",
 				"Core/CoreData/VinStore/VinStore+CoreDataProperties.swift",
 				Core/Service/CarService.swift,
+				Core/Service/InsuranceService.swift,
+				Core/Service/NotificationService.swift,
 				Core/Service/RepairService.swift,
 				Core/Service/VinService.swift,
 				Core/UserPreferences/EnumModel.swift,
@@ -130,13 +159,32 @@
 				Core/WatchSession/PhoneSessionManager.swift,
 				Core/WatchSession/PhoneSessionViewModel.swift,
 				"Features /Car/Add/AddCarView.swift",
+				"Features /Car/Dashboard/CarProfileView.swift",
+				"Features /Car/Dashboard/CarTabContainerView.swift",
+				"Features /Car/Dashboard/Common/AddNewCarView.swift",
+				"Features /Car/Dashboard/Common/CarAvatarView.swift",
+				"Features /Car/Dashboard/Common/CarDrawerView.swift",
+				"Features /Car/Dashboard/Common/CardView.swift",
+				"Features /Car/Dashboard/Common/CarPlaceholderView.swift",
+				"Features /Car/Dashboard/Common/LicensePlateView.swift",
+				"Features /Car/Dashboard/Common/MaintenanceView.swift",
+				"Features /Car/Dashboard/Common/MileageCardView.swift",
+				"Features /Car/Dashboard/Common/RefuelCardView.swift",
+				"Features /Car/Dashboard/Common/SheetUpdateMileageView.swift",
+				"Features /Car/Dashboard/Insurance/AddInsuranceSheet.swift",
+				"Features /Car/Dashboard/Insurance/InsuranceCardView.swift",
+				"Features /Car/Dashboard/Insurance/InsuranceListSelection.swift",
+				"Features /Car/Dashboard/WebKit/WebView.swift",
+				"Features /Car/Dashboard/WebKit/WebViewScreen.swift",
 				"Features /Car/Edit/EditCarView.swift",
 				"Features /Car/Select/EmptyCarList.swift",
 				"Features /Car/Select/SelectCarView.swift",
 				"Features /Car/Select/SelectRowCarView.swift",
 				"Features /Car/ViewModels/CarViewModel.swift",
+				"Features /Car/ViewModels/InsuranceViewModel.swift",
 				"Features /Repair/Add/AddRepairView.swift",
 				"Features /Repair/Common/PartsMapper.swift",
+				"Features /Repair/Common/RepairGroup.swift",
 				"Features /Repair/Detail/Detail repair/HeaderView.swift",
 				"Features /Repair/Detail/Detail repair/ImageView.swift",
 				"Features /Repair/Detail/Detail repair/InfoCardView.swift",
@@ -296,7 +344,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1620;
+				LastUpgradeCheck = 1640;
 				TargetAttributes = {
 					5C2005052CB714BA0058D993 = {
 						CreatedOnToolsVersion = 16.0;
@@ -410,6 +458,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = CHU99933X5;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -475,6 +524,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = CHU99933X5;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -506,7 +556,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"AutoCareiOS/Resources\"";
-				DEVELOPMENT_TEAM = CHU99933X5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AutoCareiOS/Info.plist;
@@ -547,7 +596,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"AutoCareiOS/Resources\"";
-				DEVELOPMENT_TEAM = CHU99933X5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AutoCareiOS/Info.plist;
@@ -588,7 +636,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"AutoCareWatchOS\"";
-				DEVELOPMENT_TEAM = CHU99933X5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AutoCareWatchOS/Info.plist;
@@ -621,7 +668,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"AutoCareWatchOS\"";
-				DEVELOPMENT_TEAM = CHU99933X5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AutoCareWatchOS/Info.plist;

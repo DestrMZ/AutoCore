@@ -21,6 +21,7 @@ class CarViewModel: ObservableObject {
     @Published var engineType: EngineTypeEnum = .gasoline
     @Published var transmissionType: TransmissionTypeEnum = .manual
     @Published var photoCar: Data = Data()
+    @Published var stateNumber: String = ""
     
     @Published var alertMessage: String = ""
     @Published var alertShow: Bool = false
@@ -69,7 +70,7 @@ class CarViewModel: ObservableObject {
         }
     }
     
-    func createNewCar(nameModel: String, year: Int16, vinNumber: String, color: String?, mileage: Int32?, engineType: EngineTypeEnum, transmissionType: TransmissionTypeEnum, photoCar: UIImage) {
+    func createNewCar(nameModel: String, year: Int16, vinNumber: String, color: String?, mileage: Int32?, engineType: EngineTypeEnum, transmissionType: TransmissionTypeEnum, photoCar: UIImage, stateNumber: String?) {
         
         alertShow = false
         
@@ -81,7 +82,9 @@ class CarViewModel: ObservableObject {
             mileage: mileage ?? 1000,
             engineType: engineType.rawValue,
             transmissionType: transmissionType.rawValue,
-            photoCar: photoCar.jpegData(compressionQuality: 0.8)
+            photoCar: photoCar.jpegData(compressionQuality: 0.8),
+            stateNumber: stateNumber
+            
         )
         
         switch result {
@@ -129,6 +132,8 @@ class CarViewModel: ObservableObject {
         self.mileage = car.mileage
         self.engineType = EngineTypeEnum(rawValue: car.engineType ?? "") ?? .gasoline
         self.transmissionType = TransmissionTypeEnum(rawValue: car.transmissionType ?? "") ?? .manual
+        self.photoCar = car.photoCar ?? Data()
+        self.stateNumber = car.stateNumber ?? "Empty"
     }
     
     func getAllCars() {
@@ -155,6 +160,19 @@ class CarViewModel: ObservableObject {
             
             self.allCars.remove(at: index)
             selectedCar = nil
+        }
+    }
+    
+    func updateMileage(for car: Car, mileage: Int32) -> (success: Bool, message: String) {
+        let result = carService.updateMileage(for: car, mileage: mileage)
+        
+        switch result {
+        case .success:
+            self.mileage = mileage
+            
+            return (true, "Success")
+        case .failure(let error):
+            return (false, error.localizedDescription)
         }
     }
 }

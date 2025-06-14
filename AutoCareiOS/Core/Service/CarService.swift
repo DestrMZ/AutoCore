@@ -15,7 +15,7 @@ final class CarDataService {
     
     private let vinService = VinStoreService()
     
-    func creatingCar(nameModel: String, year: Int16, vinNumber: String, color: String?, mileage: Int32, engineType: String, transmissionType: String, photoCar: Data?) -> Result<Car, CarSaveError> {
+    func creatingCar(nameModel: String, year: Int16, vinNumber: String, color: String?, mileage: Int32, engineType: String, transmissionType: String, photoCar: Data?, stateNumber: String?) -> Result<Car, CarSaveError> {
         
         if nameModel.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             return .failure(.missingNameModel)
@@ -46,6 +46,7 @@ final class CarDataService {
         car.engineType = engineType
         car.transmissionType = transmissionType
         car.photoCar = photoCar
+        car.stateNumber = stateNumber ?? "Empty"
         
         vinService.addVin(vinNumber: vinNumber)
         
@@ -79,6 +80,16 @@ final class CarDataService {
             return .success(car)
         }
         return .failure(.updateFailed)
+    }
+    
+    func updateMileage(for car: Car?, mileage: Int32?) -> Result<Void, UpdateMileageError> {
+        guard car != nil else { return .failure(.carNotFound)}
+        guard let mileage = mileage else { return .failure(.invalidData)}
+        guard mileage >= 0 else { return .failure(.numberNonNegative)}
+        guard mileage < 5_000_000 else { return .failure(.exceedsMaximumValue)}
+        
+        saveContext()
+        return .success(())
     }
     
     func deleteCar(car: Car) {

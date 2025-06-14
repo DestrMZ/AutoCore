@@ -1,8 +1,8 @@
 //
 //  Repair+CoreDataClass.swift
-//  carRepairApp
+//  AutoCareiOS
 //
-//  Created by Ivan Maslennikov on 05.12.2024.
+//  Created by Ivan Maslennikov on 13.06.2025.
 //
 //
 

@@ -17,6 +17,7 @@ struct CustomTapBar: View {
         case repair            // Вкладка "Ремонт".
         case statistics        // Вкладка "Статистика".
         case settings          // Вкладка "Настройки".
+//        case testingView       // Вкладка для тестовых View
     }
     
     /// Структура для представления элемента вкладки с изображением и типом вкладки.
@@ -27,6 +28,7 @@ struct CustomTapBar: View {
     
     /// Массив элементов вкладок с соответствующими изображениями и типами.
     private let items = [
+//        TabItem(imageName: "testtube.2", type: .testingView),
         TabItem(imageName: "car.2", type: .cars),          // Вкладка "Автомобили".
         TabItem(imageName: "wrench", type: .repair),       // Вкладка "Ремонт".
         TabItem(imageName: "chart.bar", type: .statistics), // Вкладка "Статистика".
@@ -65,7 +67,7 @@ struct CustomTapBar: View {
                             // Обработчик нажатия на элемент.
                             withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
                                 selectedTab = item.type // Обновление выбранной вкладки.
-                                scale = 1.1 // Увеличение масштаба.
+                                scale = 1.3 // Увеличение масштаба.
                             }
                         }
                     Spacer() // Пробел между элементами вкладок.

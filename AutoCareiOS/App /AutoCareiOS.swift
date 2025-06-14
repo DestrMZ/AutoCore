@@ -25,6 +25,7 @@ struct AutoCareiOS: App {
                 .preferredColorScheme(settingsViewModel.changeColorScheme())
                 .onAppear {
                     carViewModel.initializeCarRepairApp()
+                    NotificationService.shared.requestNotificationPermission()
                 }
         }
     }

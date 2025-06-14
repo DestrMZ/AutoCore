@@ -20,6 +20,7 @@ class RepairViewModel: ObservableObject {
     @Published var photoRepair: [Data] = [Data()]
     @Published var repairCategory: RepairCategory = .service
     @Published var parts: [Part] = []
+    @Published var litresFuel: String = ""
     
     @Published var car: Car? = nil
     @Published var repairArray: [Repair] = []
@@ -27,7 +28,7 @@ class RepairViewModel: ObservableObject {
     @Published var alertMessage: String = ""
     @Published var alertShow: Bool = false
 
-    func createNewRepair(for car: Car?, partReplaced: String, amount: Int32, repairDate: Date?, repairMileage: Int32, notes: String, photoRepair: [Data], repairCategory: RepairCategory, partsDict: [String: String]) {
+    func createNewRepair(for car: Car?, partReplaced: String, amount: Int32, repairDate: Date?, repairMileage: Int32, notes: String, photoRepair: [Data], repairCategory: RepairCategory, partsDict: [String: String], litresFuel: String) {
         guard let car = car else { return }
         
         alertShow = false
@@ -41,7 +42,9 @@ class RepairViewModel: ObservableObject {
             photoRepair: photoRepair,
             repairCategory: repairCategory.rawValue,
             car: car,
-            partsDict: partsDict)
+            partsDict: partsDict,
+            litresFuel: Double(litresFuel)
+        )
         
         switch result {
         case .success():
@@ -76,6 +79,40 @@ class RepairViewModel: ObservableObject {
             alertMessage = error.localizedDescription
             alertShow = true
         }
+    }
+    
+    func getRepairsGroupByMonth(for repairs: [Repair]) -> [RepairGroup] {
+        var result: [String: [Repair]] = [:]
+        
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ru_RU")
+        formatter.dateFormat = "LLLL yyyy"
+        
+        for repair in repairs {
+            guard let date = repair.repairDate else { continue }
+            
+            let month = formatter.string(from: date)
+            let key = month.prefix(1).capitalized + month.dropFirst()
+            
+            if result[key] != nil {
+                result[key]?.append(repair)
+            } else {
+                result[key] = [repair]
+            }
+        }
+        
+        let sortedResult = result.sorted { (lhs, rhs) in
+            formatter.date(from: lhs.key)! > formatter.date(from: rhs.key)!
+        }
+        
+        return sortedResult.map { (month, repairsInMonth) in
+            let totalAmount = repairsInMonth.reduce(0) { $0 + Double($1.amount )}
+            return RepairGroup(monthTitle: month, repairs: repairsInMonth, totalAmount: totalAmount)}
+    }
+    
+    func getLastRefuel(car: Car?, repairs: [Repair]) -> (litres: String, date: Date) {
+        let result = repairService.fetchLatestRefueling(for: car, repairs: repairs)
+        return result
     }
     
     func getAllRepairs(for car: Car) {

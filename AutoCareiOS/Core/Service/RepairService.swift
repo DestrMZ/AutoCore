@@ -14,7 +14,7 @@ final class RepairDataService {
     
     private let context = CoreDataStack.shared.context
     
-    func creatingRepair(repairDate: Date?, partReplaced: String, amount: Int32, repairMileage: Int32, notes: String?, photoRepair: [Data]?, repairCategory: String, car: Car?, partsDict: [String: String]?) -> Result<Void, RepairErrorStatus> {
+    func creatingRepair(repairDate: Date?, partReplaced: String, amount: Int32, repairMileage: Int32, notes: String?, photoRepair: [Data]?, repairCategory: String, car: Car?, partsDict: [String: String]?, litresFuel: Double?) -> Result<Void, RepairErrorStatus> {
         
         guard !partReplaced.isEmpty else { return .failure(.missingPartReplaced) }
         guard amount >= 0 else { return .failure(.invalidAmount) }
@@ -28,8 +28,9 @@ final class RepairDataService {
         repair.notes = notes ?? ""
         repair.photoRepair = photoRepair
         repair.repairCategory = repairCategory
-        repair.cars = car
+        repair.car = car
         repair.parts = partsDict
+        repair.litresFuel = NSNumber(value: litresFuel ?? 0)
         
         saveContext()
         return .success(())
@@ -37,7 +38,7 @@ final class RepairDataService {
     
     func getAllRepairs(for car: Car) -> [Repair] {
         let requestRepair: NSFetchRequest<Repair> = Repair.fetchRequest()
-        requestRepair.predicate = NSPredicate(format: "cars == %@", car)
+        requestRepair.predicate = NSPredicate(format: "car == %@", car)
         do {
             return try context.fetch(requestRepair)
         } catch {
@@ -62,11 +63,23 @@ final class RepairDataService {
         repair.photoRepair = photoRepair ?? repair.photoRepair
         repair.repairCategory = repairCategory ?? repair.repairCategory
         repair.parts = partsDict ?? repair.parts
+        #warning("При добавлении функционала по редактированию ремонта, ты не передаешь litresFuel")
         
         saveContext()
         return .success(())
     }
     
+    func fetchLatestRefueling(for car: Car?, repairs: [Repair]) -> (litres: String, date: Date) {
+        let repairsFuel = repairs.filter { $0.repairCategory == "Fuel" && $0.repairDate != nil }
+        
+        if let latest = repairsFuel.max(by: { $0.repairDate! < $1.repairDate ?? Date() }) {
+            let dateRefuel = latest.repairDate
+            let litresRefuel = String(format: "%.1f", Double(truncating: latest.litresFuel ?? 0))
+            
+            return (litres: litresRefuel, date: dateRefuel ?? Date.now)
+        }
+        return (litres: "10", date: Date.now)
+    }
     
     func deleteRepair(at repair: Repair) {
         context.delete(repair)

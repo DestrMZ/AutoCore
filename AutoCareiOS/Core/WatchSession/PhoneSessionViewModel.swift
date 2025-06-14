@@ -79,7 +79,8 @@ class PhoneSessionViewModel: ObservableObject {
                     photoRepair: nil,
                     repairCategory: expense.category,
                     car: car,
-                    partsDict: [:]
+                    partsDict: [:],
+                    litresFuel: 0
                 )
                 
                 switch result {

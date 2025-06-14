@@ -26,7 +26,8 @@ struct ImageView: View {
     var body: some View {
         let displayPhotos = isRepairEditing
             ? photoRepair
-            : ImageMapper.convertToUIImage(images: repair.photoRepair) // !!!!!!!!!
+        : ImageMapper.convertToUIImage(images: repair.photoRepair) // !!!!!!!!!
+        #warning("Обрати внимание, не работает функционал по выводу изображения на полный экран!")
         VStack(alignment: .leading, spacing: 12) {
             Label("Photos", systemImage: "photo.stack.fill")
                 .font(.headline)

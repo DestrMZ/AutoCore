@@ -93,6 +93,7 @@ struct PartsView: View {
     repair.notes = "Brake pads were replaced"
     repair.parts = ["EF31": "Generator", "E531": "Starter"]
     repair.repairCategory = "Service"
+    repair.litresFuel = 10
     
     return PartsView(
         isRepairEditing: .constant(false),

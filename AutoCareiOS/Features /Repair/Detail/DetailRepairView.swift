@@ -112,6 +112,7 @@ struct DetailRepairView: View {
     repair.notes = "Brake pads were replaced"
     repair.parts = ["EF31": "Generator", "E531": "Generator"]
     repair.repairCategory = "Service"
+    repair.litresFuel = NSNumber(value: 10)
     
     return DetailRepairView(repair: repair)
         .environmentObject(RepairViewModel())

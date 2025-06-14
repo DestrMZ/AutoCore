@@ -26,6 +26,7 @@ struct AddRepairView: View {
     @State private var photoRepair: [Data] = []
     @State private var repairCategory: RepairCategory = .service
     @State private var parts: [Part] = [Part(article: "", name: "")]
+    @State private var litresFuel: String = ""
 
     @State private var showSuccessMessage: Bool = false
     
@@ -52,8 +53,9 @@ struct AddRepairView: View {
                                         notes: notesRepair,
                                         photoRepair: photoRepair,
                                         repairCategory: repairCategory,
-                                        partsDict: repairViewModel.savePart(parts: parts))
-                                    
+                                        partsDict: repairViewModel.savePart(parts: parts),
+                                        litresFuel: litresFuel
+                                    )
                                     dismiss()
                                 }
                             }.disabled(nameRepair.isEmpty || amountRepair ?? 0 <= 0 || mileageRepair ?? 0 <= 0)
@@ -93,6 +95,14 @@ struct AddRepairView: View {
                 .focused($focusedField, equals: .nameRepair)
             
             selectCategory // <- Select category
+            
+            if repairCategory.rawValue == "Fuel" {
+                TextField("How many liters were poured?", text: $litresFuel)
+                    .keyboardType(.numberPad)
+                    .disableAutocorrection(true)
+                    .shadow(radius: 5)
+                    .focused($focusedField, equals: .litresFuel)
+            }
             
             TextField("Amount", value: $amountRepair, formatter: numberFormatterForCoast())
                 .keyboardType(.decimalPad)

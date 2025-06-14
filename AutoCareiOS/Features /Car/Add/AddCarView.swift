@@ -20,6 +20,7 @@ struct AddCarView: View {
     @State private var tempMileage: Int32? = nil
     @State private var tempEngineType: EngineTypeEnum = .gasoline
     @State private var tempTransmissionType: TransmissionTypeEnum = .manual
+    @State private var tempStateNumber: String = ""
     
     @State private var selectionImageCar: PhotosPickerItem?
     @State private var avatarImage: UIImage?
@@ -56,7 +57,8 @@ struct AddCarView: View {
                                 mileage: tempMileage,
                                 engineType: tempEngineType,
                                 transmissionType: tempTransmissionType,
-                                photoCar: avatarImage ?? UIImage()
+                                photoCar: avatarImage ?? UIImage(),
+                                stateNumber: tempStateNumber
                                 )
                             if !carViewModel.alertShow {
                                 dismiss()
@@ -99,6 +101,10 @@ struct AddCarView: View {
                     .focused($isKeyboardActive)
                 
                 TextField("VIN", text: $tempVinNumber)
+                    .textFieldStyle(.roundedBorder)
+                    .focused($isKeyboardActive)
+                
+                TextField("State number", text: $tempStateNumber)
                     .textFieldStyle(.roundedBorder)
                     .focused($isKeyboardActive)
                 

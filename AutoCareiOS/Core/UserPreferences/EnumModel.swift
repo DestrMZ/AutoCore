@@ -86,5 +86,5 @@ enum FilterDate: Hashable {
 
 
 enum Field {
-    case nameRepair, amountRepair, mileageRepair, parts, notes
+    case nameRepair, amountRepair, mileageRepair, parts, notes, litresFuel
 }

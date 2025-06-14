@@ -24,6 +24,43 @@
         }
       }
     },
+    "%@ — %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ — %2$@"
+          }
+        }
+      }
+    },
+    "%@ $" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ₽"
+          }
+        }
+      }
+    },
+    "%@ L" : {
+
+    },
+    "%d mi" : {
+
+    },
+    "%d miles" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d км"
+          }
+        }
+      }
+    },
     "%lld" : {
       "localizations" : {
         "ru" : {
@@ -50,6 +87,29 @@
         }
       }
     },
+    "%lld%%" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        }
+      }
+    },
+    "😳 Ops..." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "😳 Упс…"
+          }
+        }
+      }
+    },
+    "😳 Wow..." : {
+
+    },
     "🛠️ Go add your first expanses?" : {
       "localizations" : {
         "ru" : {
@@ -59,6 +119,9 @@
           }
         }
       }
+    },
+    "0" : {
+
     },
     "Add" : {
       "localizations" : {
@@ -79,6 +142,9 @@
           }
         }
       }
+    },
+    "Add insurance" : {
+
     },
     "Add photo" : {
       "localizations" : {
@@ -120,6 +186,12 @@
           }
         }
       }
+    },
+    "Add your first policy to get reminders and stay informed." : {
+
+    },
+    "Additional" : {
+
     },
     "All time" : {
       "localizations" : {
@@ -173,7 +245,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Да, я хочу удалить"
+            "value" : "Да, удалить %@"
           }
         }
       }
@@ -227,7 +299,24 @@
       }
     },
     "Car Info" : {
-
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Детали автомобиля"
+          }
+        }
+      }
+    },
+    "Car not found." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Автомобиль не найден."
+          }
+        }
+      }
     },
     "car_expenses_control" : {
       "extractionState" : "manual",
@@ -277,6 +366,9 @@
         }
       }
     },
+    "Close" : {
+
+    },
     "Color" : {
       "localizations" : {
         "ru" : {
@@ -286,6 +378,12 @@
           }
         }
       }
+    },
+    "Company name" : {
+
+    },
+    "Confirm deletion?" : {
+
     },
     "Copy VIN-Number" : {
       "localizations" : {
@@ -303,22 +401,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Валюта"
-          }
-        }
-      }
-    },
-    "Current mileage: %@ %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Current mileage: %1$@ %2$@"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Текущий пробег: %1$@ %2$@"
           }
         }
       }
@@ -352,6 +434,9 @@
           }
         }
       }
+    },
+    "Dates" : {
+
     },
     "Delete" : {
       "localizations" : {
@@ -476,6 +561,9 @@
         }
       }
     },
+    "Enable notification" : {
+
+    },
     "Enable Notifications" : {
       "localizations" : {
         "ru" : {
@@ -539,6 +627,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Введите описание работ"
+          }
+        }
+      }
+    },
+    "Enter new mileage" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введите новый пробег"
           }
         }
       }
@@ -628,6 +726,9 @@
         }
       }
     },
+    "GIBDD Official Site" : {
+
+    },
     "Go" : {
       "localizations" : {
         "ru" : {
@@ -654,6 +755,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Отлично, изображение добавлено в галерею."
+          }
+        }
+      }
+    },
+    "How many liters were poured?" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сколько литров заправили?"
           }
         }
       }
@@ -696,12 +807,28 @@
         }
       }
     },
+    "Insurance info" : {
+
+    },
+    "Insurance type" : {
+
+    },
     "Invalid Input" : {
       "localizations" : {
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Некорректные значения"
+          }
+        }
+      }
+    },
+    "Invalid mileage format" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Неверный формат пробега."
           }
         }
       }
@@ -732,6 +859,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Изменение языка"
+          }
+        }
+      }
+    },
+    "Last Refuel" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Последняя заправка"
           }
         }
       }
@@ -768,6 +905,26 @@
         }
       }
     },
+    "Mileage exceeds maximum value." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пробег превышает максимальное значение."
+          }
+        }
+      }
+    },
+    "Mileage must be non-negative." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пробег не может быть отрицательным."
+          }
+        }
+      }
+    },
     "miles" : {
       "localizations" : {
         "ru" : {
@@ -789,7 +946,14 @@
       }
     },
     "Model Name" : {
-
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Модель"
+          }
+        }
+      }
     },
     "Month" : {
       "localizations" : {
@@ -832,6 +996,12 @@
         }
       }
     },
+    "No insurance yet" : {
+
+    },
+    "No license plate" : {
+
+    },
     "Not selected" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -843,7 +1013,23 @@
         }
       }
     },
+    "Notes" : {
+
+    },
     "Notice" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Уведомление"
+          }
+        }
+      }
+    },
+    "Notification" : {
+
+    },
+    "Notification Date" : {
 
     },
     "Notifications (beta)" : {
@@ -1008,6 +1194,9 @@
         }
       }
     },
+    "Price" : {
+
+    },
     "Repairs" : {
       "localizations" : {
         "ru" : {
@@ -1118,6 +1307,16 @@
         }
       }
     },
+    "Some data is invalid." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Некорректные данные."
+          }
+        }
+      }
+    },
     "Start date" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1134,6 +1333,9 @@
           }
         }
       }
+    },
+    "State number" : {
+
     },
     "Support" : {
       "localizations" : {
@@ -1185,6 +1387,9 @@
         }
       }
     },
+    "Traffic Fine Check" : {
+
+    },
     "Trand" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1212,6 +1417,16 @@
         }
       }
     },
+    "Trash" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удалить"
+          }
+        }
+      }
+    },
     "Units of Measurement" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1219,6 +1434,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Единицы измерений"
+          }
+        }
+      }
+    },
+    "Update Mileage" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обновить пробег"
           }
         }
       }
@@ -1274,6 +1499,9 @@
         }
       }
     },
+    "VIN: %@" : {
+
+    },
     "Washing" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1321,6 +1549,16 @@
         }
       }
     },
+    "Yes" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Да"
+          }
+        }
+      }
+    },
     "Yes, delete" : {
       "localizations" : {
         "ru" : {
@@ -1330,6 +1568,22 @@
           }
         }
       }
+    },
+    "Your cars" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ваши автомобили"
+          }
+        }
+      }
+    },
+    "Запланировать" : {
+
+    },
+    "Предстоящее ТО" : {
+
     }
   },
   "version" : "1.0"

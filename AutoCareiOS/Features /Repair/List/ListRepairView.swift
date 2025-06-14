@@ -18,6 +18,7 @@ struct ListRepairView: View {
     @Binding var showTapBar: Bool
 
     @State var isPresented: Bool = false
+    @State private var isExpanded = true
     
     var body: some View {
         
@@ -99,24 +100,43 @@ struct ListRepairView: View {
     }
     
     private var listRepairView: some View {
-        ForEach(filteredRepairs) { repair in
-            NavigationLink(destination: DetailRepairView(repair: repair)
-                .onAppear { showTapBar = false }
-                .onDisappear { showTapBar = true }) {
-                ListRowView(repair: repair)
-                    .padding(.vertical, 5)
+        let groupedRepair = repairViewModel.getRepairsGroupByMonth(for: filteredRepairs)
+        
+        return ForEach(groupedRepair) { group in
+            HStack() {
+                Text("\(group.monthTitle)")
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+                
+                Spacer()
+            
+                Text("\(String(format: "%.2f", group.totalAmount)) $")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .bold()
             }
-            .buttonStyle(PlainButtonStyle())
-            .contextMenu {
-                Button(action: {
-                    repairViewModel.deleteRepair(repair)
-                }) {
-                    Text("Delete repair")
-                    Image(systemName: "trash")
-                }
-            }
+            .padding(5)
             Divider()
-                .background(Color.gray)
+                
+            ForEach(group.repairs) { repair in
+                NavigationLink(destination: DetailRepairView(repair: repair)
+                    .onAppear { showTapBar = false }
+                    .onDisappear { showTapBar = true }) {
+                        ListRowView(repair: repair)
+                            .padding(.vertical, 5)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .contextMenu {
+                        Button(action: {
+                            repairViewModel.deleteRepair(repair)
+                        }) {
+                            Text("Delete repair")
+                            Image(systemName: "trash")
+                        }
+                    }
+//                Divider()
+//                    .background(Color.gray)
+            }
         }
     }
     

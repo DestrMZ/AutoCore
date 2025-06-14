@@ -15,14 +15,14 @@ struct MainView: View {
     @EnvironmentObject var settingsViewModel: SettingsViewModel
     
     
-    @State private var selectedTab: CustomTapBar.TabItems = .repair
+    @State private var selectedTab: CustomTapBar.TabItems = .cars
     @State private var showTapBar: Bool = true
     
     var body: some View {
         ZStack {
             switch selectedTab {
             case .cars:
-                SelectCarView()
+                CarProfileView(showTapBar: $showTapBar)
             case .repair:
                 ListRepairView(showTapBar: $showTapBar)
             case .statistics:
