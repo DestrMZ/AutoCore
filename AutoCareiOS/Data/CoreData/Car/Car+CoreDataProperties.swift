@@ -16,15 +16,16 @@ extension Car {
         return NSFetchRequest<Car>(entityName: "Car")
     }
 
+    @NSManaged public var id: UUID
     @NSManaged public var color: String?
-    @NSManaged public var engineType: String?
+    @NSManaged public var engineType: String
     @NSManaged public var existingVinNumbers: [String]?
     @NSManaged public var mileage: Int32
-    @NSManaged public var nameModel: String?
-    @NSManaged public var photoCar: Data?
+    @NSManaged public var nameModel: String
+    @NSManaged public var photoCar: Data
     @NSManaged public var stateNumber: String?
-    @NSManaged public var transmissionType: String?
-    @NSManaged public var vinNumber: String?
+    @NSManaged public var transmissionType: String
+    @NSManaged public var vinNumber: String
     @NSManaged public var year: Int16
     @NSManaged public var repairs: NSSet?
     @NSManaged public var insurance: NSSet?

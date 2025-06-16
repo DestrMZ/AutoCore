@@ -13,6 +13,7 @@ enum RepairErrorStatus: Error, LocalizedError {
     case missingPartReplaced
     case invalidAmount
     case invalidMileage
+    case carNotFound
     
     var errorDescription: String? {
         switch self {
@@ -24,6 +25,8 @@ enum RepairErrorStatus: Error, LocalizedError {
             return "Mileage must be a number"
         case .repairNotFound:
             return "Repair not found in database"
+        case .carNotFound:
+            return "Car not found in database"
         }
     }
 }

@@ -72,7 +72,7 @@ final class RepairDataService {
     func fetchLatestRefueling(for car: Car?, repairs: [Repair]) -> (litres: String, date: Date) {
         let repairsFuel = repairs.filter { $0.repairCategory == "Fuel" && $0.repairDate != nil }
         
-        if let latest = repairsFuel.max(by: { $0.repairDate! < $1.repairDate ?? Date() }) {
+        if let latest = repairsFuel.max(by: { $0.repairDate < $1.repairDate ?? Date() }) {
             let dateRefuel = latest.repairDate
             let litresRefuel = String(format: "%.1f", Double(truncating: latest.litresFuel ?? 0))
             

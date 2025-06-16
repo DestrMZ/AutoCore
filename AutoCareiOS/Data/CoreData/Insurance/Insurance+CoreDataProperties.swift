@@ -16,6 +16,7 @@ extension Insurance {
         return NSFetchRequest<Insurance>(entityName: "Insurance")
     }
 
+    @NSManaged public var id: UUID
     @NSManaged public var type: String
     @NSManaged public var nameCompany: String
     @NSManaged public var startDate: Date

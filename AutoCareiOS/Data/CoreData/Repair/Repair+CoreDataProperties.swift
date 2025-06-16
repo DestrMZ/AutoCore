@@ -16,14 +16,15 @@ extension Repair {
         return NSFetchRequest<Repair>(entityName: "Repair")
     }
 
+    @NSManaged public var id: UUID
     @NSManaged public var amount: Int32
     @NSManaged public var litresFuel: NSNumber?
     @NSManaged public var notes: String?
-    @NSManaged public var partReplaced: String?
+    @NSManaged public var partReplaced: String
     @NSManaged public var parts: [String: String]?
     @NSManaged public var photoRepair: [Data]?
-    @NSManaged public var repairCategory: String?
-    @NSManaged public var repairDate: Date?
+    @NSManaged public var repairCategory: String
+    @NSManaged public var repairDate: Date
     @NSManaged public var repairMileage: Int32
     @NSManaged public var car: Car?
 

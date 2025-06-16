@@ -8,7 +8,7 @@
 import Foundation
 
 
-enum UpdateMileageError: Error, LocalizedError {
+enum UpdateMileageUseCaseError: Error, LocalizedError {
     case carNotFound
     case invalidData
     case numberNonNegative

@@ -83,10 +83,12 @@ final class CarDataService {
     }
     
     func updateMileage(for car: Car?, mileage: Int32?) -> Result<Void, UpdateMileageError> {
-        guard car != nil else { return .failure(.carNotFound)}
+        guard let car = car else { return .failure(.carNotFound)}
         guard let mileage = mileage else { return .failure(.invalidData)}
         guard mileage >= 0 else { return .failure(.numberNonNegative)}
         guard mileage < 5_000_000 else { return .failure(.exceedsMaximumValue)}
+        
+        car.mileage = mileage
         
         saveContext()
         return .success(())

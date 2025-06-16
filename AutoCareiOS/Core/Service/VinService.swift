@@ -18,13 +18,13 @@ final class VinStoreService {
     
         let vinStore = try? context.fetch(requesVinStore).first ?? VinStore(context: context)
         
-        var vinNumbers = vinStore?.allVinNumbers ?? []
+        var vinNaumbers = vinStore?.allVinNumbers ?? []
         
         if !vinNumbers.contains(vinNumber) {
             vinNumbers.append(vinNumber)
             vinStore?.allVinNumbers = vinNumbers
         } else {
-            print("INFO: Указанный VIN уже существует: \(vinNumber)")
+            print("INFO: Указанный VIN уже существует: d\(vinNumber)")
         }
         
         saveContext()

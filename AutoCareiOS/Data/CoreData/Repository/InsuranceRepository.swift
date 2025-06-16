@@ -1,0 +1,112 @@
+//
+//  InsuranceRepository.swift
+//  AutoCareiOS
+//
+//  Created by Ivan Maslennikov on 15.06.2025.
+//
+
+import Foundation
+import CoreData
+
+
+class InsuranceRepository: InsuranceRepositoryProtocol {
+    
+    private let context = CoreDataStack.shared.context
+    
+    func createInsurance(insuranceModel: InsuranceModel, for carID: UUID) -> Result<Void, InsuranceRepositoryError> {
+        
+        let fetchRequest: NSFetchRequest<Car> = Car.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", carID as CVarArg)
+                
+        do {
+            guard let entity = try context.fetch(fetchRequest).first else {
+                return .failure(.creationFailed)
+            }
+            
+            let insurance = Insurance(context: context)
+            
+            InsuranceMapper.mapToCoreData(
+                insuranceModel: insuranceModel,
+                entity: insurance,
+                for: entity)
+            
+            try context.save()
+            return .success(())
+        } catch {
+            debugPrint("InsuranceRepository: Failed to create insurance – car with ID \(carID) not found.")
+            return .failure(.carNotFound)
+        }
+    }
+    
+    func fetchInsurances(for carID: UUID) -> Result<[InsuranceModel], InsuranceRepositoryError> {
+        let fetchRequest: NSFetchRequest<Insurance> = Insurance.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "car.id == %@", carID as CVarArg)
+        
+        do {
+            let insurances = try context.fetch(fetchRequest)
+            let result = insurances.map { InsuranceMapper.mapToModel(insuranceModel: $0)}
+            return .success(result)
+        } catch {
+            debugPrint("InsuranceRepository: Failed to fetch insurances for car ID \(carID): \(error.localizedDescription)")
+            return .failure(.fetchFailed)
+        }
+    }
+    
+    func updateInsurance(insuranceModel: InsuranceModel, for carID: UUID) -> Result<Void, InsuranceRepositoryError> {
+        
+        let fetchRequestInsurance: NSFetchRequest<Insurance> = Insurance.fetchRequest()
+        fetchRequestInsurance.predicate = NSPredicate(format: "id == %@", insuranceModel.id as CVarArg)
+        
+        let fetchRequestCar: NSFetchRequest<Car> = Car.fetchRequest()
+        fetchRequestCar.predicate = NSPredicate(format: "id == %@", carID as CVarArg)
+        
+        do {
+            guard let entityInsurance = try context.fetch(fetchRequestInsurance).first else {
+                return .failure(.insuranceNotFound)
+            }
+            
+            guard let entityCar = try context.fetch(fetchRequestCar).first else {
+                return .failure(.carNotFound)
+            }
+            
+            InsuranceMapper.mapToCoreData(
+                insuranceModel: insuranceModel,
+                entity: entityInsurance,
+                for: entityCar)
+            
+            try context.save()
+            return .success(())
+        } catch {
+            debugPrint("InsuranceRepository: Failed to update insurance with ID \(insuranceModel.id): \(error.localizedDescription)")
+            return .failure(.fetchFailed)
+        }
+    }
+    
+    func deleteInsurance(insuranceModel: InsuranceModel) -> Result<Void, InsuranceRepositoryError> {
+        let fetchRequest: NSFetchRequest<Insurance> = Insurance.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", insuranceModel.id as CVarArg)
+        
+        do {
+            if let entityInsurance = try context.fetch(fetchRequest).first {
+                context.delete(entityInsurance)
+                try context.save()
+                return .success(())
+            }
+            return .failure(.insuranceNotFound)
+        } catch {
+            debugPrint("InsuranceRepository: Failed to delete insurance with ID \(insuranceModel.id): \(error.localizedDescription)")
+            return .failure(.deleteFailed)
+        }
+    }
+}
+
+
+protocol InsuranceRepositoryProtocol {
+    func createInsurance(insuranceModel: InsuranceModel, for carID: UUID) -> Result<Void, InsuranceRepositoryError>
+    
+    func fetchInsurances(for carID: UUID) -> Result<[InsuranceModel], InsuranceRepositoryError>
+    
+    func updateInsurance(insuranceModel: InsuranceModel, for carID: UUID) -> Result<Void, InsuranceRepositoryError>
+    
+    func deleteInsurance(insuranceModel: InsuranceModel) -> Result<Void, InsuranceRepositoryError>
+}

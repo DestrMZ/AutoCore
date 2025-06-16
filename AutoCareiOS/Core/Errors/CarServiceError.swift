@@ -15,6 +15,7 @@ enum CarSaveError: Error, LocalizedError {
     case missingVinNumber
     case missingYear
     case missingMileage
+    case carSaveFailed
     
     var errorDescription: String? {
         switch self {
@@ -30,6 +31,8 @@ enum CarSaveError: Error, LocalizedError {
             return "Please enter year."
         case .missingMileage:
             return "Please enter mileage."
+        case .carSaveFailed:
+            return "Car save failed."
         }
     }
 }
