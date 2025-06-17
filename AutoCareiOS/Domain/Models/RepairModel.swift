@@ -19,5 +19,4 @@ struct RepairModel: Identifiable, Equatable {
     let repairCategory: String
     let repairDate: Date
     let repairMileage: Int32
-    let car: CarModel?
 }

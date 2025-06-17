@@ -21,8 +21,7 @@ struct RepairMapper {
             photoRepairs: entity.photoRepair,
             repairCategory: entity.repairCategory,
             repairDate: entity.repairDate,
-            repairMileage: entity.repairMileage,
-            car: entity.car.map(CarMapper.mapToModel))
+            repairMileage: entity.repairMileage)
     }
     // Convert Domain RepairModel to CoreData Repair entity
     static func mapToEntity(repairModel: RepairModel, entity: Repair, entityCar: Car) {

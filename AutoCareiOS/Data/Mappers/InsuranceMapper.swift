@@ -20,8 +20,7 @@ struct InsuranceMapper {
             price: insuranceModel.price,
             notes: insuranceModel.notes,
             notificationDate: insuranceModel.notificationDate,
-            isActive: insuranceModel.isActive,
-            car: insuranceModel.car.map(CarMapper.mapToModel)
+            isActive: insuranceModel.isActive
         )
     }
     // Convert Domain InsuranceModel to CoreData Insurance entity

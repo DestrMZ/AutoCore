@@ -18,5 +18,4 @@ struct InsuranceModel: Identifiable, Equatable {
     let notes: String?
     let notificationDate: Date?
     let isActive: Bool
-    let car: CarModel?
 }
