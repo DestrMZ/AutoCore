@@ -37,7 +37,7 @@ class CarRepository: CarRepositoryProtocol {
             return .success(result)
         } catch {
             debugPrint("[CarRepository] Failed to fetch cars: \(error.localizedDescription)")
-            return .failure(.carNotFound)
+            return .failure(.fetchFailed)
         }
     }
     

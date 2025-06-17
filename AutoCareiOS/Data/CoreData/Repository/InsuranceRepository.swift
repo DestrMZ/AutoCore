@@ -20,7 +20,7 @@ class InsuranceRepository: InsuranceRepositoryProtocol {
                 
         do {
             guard let entity = try context.fetch(fetchRequest).first else {
-                return .failure(.creationFailed)
+                return .failure(.carNotFound)
             }
             
             let insurance = Insurance(context: context)
@@ -78,7 +78,7 @@ class InsuranceRepository: InsuranceRepositoryProtocol {
             return .success(())
         } catch {
             debugPrint("InsuranceRepository: Failed to update insurance with ID \(insuranceModel.id): \(error.localizedDescription)")
-            return .failure(.fetchFailed)
+            return .failure(.updateFailed)
         }
     }
     

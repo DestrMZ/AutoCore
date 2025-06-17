@@ -15,22 +15,23 @@ class VinRepository: VinRepositoryProtocol {
     
     func addVin(vin: String) -> Result<Void, VinRepositoryError> {
         let fetchRequest: NSFetchRequest<VinStore> = VinStore.fetchRequest()
-        
-        let vinStore = try? context.fetch(fetchRequest).first ?? VinStore(context: context)
-        
-        var vinNumbers = vinStore?.allVinNumbers ?? []
        
         do {
-            guard !vinNumbers.contains(vin) else { return .failure(.vinAlreadyExists)}
+            let vinStore = try context.fetch(fetchRequest).first ?? VinStore(context: context)
+            
+            var vinNumbers = vinStore.allVinNumbers ?? []
+            
+            guard !vinNumbers.contains(vin) else {
+                return .failure(.vinAlreadyExists)}
             
             vinNumbers.append(vin)
-            vinStore?.allVinNumbers = vinNumbers
+            vinStore.allVinNumbers = vinNumbers
             
             try context.save()
             return .success(())
         } catch {
-            print("WARNING: Failed to save context")
-            return .failure(.saveFailed)
+            debugPrint("WARNING: Failed to save context")
+            return .failure(.createFailed)
         }
     }
     
@@ -45,7 +46,7 @@ class VinRepository: VinRepositoryProtocol {
             
             return .success(result)
         } catch {
-            print("WARNING: Error fetch VIN-Numbers")
+            debugPrint("WARNING: Error fetch VIN-Numbers")
             return .failure(.fetchFailed)
         }
     }
@@ -62,8 +63,8 @@ class VinRepository: VinRepositoryProtocol {
             try context.save()
             return .success(())
         } catch {
-            print("WARNING: Error delete VIN-Number")
-            return .failure(.fetchFailed)
+            debugPrint("WARNING: Error delete VIN-Number")
+            return .failure(.deleteFailed)
         }
     }
     
@@ -80,7 +81,7 @@ class VinRepository: VinRepositoryProtocol {
             }
             
             guard let oldIndex = vinList.firstIndex(of: oldVin) else {
-                return .failure(.vinNotFound)
+                return .failure(.updateFailed)
             }
             
             guard !vinList.contains(newVin) else {
@@ -94,7 +95,7 @@ class VinRepository: VinRepositoryProtocol {
             return .success(())
             
         } catch {
-            print("WARNING: Error while editing VIN-Store!")
+            debugPrint("VinRepository: Failed to update VIN from \(oldVin) to \(newVin): \(error.localizedDescription)")
             return .failure(.updateFailed)
         }
     }

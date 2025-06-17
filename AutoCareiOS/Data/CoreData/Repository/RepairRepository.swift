@@ -34,7 +34,7 @@ class RepairRepository: RepairRepositoryProtocol {
             return .success(())
         } catch {
             debugPrint("RepairRepository: Failed to create repair for car ID \(carID): \(error.localizedDescription)")
-            return .failure(.repairNotFound)
+            return .failure(.creationFailed)
         }
     }
     
@@ -48,7 +48,7 @@ class RepairRepository: RepairRepositoryProtocol {
             return .success(result)
         } catch {
             debugPrint("RepairRepository: Failed to fetch repairs for car ID \(carID): \(error.localizedDescription)")
-            return .failure(.repairNotFound)
+            return .failure(.fetchFailed)
         }
     }
     
@@ -79,7 +79,7 @@ class RepairRepository: RepairRepositoryProtocol {
             return .success(())
         } catch {
             debugPrint("RepairRepository: Failed to update repair with ID \(repair.id): \(error.localizedDescription)")
-            return .failure(.repairNotFound)
+            return .failure(.updateFailed)
         }
     }
     

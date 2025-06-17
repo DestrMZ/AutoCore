@@ -10,8 +10,9 @@ import Foundation
 
 enum VinRepositoryError: Error {
     case fetchFailed
-    case saveFailed
+    case createFailed
     case vinAlreadyExists
     case vinNotFound
     case updateFailed
+    case deleteFailed
 }
