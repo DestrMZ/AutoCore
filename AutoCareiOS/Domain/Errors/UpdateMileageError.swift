@@ -13,6 +13,7 @@ enum UpdateMileageUseCaseError: Error, LocalizedError {
     case invalidData
     case numberNonNegative
     case exceedsMaximumValue
+    case updateMileageFailed
     
     var errorDescription: String? {
         switch self {
@@ -24,6 +25,8 @@ enum UpdateMileageUseCaseError: Error, LocalizedError {
             return NSLocalizedString("Mileage must be non-negative.", comment: "")
         case .exceedsMaximumValue:
             return NSLocalizedString("Mileage exceeds maximum value.", comment: "")
+        case .updateMileageFailed:
+            return NSLocalizedString("Failed to update mileage.", comment: "")
         }
     }
 }

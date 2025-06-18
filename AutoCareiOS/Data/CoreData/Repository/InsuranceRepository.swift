@@ -44,7 +44,7 @@ class InsuranceRepository: InsuranceRepositoryProtocol {
         
         do {
             let insurances = try context.fetch(fetchRequest)
-            let result = insurances.map { InsuranceMapper.mapToModel(insuranceModel: $0)}
+            let result = insurances.map { InsuranceMapper.mapToModel(entity: $0)}
             return .success(result)
         } catch {
             debugPrint("InsuranceRepository: Failed to fetch insurances for car ID \(carID): \(error.localizedDescription)")

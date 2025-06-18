@@ -10,17 +10,17 @@ import Foundation
 
 struct InsuranceMapper {
     // Convert CoreData Insurance entity to Domain InsuranceModel
-    static func mapToModel(insuranceModel: Insurance) -> InsuranceModel {
+    static func mapToModel(entity: Insurance) -> InsuranceModel {
         return InsuranceModel(
-            id: insuranceModel.id,
-            type: insuranceModel.type,
-            nameCompany: insuranceModel.nameCompany,
-            startDate: insuranceModel.startDate,
-            endDate: insuranceModel.endDate,
-            price: insuranceModel.price,
-            notes: insuranceModel.notes,
-            notificationDate: insuranceModel.notificationDate,
-            isActive: insuranceModel.isActive
+            id: entity.id,
+            type: entity.type,
+            nameCompany: entity.nameCompany,
+            startDate: entity.startDate,
+            endDate: entity.endDate,
+            price: entity.price,
+            notes: entity.notes,
+            notificationDate: entity.notificationDate,
+            isActive: entity.isActive
         )
     }
     // Convert Domain InsuranceModel to CoreData Insurance entity

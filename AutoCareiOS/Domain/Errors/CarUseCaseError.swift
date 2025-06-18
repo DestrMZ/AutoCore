@@ -8,7 +8,7 @@
 import Foundation
 
 
-enum CarSaveError: Error, LocalizedError {
+enum CarUseCaseError: Error, LocalizedError {
     case invalidData
     case duplicateVinNumber
     case missingNameModel
@@ -16,6 +16,9 @@ enum CarSaveError: Error, LocalizedError {
     case missingYear
     case missingMileage
     case carSaveFailed
+    case getCarsFailed
+    case deleteFailed
+    case updateCarFailed
     
     var errorDescription: String? {
         switch self {
@@ -33,6 +36,12 @@ enum CarSaveError: Error, LocalizedError {
             return "Please enter mileage."
         case .carSaveFailed:
             return "Car save failed."
+        case .getCarsFailed:
+            return "Get cars failed."
+        case .deleteFailed:
+            return "Delete failed."
+        case .updateCarFailed:
+            return "Update car failed."
         }
     }
 }

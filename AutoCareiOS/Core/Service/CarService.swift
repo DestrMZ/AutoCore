@@ -15,7 +15,7 @@ final class CarDataService {
     
     private let vinService = VinStoreService()
     
-    func creatingCar(nameModel: String, year: Int16, vinNumber: String, color: String?, mileage: Int32, engineType: String, transmissionType: String, photoCar: Data?, stateNumber: String?) -> Result<Car, CarSaveError> {
+    func creatingCar(nameModel: String, year: Int16, vinNumber: String, color: String?, mileage: Int32, engineType: String, transmissionType: String, photoCar: Data, stateNumber: String?) -> Result<Car, CarSaveError> {
         
         if nameModel.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             return .failure(.missingNameModel)

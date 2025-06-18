@@ -43,7 +43,6 @@ class VinRepository: VinRepositoryProtocol {
             guard vinNumbers.first != nil else { return .failure(.vinNotFound)}
             
             let result = vinNumbers.first?.allVinNumbers ?? []
-            
             return .success(result)
         } catch {
             debugPrint("WARNING: Error fetch VIN-Numbers")
