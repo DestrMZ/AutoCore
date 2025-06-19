@@ -8,54 +8,63 @@
 import Foundation
 
 
-enum CarUseCaseError: Error, LocalizedError {
-    case invalidData
-    case duplicateVinNumber
+enum CarValidationError: LocalizedError {
     case missingNameModel
     case missingVinNumber
     case missingYear
     case missingMileage
-    case carSaveFailed
-    case getCarsFailed
-    case deleteFailed
-    case updateCarFailed
-    
+    case duplicateVinNumber
+
     var errorDescription: String? {
         switch self {
-        case .duplicateVinNumber:
-            return "Ops...that VIN number already exists."
-        case .invalidData:
-            return "Some data is invalid."
-        case .missingNameModel:
-            return "Please enter name and model."
-        case .missingVinNumber:
-            return "Please enter VIN number."
-        case .missingYear:
-            return "Please enter year."
-        case .missingMileage:
-            return "Please enter mileage."
-        case .carSaveFailed:
-            return "Car save failed."
-        case .getCarsFailed:
-            return "Get cars failed."
-        case .deleteFailed:
-            return "Delete failed."
-        case .updateCarFailed:
-            return "Update car failed."
+        case .missingNameModel: return "Please enter name and model."
+        case .missingVinNumber: return "Please enter VIN number."
+        case .missingYear: return "Please enter year."
+        case .missingMileage: return "Please enter mileage."
+        case .duplicateVinNumber: return "Ops...that VIN number already exists."
         }
     }
 }
 
-enum CarUpdateError: Error, LocalizedError {
+
+enum CarStorageError: Error, LocalizedError {
+    case saveFailed
+    case fetchFailed
+    case deleteFailed
     case updateFailed
+    case vinNumberSaveFailed
+
+    var errorDescription: String? {
+        switch self {
+        case .saveFailed: return "Car save failed."
+        case .fetchFailed: return "Failed to fetch cars."
+        case .deleteFailed: return "Failed to delete car."
+        case .updateFailed: return "Failed to update car."
+        case .vinNumberSaveFailed: return "Failed to save VIN number."
+        }
+    }
+}
+
+
+enum UpdateMileageUseCaseError: Error, LocalizedError {
+    case carNotFound
     case invalidData
+    case numberNonNegative
+    case exceedsMaximumValue
+    case updateMileageFailed
     
     var errorDescription: String? {
         switch self {
+        case .carNotFound:
+            return NSLocalizedString("Car not found.", comment: "")
         case .invalidData:
-            return "Some data is invalid."
-        case .updateFailed:
-            return "Update failed."
+            return NSLocalizedString("Some data is invalid.", comment: "")
+        case .numberNonNegative:
+            return NSLocalizedString("Mileage must be non-negative.", comment: "")
+        case .exceedsMaximumValue:
+            return NSLocalizedString("Mileage exceeds maximum value.", comment: "")
+        case .updateMileageFailed:
+            return NSLocalizedString("Failed to update mileage.", comment: "")
         }
     }
 }

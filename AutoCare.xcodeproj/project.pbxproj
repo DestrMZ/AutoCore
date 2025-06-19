@@ -81,7 +81,6 @@
 				Domain/Errors/CarUseCaseError.swift,
 				Domain/Errors/InsuranceUseCaseError.swift,
 				Domain/Errors/RepairUseCaseError.swift,
-				Domain/Errors/UpdateMileageError.swift,
 				Domain/Models/CarModel.swift,
 				Domain/Models/InsuranceModel.swift,
 				Domain/Models/RepairModel.swift,

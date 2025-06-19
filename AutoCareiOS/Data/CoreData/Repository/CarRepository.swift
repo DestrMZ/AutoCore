@@ -46,7 +46,7 @@ class CarRepository: CarRepositoryProtocol {
         fetchRequest.predicate = NSPredicate(format: "id == %@", car.id as CVarArg)
         do {
             guard let entity = try context.fetch(fetchRequest).first else {
-                return .failure(.updateFailed)
+                return .failure(.carNotFound)
             }
             
             CarMapper.mapToCoreData(carModel: car, entity: entity)
@@ -82,7 +82,7 @@ class CarRepository: CarRepositoryProtocol {
         fetchRequest.predicate = NSPredicate(format: "id == %@", car.id as CVarArg)
         do {
             guard let entity = try context.fetch(fetchRequest).first else {
-                return .failure(.deleteFailed)
+                return .failure(.carNotFound)
             }
             context.delete(entity)
             try context.save()
