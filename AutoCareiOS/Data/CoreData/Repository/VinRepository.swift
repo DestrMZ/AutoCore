@@ -13,7 +13,7 @@ class VinRepository: VinRepositoryProtocol {
     
     private let context = CoreDataStack.shared.context
     
-    func addVin(vin: String) -> Result<Void, VinRepositoryError> {
+    func addVin(vin: String) throws {
         let fetchRequest: NSFetchRequest<VinStore> = VinStore.fetchRequest()
        
         do {
@@ -21,92 +21,75 @@ class VinRepository: VinRepositoryProtocol {
             
             var vinNumbers = vinStore.allVinNumbers ?? []
             
-            guard !vinNumbers.contains(vin) else {
-                return .failure(.vinAlreadyExists)}
-            
             vinNumbers.append(vin)
             vinStore.allVinNumbers = vinNumbers
             
             try context.save()
-            return .success(())
         } catch {
-            debugPrint("WARNING: Failed to save context")
-            return .failure(.createFailed)
+            debugPrint("[VinRepository]: Failed to save context: \(error.localizedDescription).")
+            throw RepositoryError.createFailed
         }
     }
     
-    func getVins() -> Result<[String], VinRepositoryError> {
-        let fetchRequest: NSFetchRequest<VinStore> = VinStore.fetchRequest()
-        
-        do {
-            let vinNumbers = try context.fetch(fetchRequest)
-            guard vinNumbers.first != nil else { return .failure(.vinNotFound)}
-            
-            let result = vinNumbers.first?.allVinNumbers ?? []
-            return .success(result)
-        } catch {
-            debugPrint("WARNING: Error fetch VIN-Numbers")
-            return .failure(.fetchFailed)
-        }
-    }
-    
-    func deleteVin(vin: String) -> Result<Void, VinRepositoryError> {
-        let fetchRequest: NSFetchRequest<VinStore> = VinStore.fetchRequest()
-        
-        do {
-            let vinNumbers = try context.fetch(fetchRequest)
-            guard vinNumbers.first != nil else { return .failure(.vinNotFound)}
-            guard let index = vinNumbers.first?.allVinNumbers?.firstIndex(of: vin) else { return .failure(.vinNotFound)}
-            
-            vinNumbers.first?.allVinNumbers?.remove(at: index)
-            try context.save()
-            return .success(())
-        } catch {
-            debugPrint("WARNING: Error delete VIN-Number")
-            return .failure(.deleteFailed)
-        }
-    }
-    
-    func updateVin(oldVin: String, newVin: String) -> Result<Void, VinRepositoryError> {
+    func getVins() throws -> [String] {
         let fetchRequest: NSFetchRequest<VinStore> = VinStore.fetchRequest()
         
         do {
             guard let store = try context.fetch(fetchRequest).first else {
-                return .failure(.vinNotFound)
+                return []
             }
             
-            guard var vinList = store.allVinNumbers else {
-                return .failure(.vinNotFound)
-            }
-            
-            guard let oldIndex = vinList.firstIndex(of: oldVin) else {
-                return .failure(.updateFailed)
-            }
-            
-            guard !vinList.contains(newVin) else {
-                return .failure(.vinAlreadyExists)
-            }
-            
-            vinList[oldIndex] = newVin
-            store.allVinNumbers = vinList
-            
-            try context.save()
-            return .success(())
-            
+            return store.allVinNumbers ?? []
         } catch {
-            debugPrint("VinRepository: Failed to update VIN from \(oldVin) to \(newVin): \(error.localizedDescription)")
-            return .failure(.updateFailed)
+            debugPrint("[VinRepository] Error fetch VIN-Numbers: \(error.localizedDescription).")
+            throw RepositoryError.fetchFailed
+        }
+    }
+    
+    func updateVin(oldVin: String, newVin: String) throws {
+        let fetchRequest: NSFetchRequest<VinStore> = VinStore.fetchRequest()
+        
+        do {
+            guard let store = try context.fetch(fetchRequest).first,
+                  var list = store.allVinNumbers,
+                  let index = list.firstIndex(of: oldVin) else {
+                return
+            }
+            list[index] = newVin
+            store.allVinNumbers = list
+            try context.save()
+        } catch {
+            debugPrint("[VinRepository] Failed to update VIN from \(oldVin) to \(newVin): \(error.localizedDescription).")
+            throw RepositoryError.updateFailed
+        }
+    }
+    
+    func deleteVin(vin: String) throws {
+        let fetchRequest: NSFetchRequest<VinStore> = VinStore.fetchRequest()
+        
+        do {
+            guard let store = try context.fetch(fetchRequest).first,
+                  var list = store.allVinNumbers,
+                  let index = list.firstIndex(of: vin) else {
+                return
+            }
+            list.remove(at: index)
+            store.allVinNumbers = list
+            try context.save()
+        } catch {
+            debugPrint("[VinRepository] Error delete VIN-Number: \(error.localizedDescription).")
+            throw RepositoryError.deleteFailed
         }
     }
 }
 
 
 protocol VinRepositoryProtocol {
-    func addVin(vin: String) -> Result<Void, VinRepositoryError>
+    func addVin(vin: String) throws
     
-    func getVins() -> Result<[String], VinRepositoryError>
+    func getVins() throws -> [String]
     
-    func deleteVin(vin: String) -> Result<Void, VinRepositoryError>
+    func deleteVin(vin: String) throws
     
-    func updateVin(oldVin: String, newVin: String) -> Result<Void, VinRepositoryError>
+    func updateVin(oldVin: String, newVin: String) throws
 }

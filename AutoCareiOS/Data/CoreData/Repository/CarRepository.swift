@@ -13,96 +13,110 @@ class CarRepository: CarRepositoryProtocol {
     
     private let context = CoreDataStack.shared.context
     
-    func createCar(_ carModel: CarModel) -> Result<CarModel, CarRepositoryError> {
+    func createCar(_ carModel: CarModel) throws -> CarModel {
         
         let car = Car(context: context)
         CarMapper.mapToCoreData(carModel: carModel, entity: car)
         
         do {
             try context.save()
-            let carModel = CarMapper.mapToModel(entity: car)
-            return .success(carModel)
+            return CarMapper.mapToModel(entity: car)
         } catch {
-            debugPrint("[CarRepository] Failed to create car: \(error.localizedDescription)")
-            return .failure(.creationFailed)
+            debugPrint("[CarRepository] Failed to save car: \(error.localizedDescription).")
+            throw RepositoryError.createFailed
         }
     }
     
-    func getAllCars() -> Result<[CarModel], CarRepositoryError> {
+    func getCar(carID: UUID) throws -> CarModel {
+        let fetchRequest: NSFetchRequest<Car> = Car.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", carID as CVarArg)
+        
+        do {
+            guard let entity = try context.fetch(fetchRequest).first else {
+                debugPrint("[CarRepository] Car with ID \(carID) not found.")
+                throw RepositoryError.objectNotFound
+            }
+            return CarMapper.mapToModel(entity: entity)
+        } catch {
+            debugPrint("[CarRepository] Failed to fetch car with ID \(carID): \(error.localizedDescription).")
+            throw RepositoryError.fetchFailed
+        }
+    }
+    
+    func getAllCars() throws -> [CarModel] {
         let fetchRequest: NSFetchRequest<Car> = Car.fetchRequest()
         
         do {
             let cars = try context.fetch(fetchRequest)
-            let result = cars.map { CarMapper.mapToModel(entity: $0) }
-            return .success(result)
+            let carsModel = cars.map { CarMapper.mapToModel(entity: $0) }
+            return carsModel
         } catch {
-            debugPrint("[CarRepository] Failed to fetch cars: \(error.localizedDescription)")
-            return .failure(.fetchFailed)
+            debugPrint("[CarRepository] Failed to get all cars: \(error.localizedDescription).")
+            throw RepositoryError.fetchFailed
         }
     }
     
-    func updateCar(_ car: CarModel) -> Result<CarModel, CarRepositoryError> {
+    func updateCar(_ car: CarModel) throws -> CarModel {
         let fetchRequest: NSFetchRequest<Car> = Car.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", car.id as CVarArg)
         do {
             guard let entity = try context.fetch(fetchRequest).first else {
-                return .failure(.carNotFound)
+                throw RepositoryError.objectNotFound
             }
             
             CarMapper.mapToCoreData(carModel: car, entity: entity)
             
             try context.save()
             
-            let updatedCar = CarMapper.mapToModel(entity: entity)
-            return .success(updatedCar)
+            return CarMapper.mapToModel(entity: entity)
         } catch {
-            debugPrint("[CarRepository] Failed to update car: \(error.localizedDescription)")
-            return .failure(.updateFailed)
+            debugPrint("[CarRepository] Failed to update car: \(error.localizedDescription).")
+            throw RepositoryError.updateFailed
         }
     }
     
-    func updateMileage(for car: CarModel, newMileage: Int32) -> Result<Void, CarRepositoryError> {
+    func updateMileage(for car: CarModel, newMileage: Int32) throws {
         let fetchRequest: NSFetchRequest<Car> = Car.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", car.id as CVarArg)
         do {
             guard let entity = try context.fetch(fetchRequest).first else {
-                return .failure(.carNotFound)
+                throw RepositoryError.objectNotFound
             }
             entity.mileage = newMileage
             try context.save()
-            return .success(())
         } catch {
-            debugPrint("[CarRepository] Failed to update mileage: \(error.localizedDescription)")
-            return .failure(.updateMileageFailed)
+            debugPrint("[CarRepository] Failed to update mileage: \(error.localizedDescription).")
+            throw RepositoryError.updateFailed
         }
     }
     
-    func deleteCar(_ car: CarModel) -> Result<Void, CarRepositoryError> {
+    func deleteCar(_ car: CarModel) throws {
         let fetchRequest: NSFetchRequest<Car> = Car.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", car.id as CVarArg)
         do {
             guard let entity = try context.fetch(fetchRequest).first else {
-                return .failure(.carNotFound)
+                throw RepositoryError.objectNotFound
             }
             context.delete(entity)
             try context.save()
-            return .success(())
         } catch {
             debugPrint("[CarRepository] Failed to delete car: \(error.localizedDescription)")
-            return .failure(.deleteFailed)
+            throw RepositoryError.deleteFailed
         }
     }
 }
 
 
 protocol CarRepositoryProtocol {
-    func createCar(_ carModel: CarModel) -> Result<CarModel, CarRepositoryError>
+    func createCar(_ carModel: CarModel) throws -> CarModel
 
-    func getAllCars() -> Result<[CarModel], CarRepositoryError>
+    func getAllCars() throws -> [CarModel]
+    
+    func getCar(carID: UUID) throws -> CarModel
 
-    func updateCar(_ car: CarModel) -> Result<CarModel, CarRepositoryError>
+    func updateCar(_ car: CarModel) throws -> CarModel
 
-    func updateMileage(for car: CarModel, newMileage: Int32) -> Result<Void, CarRepositoryError>
+    func updateMileage(for car: CarModel, newMileage: Int32) throws
 
-    func deleteCar(_ car: CarModel) -> Result<Void, CarRepositoryError>
+    func deleteCar(_ car: CarModel) throws
 }

@@ -13,14 +13,14 @@ class InsuranceRepository: InsuranceRepositoryProtocol {
     
     private let context = CoreDataStack.shared.context
     
-    func createInsurance(insuranceModel: InsuranceModel, for carID: UUID) -> Result<Void, InsuranceRepositoryError> {
+    func createInsurance(insuranceModel: InsuranceModel, for carID: UUID) throws {
         
         let fetchRequest: NSFetchRequest<Car> = Car.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", carID as CVarArg)
-                
+        
         do {
             guard let entity = try context.fetch(fetchRequest).first else {
-                return .failure(.carNotFound)
+                throw RepositoryError.objectNotFound
             }
             
             let insurance = Insurance(context: context)
@@ -31,28 +31,26 @@ class InsuranceRepository: InsuranceRepositoryProtocol {
                 for: entity)
             
             try context.save()
-            return .success(())
         } catch {
-            debugPrint("InsuranceRepository: Failed to create insurance – car with ID \(carID) not found.")
-            return .failure(.carNotFound)
+            debugPrint("[InsuranceRepository] Failed to create insurance – car with ID \(carID) not found: \(error.localizedDescription).")
+            throw RepositoryError.createFailed
         }
     }
     
-    func fetchInsurances(for carID: UUID) -> Result<[InsuranceModel], InsuranceRepositoryError> {
+    func fetchInsurances(for carID: UUID) throws -> [InsuranceModel] {
         let fetchRequest: NSFetchRequest<Insurance> = Insurance.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "car.id == %@", carID as CVarArg)
         
         do {
             let insurances = try context.fetch(fetchRequest)
-            let result = insurances.map { InsuranceMapper.mapToModel(entity: $0)}
-            return .success(result)
+            return insurances.map { InsuranceMapper.mapToModel(entity: $0)}
         } catch {
-            debugPrint("InsuranceRepository: Failed to fetch insurances for car ID \(carID): \(error.localizedDescription)")
-            return .failure(.fetchFailed)
+            debugPrint("[InsuranceRepository] Failed to fetch insurances for car ID \(carID): \(error.localizedDescription).")
+            throw RepositoryError.fetchFailed
         }
     }
     
-    func updateInsurance(insuranceModel: InsuranceModel, for carID: UUID) -> Result<Void, InsuranceRepositoryError> {
+    func updateInsurance(insuranceModel: InsuranceModel, for carID: UUID) throws {
         
         let fetchRequestInsurance: NSFetchRequest<Insurance> = Insurance.fetchRequest()
         fetchRequestInsurance.predicate = NSPredicate(format: "id == %@", insuranceModel.id as CVarArg)
@@ -62,11 +60,11 @@ class InsuranceRepository: InsuranceRepositoryProtocol {
         
         do {
             guard let entityInsurance = try context.fetch(fetchRequestInsurance).first else {
-                return .failure(.insuranceNotFound)
+                throw RepositoryError.objectNotFound
             }
             
             guard let entityCar = try context.fetch(fetchRequestCar).first else {
-                return .failure(.carNotFound)
+                throw RepositoryError.objectNotFound
             }
             
             InsuranceMapper.mapToCoreData(
@@ -75,38 +73,37 @@ class InsuranceRepository: InsuranceRepositoryProtocol {
                 for: entityCar)
             
             try context.save()
-            return .success(())
         } catch {
-            debugPrint("InsuranceRepository: Failed to update insurance with ID \(insuranceModel.id): \(error.localizedDescription)")
-            return .failure(.updateFailed)
+            debugPrint("[InsuranceRepository] Failed to update insurance with ID \(insuranceModel.id): \(error.localizedDescription).")
+            throw RepositoryError.updateFailed
         }
     }
     
-    func deleteInsurance(insuranceModel: InsuranceModel) -> Result<Void, InsuranceRepositoryError> {
+    func deleteInsurance(insuranceModel: InsuranceModel) throws {
         let fetchRequest: NSFetchRequest<Insurance> = Insurance.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", insuranceModel.id as CVarArg)
         
         do {
-            if let entityInsurance = try context.fetch(fetchRequest).first {
-                context.delete(entityInsurance)
-                try context.save()
-                return .success(())
+            guard let entityInsurance = try context.fetch(fetchRequest).first else {
+                throw RepositoryError.objectNotFound
             }
-            return .failure(.insuranceNotFound)
+
+            context.delete(entityInsurance)
+            try context.save()
         } catch {
-            debugPrint("InsuranceRepository: Failed to delete insurance with ID \(insuranceModel.id): \(error.localizedDescription)")
-            return .failure(.deleteFailed)
+            debugPrint("[InsuranceRepository] Failed to delete insurance with ID \(insuranceModel.id): \(error.localizedDescription).")
+            throw RepositoryError.deleteFailed
         }
     }
 }
 
 
 protocol InsuranceRepositoryProtocol {
-    func createInsurance(insuranceModel: InsuranceModel, for carID: UUID) -> Result<Void, InsuranceRepositoryError>
+    func createInsurance(insuranceModel: InsuranceModel, for carID: UUID) throws
     
-    func fetchInsurances(for carID: UUID) -> Result<[InsuranceModel], InsuranceRepositoryError>
+    func fetchInsurances(for carID: UUID) throws -> [InsuranceModel]
     
-    func updateInsurance(insuranceModel: InsuranceModel, for carID: UUID) -> Result<Void, InsuranceRepositoryError>
+    func updateInsurance(insuranceModel: InsuranceModel, for carID: UUID) throws
     
-    func deleteInsurance(insuranceModel: InsuranceModel) -> Result<Void, InsuranceRepositoryError>
+    func deleteInsurance(insuranceModel: InsuranceModel) throws
 }

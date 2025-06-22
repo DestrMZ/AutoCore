@@ -8,11 +8,10 @@
 import Foundation
 
 
-enum CarRepositoryError: Error {
-    case creationFailed
+enum RepositoryError: Error {
+    case createFailed
     case fetchFailed
     case updateFailed
     case deleteFailed
-    case carNotFound
-    case updateMileageFailed
+    case objectNotFound
 }

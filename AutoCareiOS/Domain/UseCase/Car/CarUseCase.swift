@@ -18,129 +18,108 @@ final class CarUseCase: CarUseCaseProtocol {
         self.vinRepository = vinRepository
     }
     
-    func createCar(car: CarModel) async throws -> CarModel {
+    func createCar(carModel: CarModel) throws -> CarModel {
+        try validateCar(car: carModel)
         
-        if car.nameModel.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            throw CarValidationError.missingNameModel
-        }
-        
-        if car.vinNumbers.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            throw CarValidationError.missingVinNumber
-        }
-        
-        if car.year <= 0 {
-            throw CarValidationError.missingYear
-        }
-        
-        if car.mileage <= 0 {
-            throw CarValidationError.missingMileage
-        }
-        
-        switch vinRepository.getVins() {
-        case .success(let vins):
-            guard !vins.contains(car.vinNumbers) else {
-                throw CarValidationError.duplicateVinNumber
+        do {
+            let vins = try vinRepository.getVins()
+            guard !vins.contains(carModel.vinNumbers) else {
+                throw CarError.duplicateVinNumber
             }
+            try vinRepository.addVin(vin: carModel.vinNumbers)
+            debugPrint("[CarUseCase] \(carModel.nameModel) successful created!")
+            return try carRepository.createCar(carModel)
+        } catch {
+            throw CarError.saveFailed
+        }
+    }
+    
+    func fetchAllCars() throws -> [CarModel] {
+        do {
+            return try carRepository.getAllCars()
+        } catch {
+            throw CarError.fetchFailed
+        }
+    }
+    
+    func updateMileage(for carModel: CarModel?, newMileage: Int32?) throws {
+        guard let car = carModel else { throw CarError.carNotFound }
+        guard let mileage = newMileage else { throw CarError.missingMileage }
+        guard mileage > 0 else { throw CarError.mileageNegative }
+        guard mileage < 5_000_000 else { throw CarError.mileageExceedsLimit }
         
-            switch vinRepository.addVin(vin: car.vinNumbers) {
-            case .success:
-            case .failure:
-                throw CarStorageError.vinNumberSaveFailed
+        do {
+            debugPrint("[CarUseCase] \(String(describing: newMileage)) mileage updated for \(car.nameModel) successfully!")
+            try carRepository.updateMileage(for: car, newMileage: mileage)
+        } catch {
+            throw CarError.mileageUpdateFailed
+        }
+    }
+    
+    func updateCar(carModel: CarModel) throws -> CarModel {
+        try validateCar(car: carModel)
+        
+        let vins = try vinRepository.getVins()
+        let oldCarModel = try carRepository.getCar(carID: carModel.id)
+        
+        if oldCarModel.vinNumbers != carModel.vinNumbers {
+            if vins.contains(carModel.vinNumbers) {
+                throw CarError.duplicateVinNumber
             }
-        case .failure:
-            throw CarStorageError.saveFailed
-        }
-        
-        switch carRepository.createCar(car) {
-        case .success(let car):
-            return car
-        case .failure:
-            throw CarStorageError.saveFailed
-        }
-    }
-    
-    func getAllCars() async throws -> [CarModel] {
-        switch carRepository.getAllCars() {
-        case .success(let cars):
-            return cars
-        case .failure:
-            throw CarStorageError.fetchFailed
-        }
-    }
-    
-    func updateMileage(for car: CarModel?, newMileage: Int32?) async throws {
-        guard let car = car else { throw UpdateMileageUseCaseError.carNotFound }
-        guard let mileage = newMileage else { throw UpdateMileageUseCaseError.invalidData }
-        guard mileage > 0 else { throw UpdateMileageUseCaseError.numberNonNegative }
-        guard mileage < 5_000_000 else { throw UpdateMileageUseCaseError.exceedsMaximumValue }
-        
-        switch carRepository.updateMileage(for: car, newMileage: mileage) {
-        case .success:
-        case .failure(let error):
-            throw UpdateMileageUseCaseError.updateMileageFailed
-        }
-    }
-    
-    func updateCar(car: CarModel) async throws {
-        if car.nameModel.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            throw CarValidationError.missingNameModel
-        }
-        
-        if car.vinNumbers.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            throw CarValidationError.missingVinNumber
-        }
-        
-        if car.year <= 0 {
-            throw CarValidationError.missingYear
-        }
-        
-        if car.mileage <= 0 {
-            throw CarValidationError.missingMileage
-        }
-       
-        switch vinRepository.getVins() {
-        case .success(let vins):
-            if !vins.contains(car.vinNumbers) {
-                debugPrint("[WARNING] VIN number was changed or missing from store — re-adding it")
-                _ = vinRepository.addVin(vin: car.vinNumbers)
-            }
-        case .failure:
-            throw CarStorageError.saveFailed
-        }
-
-        switch carRepository.updateCar(car) {
-        case .success:
-        case .failure:
-            throw CarStorageError.updateFailed
-        }
-    }
-    
-    func deleteCar(car: CarModel) async throws {
-        switch carRepository.deleteCar(car) {
-        case .success:
             
-            switch vinRepository.deleteVin(vin: car.vinNumbers) {
-            case .success:
-            case .failure:
-                throw CarStorageError.fetchFailed
-            }
-        case .failure:
-            throw CarStorageError.deleteFailed
+            try vinRepository.deleteVin(vin: oldCarModel.vinNumbers)
+            try vinRepository.addVin(vin: carModel.vinNumbers)
+            debugPrint("[CarUseCase] VIN updated from \(oldCarModel.vinNumbers) to \(carModel.vinNumbers)")
+        }
+        
+        do {
+            debugPrint("[CarUseCase] \(carModel.nameModel) successful updated!")
+            return try carRepository.updateCar(carModel)
+        } catch {
+            throw CarError.updateFailed
+        }
+    }
+    
+    func deleteCar(carModel: CarModel) throws {
+        do {
+            try vinRepository.deleteVin(vin: carModel.vinNumbers)
+            try carRepository.deleteCar(carModel)
+            debugPrint( "[CarUseCase] \(carModel.nameModel) successful deleted!")
+        } catch {
+            throw CarError.deleteFailed
+        }
+    }
+    
+    func validateCar(car: CarModel) throws {
+        if car.nameModel.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            throw CarError.missingNameModel
+        }
+        
+        if car.vinNumbers.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            throw CarError.missingVinNumber
+        }
+        
+        if car.year <= 0 {
+            throw CarError.missingYear
+        }
+        
+        if car.mileage <= 0 {
+            throw CarError.missingMileage
         }
     }
 }
 
 
 protocol CarUseCaseProtocol {
-    func createCar(car: CarModel) async throws -> CarModel
+    func createCar(carModel: CarModel) throws -> CarModel
     
-    func getAllCars() async throws -> [CarModel]
+    func fetchAllCars() throws -> [CarModel]
     
-    func updateCar(car: CarModel) async throws
+    func updateCar(carModel: CarModel) throws -> CarModel
     
-    func updateMileage(for car: CarModel?, newMileage: Int32?) async throws
+    func updateMileage(for car: CarModel?, newMileage: Int32?) throws
 
-    func deleteCar(car: CarModel) async throws
+    func deleteCar(carModel: CarModel) throws
     
-    
+    func validateCar(car: CarModel) throws
 }
