@@ -20,15 +20,16 @@ final class CarUseCase: CarUseCaseProtocol {
     
     func createCar(carModel: CarModel) throws -> CarModel {
         try validateCar(car: carModel)
+        let vins = try vinRepository.getVins()
+        guard !vins.contains(carModel.vinNumbers) else {
+            throw CarError.duplicateVinNumber
+        }
         
         do {
-            let vins = try vinRepository.getVins()
-            guard !vins.contains(carModel.vinNumbers) else {
-                throw CarError.duplicateVinNumber
-            }
+            let car = try carRepository.createCar(carModel)
             try vinRepository.addVin(vin: carModel.vinNumbers)
             debugPrint("[CarUseCase] \(carModel.nameModel) successful created!")
-            return try carRepository.createCar(carModel)
+            return car
         } catch {
             throw CarError.saveFailed
         }
@@ -59,22 +60,38 @@ final class CarUseCase: CarUseCaseProtocol {
     func updateCar(carModel: CarModel) throws -> CarModel {
         try validateCar(car: carModel)
         
-        let vins = try vinRepository.getVins()
-        let oldCarModel = try carRepository.getCar(carID: carModel.id)
+        let vins: [String]
+        let oldCarModel: CarModel
+        
+        do {
+            vins = try vinRepository.getVins()
+        } catch {
+            throw CarError.vinAccessFailed
+        }
+        
+        do {
+            oldCarModel = try carRepository.getCar(carID: carModel.id)
+        } catch {
+            throw CarError.carNotFound
+        }
         
         if oldCarModel.vinNumbers != carModel.vinNumbers {
             if vins.contains(carModel.vinNumbers) {
                 throw CarError.duplicateVinNumber
             }
-            
-            try vinRepository.deleteVin(vin: oldCarModel.vinNumbers)
-            try vinRepository.addVin(vin: carModel.vinNumbers)
-            debugPrint("[CarUseCase] VIN updated from \(oldCarModel.vinNumbers) to \(carModel.vinNumbers)")
         }
         
         do {
-            debugPrint("[CarUseCase] \(carModel.nameModel) successful updated!")
-            return try carRepository.updateCar(carModel)
+            let updatedCar = try carRepository.updateCar(carModel)
+
+            if oldCarModel.vinNumbers != carModel.vinNumbers {
+                try vinRepository.deleteVin(vin: oldCarModel.vinNumbers)
+                try vinRepository.addVin(vin: carModel.vinNumbers)
+                debugPrint("[CarUseCase] VIN updated from \(oldCarModel.vinNumbers) to \(carModel.vinNumbers)")
+            }
+
+            debugPrint("[CarUseCase] \(carModel.nameModel) successfully updated!")
+            return updatedCar
         } catch {
             throw CarError.updateFailed
         }
@@ -82,8 +99,8 @@ final class CarUseCase: CarUseCaseProtocol {
     
     func deleteCar(carModel: CarModel) throws {
         do {
-            try vinRepository.deleteVin(vin: carModel.vinNumbers)
             try carRepository.deleteCar(carModel)
+            try vinRepository.deleteVin(vin: carModel.vinNumbers)
             debugPrint( "[CarUseCase] \(carModel.nameModel) successful deleted!")
         } catch {
             throw CarError.deleteFailed

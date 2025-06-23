@@ -36,7 +36,7 @@ class VinRepository: VinRepositoryProtocol {
         
         do {
             guard let store = try context.fetch(fetchRequest).first else {
-                return []
+                throw RepositoryError.objectNotFound
             }
             
             return store.allVinNumbers ?? []
