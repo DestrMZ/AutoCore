@@ -11,34 +11,29 @@ import Foundation
 final class CarUseCase: CarUseCaseProtocol {
     
     private let carRepository: CarRepositoryProtocol
-    private let vinRepository: VinRepositoryProtocol
     
-    init(carRepository: CarRepositoryProtocol, vinRepository: VinRepositoryProtocol) {
+    init(carRepository: CarRepositoryProtocol) {
         self.carRepository = carRepository
-        self.vinRepository = vinRepository
     }
     
     func createCar(carModel: CarModel) throws -> CarModel {
         try validateCar(car: carModel)
-        let vins = try vinRepository.getVins()
-        guard !vins.contains(carModel.vinNumbers) else {
-            throw CarError.duplicateVinNumber
-        }
         
         do {
-            let car = try carRepository.createCar(carModel)
-            try vinRepository.addVin(vin: carModel.vinNumbers)
-            debugPrint("[CarUseCase] \(carModel.nameModel) successful created!")
-            return car
-        } catch {
-            throw CarError.saveFailed
+            let carModel = try carRepository.createCar(carModel)
+            debugPrint("[CarUseCase] \(carModel.nameModel) successfully created!")
+            return carModel
+        } catch RepositoryError.duplicateObject {
+            throw CarError.duplicateVinNumber
+        } catch RepositoryError.createFailed {
+            throw CarError.createFailed
         }
     }
     
     func fetchAllCars() throws -> [CarModel] {
         do {
-            return try carRepository.getAllCars()
-        } catch {
+            return try carRepository.fetchAllCars()
+        } catch RepositoryError.fetchFailed {
             throw CarError.fetchFailed
         }
     }
@@ -52,7 +47,9 @@ final class CarUseCase: CarUseCaseProtocol {
         do {
             debugPrint("[CarUseCase] \(String(describing: newMileage)) mileage updated for \(car.nameModel) successfully!")
             try carRepository.updateMileage(for: car, newMileage: mileage)
-        } catch {
+        } catch RepositoryError.carNotFound {
+            throw CarError.carNotFound
+        } catch RepositoryError.updateFailed {
             throw CarError.mileageUpdateFailed
         }
     }
@@ -60,39 +57,25 @@ final class CarUseCase: CarUseCaseProtocol {
     func updateCar(carModel: CarModel) throws -> CarModel {
         try validateCar(car: carModel)
         
-        let vins: [String]
         let oldCarModel: CarModel
-        
-        do {
-            vins = try vinRepository.getVins()
-        } catch {
-            throw CarError.vinAccessFailed
-        }
-        
         do {
             oldCarModel = try carRepository.getCar(carID: carModel.id)
-        } catch {
+        } catch RepositoryError.carNotFound {
             throw CarError.carNotFound
+        } catch RepositoryError.fetchFailed {
+            throw CarError.fetchFailed
         }
-        
-        if oldCarModel.vinNumbers != carModel.vinNumbers {
-            if vins.contains(carModel.vinNumbers) {
-                throw CarError.duplicateVinNumber
-            }
-        }
-        
+
         do {
             let updatedCar = try carRepository.updateCar(carModel)
-
             if oldCarModel.vinNumbers != carModel.vinNumbers {
-                try vinRepository.deleteVin(vin: oldCarModel.vinNumbers)
-                try vinRepository.addVin(vin: carModel.vinNumbers)
                 debugPrint("[CarUseCase] VIN updated from \(oldCarModel.vinNumbers) to \(carModel.vinNumbers)")
             }
-
-            debugPrint("[CarUseCase] \(carModel.nameModel) successfully updated!")
             return updatedCar
+        } catch RepositoryError.duplicateObject {
+            throw CarError.duplicateVinNumber
         } catch {
+            debugPrint("[CarUseCase] Unexpected error during update: \(error.localizedDescription)")
             throw CarError.updateFailed
         }
     }
@@ -100,9 +83,10 @@ final class CarUseCase: CarUseCaseProtocol {
     func deleteCar(carModel: CarModel) throws {
         do {
             try carRepository.deleteCar(carModel)
-            try vinRepository.deleteVin(vin: carModel.vinNumbers)
             debugPrint( "[CarUseCase] \(carModel.nameModel) successful deleted!")
-        } catch {
+        } catch RepositoryError.carNotFound {
+            throw CarError.carNotFound
+        } catch RepositoryError.deleteFailed {
             throw CarError.deleteFailed
         }
     }

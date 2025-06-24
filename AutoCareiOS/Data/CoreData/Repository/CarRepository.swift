@@ -16,14 +16,22 @@ class CarRepository: CarRepositoryProtocol {
     func createCar(_ carModel: CarModel) throws -> CarModel {
         
         let car = Car(context: context)
+        
         CarMapper.mapToCoreData(carModel: carModel, entity: car)
         
         do {
             try context.save()
             return CarMapper.mapToModel(entity: car)
-        } catch {
-            debugPrint("[CarRepository] Failed to save car: \(error.localizedDescription).")
-            throw RepositoryError.createFailed
+        } catch let error as NSError {
+            if error.domain == NSCocoaErrorDomain && (error.code == 133021 || error.code == 1550) {
+                // NSManagedObjectConstraintMergeError and NSValidationErrorCode
+                // TODO: Improve CoreData duplicate error detection (use nested error parsing for NSValidationMultipleErrorsError)
+                debugPrint("[CarRepository] Failed to save car, duplicate object: \(error.localizedDescription).")
+                throw RepositoryError.duplicateObject
+            } else {
+                debugPrint("[CarRepository] Failed to save car: \(error.localizedDescription).")
+                throw RepositoryError.createFailed
+            }
         }
     }
     
@@ -34,7 +42,7 @@ class CarRepository: CarRepositoryProtocol {
         do {
             guard let entity = try context.fetch(fetchRequest).first else {
                 debugPrint("[CarRepository] Car with ID \(carID) not found.")
-                throw RepositoryError.objectNotFound
+                throw RepositoryError.carNotFound
             }
             return CarMapper.mapToModel(entity: entity)
         } catch {
@@ -43,7 +51,7 @@ class CarRepository: CarRepositoryProtocol {
         }
     }
     
-    func getAllCars() throws -> [CarModel] {
+    func fetchAllCars() throws -> [CarModel] {
         let fetchRequest: NSFetchRequest<Car> = Car.fetchRequest()
         
         do {
@@ -59,19 +67,30 @@ class CarRepository: CarRepositoryProtocol {
     func updateCar(_ car: CarModel) throws -> CarModel {
         let fetchRequest: NSFetchRequest<Car> = Car.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", car.id as CVarArg)
+        
         do {
             guard let entity = try context.fetch(fetchRequest).first else {
-                throw RepositoryError.objectNotFound
+                throw RepositoryError.carNotFound
             }
             
             CarMapper.mapToCoreData(carModel: car, entity: entity)
             
-            try context.save()
+            do {
+                try context.save()
+                return CarMapper.mapToModel(entity: entity)
+            } catch let error as NSError {
+                if error.domain == NSCocoaErrorDomain && (error.code == 133021 || error.code == 1550) {
+                    debugPrint("[CarRepository] Failed to update car, duplicate VIN.")
+                    throw RepositoryError.duplicateObject
+                } else {
+                    debugPrint("[CarRepository] Failed to update car: \(error.localizedDescription)")
+                    throw RepositoryError.updateFailed
+                }
+            }
             
-            return CarMapper.mapToModel(entity: entity)
         } catch {
-            debugPrint("[CarRepository] Failed to update car: \(error.localizedDescription).")
-            throw RepositoryError.updateFailed
+            debugPrint("[CarRepository] Failed to fetch car for update: \(error.localizedDescription)")
+            throw RepositoryError.fetchFailed
         }
     }
     
@@ -80,7 +99,7 @@ class CarRepository: CarRepositoryProtocol {
         fetchRequest.predicate = NSPredicate(format: "id == %@", car.id as CVarArg)
         do {
             guard let entity = try context.fetch(fetchRequest).first else {
-                throw RepositoryError.objectNotFound
+                throw RepositoryError.carNotFound
             }
             entity.mileage = newMileage
             try context.save()
@@ -95,7 +114,7 @@ class CarRepository: CarRepositoryProtocol {
         fetchRequest.predicate = NSPredicate(format: "id == %@", car.id as CVarArg)
         do {
             guard let entity = try context.fetch(fetchRequest).first else {
-                throw RepositoryError.objectNotFound
+                throw RepositoryError.carNotFound
             }
             context.delete(entity)
             try context.save()
@@ -110,7 +129,7 @@ class CarRepository: CarRepositoryProtocol {
 protocol CarRepositoryProtocol {
     func createCar(_ carModel: CarModel) throws -> CarModel
 
-    func getAllCars() throws -> [CarModel]
+    func fetchAllCars() throws -> [CarModel]
     
     func getCar(carID: UUID) throws -> CarModel
 

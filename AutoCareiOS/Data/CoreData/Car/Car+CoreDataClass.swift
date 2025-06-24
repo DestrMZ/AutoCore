@@ -2,7 +2,7 @@
 //  Car+CoreDataClass.swift
 //  AutoCareiOS
 //
-//  Created by Ivan Maslennikov on 13.06.2025.
+//  Created by Ivan Maslennikov on 24.06.2025.
 //
 //
 

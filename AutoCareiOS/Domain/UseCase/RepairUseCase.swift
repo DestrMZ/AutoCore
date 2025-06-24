@@ -22,26 +22,32 @@ class RepairUseCase: RepairUseCaseProtocol {
         do {
             try repairRepository.createRepair(repairModel: repairModel, for: carModel.id)
             debugPrint("[RepairUseCase] \(repairModel.partReplaced) successful created!")
-        } catch {
-            throw RepairError.saveFailed
+        } catch RepositoryError.carNotFound {
+            throw RepairError.carNotFound
+        } catch RepositoryError.createFailed {
+            throw RepairError.createFailed
         }
     }
     
     func fetchAllRepairs(for carModel: CarModel) throws -> [RepairModel] {
         do {
-            return try repairRepository.getAllRepairs(for: carModel.id)
-        } catch {
+            return try repairRepository.fetchAllRepairs(for: carModel.id)
+        } catch RepositoryError.fetchFailed {
             throw RepairError.fetchFailed
         }
     }
     
-    func updateRepair(for carModel: CarModel, repairModel: RepairModel) throws {
+    func updateRepair(repairModel: RepairModel, for carModel: CarModel) throws {
         try validateRepair(repairModel: repairModel)
         
         do {
             try repairRepository.updateRepair(repair: repairModel, for: carModel.id)
             debugPrint("[RepairUseCase] \(repairModel.partReplaced) successful updated!")
-        } catch {
+        } catch RepositoryError.repairNotFound {
+            throw RepairError.repairNotFound
+        } catch RepositoryError.carNotFound {
+            throw RepairError.carNotFound
+        } catch RepositoryError.updateFailed {
             throw RepairError.updateFailed
         }
     }
@@ -61,7 +67,9 @@ class RepairUseCase: RepairUseCaseProtocol {
         do {
             try repairRepository.deleteRepair(repair: repairModel)
             debugPrint( "[RepairUseCase] \(repairModel.partReplaced) successful deleted!")
-        } catch {
+        } catch RepositoryError.repairNotFound {
+            throw RepairError.repairNotFound
+        } catch RepositoryError.deleteFailed {
             throw RepairError.deleteFailed
         }
     }
@@ -106,7 +114,7 @@ protocol RepairUseCaseProtocol {
     
     func fetchAllRepairs(for carModel: CarModel) throws -> [RepairModel]
     
-    func updateRepair(for carModel: CarModel, repairModel: RepairModel) throws
+    func updateRepair(repairModel: RepairModel, for carModel: CarModel) throws
     
     func fetchLatestRefueling(from repairs: [RepairModel]) -> (litres: String, date: Date)
     

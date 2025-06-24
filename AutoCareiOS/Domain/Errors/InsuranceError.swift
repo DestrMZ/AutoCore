@@ -17,7 +17,8 @@ enum InsuranceError: Error, LocalizedError {
     case startDateAfterEndDate
     case endDateInPast
     case notificationSetInPast
-    case carNotAttached
+    case carNotFound
+    case insuranceNotFound
 
     // MARK: - Хранилище
     
@@ -25,6 +26,7 @@ enum InsuranceError: Error, LocalizedError {
     case fetchFailed
     case updateFailed
     case deleteFailed
+    case createFailed
 
     // MARK: - Описание для UI
 
@@ -56,6 +58,10 @@ enum InsuranceError: Error, LocalizedError {
             return "Failed to update insurance."
         case .deleteFailed:
             return "Failed to delete insurance."
+        case .createFailed:
+            return "Failed to create insurance."
+        case .insuranceNotFound:
+            return "Insurance not found."
         }
     }
 }

@@ -26,3 +26,43 @@
 
 Сканирование чеков на заправке (OCR)
 Используй VisionKit (или сторонний SDK), чтобы быстро внести данные о расходах.
+
+    // insurance
+    @NSManaged public var id: UUID
+    @NSManaged public var type: String
+    @NSManaged public var nameCompany: String
+    @NSManaged public var startDate: Date
+    @NSManaged public var endDate: Date
+    @NSManaged public var price: Int32
+    @NSManaged public var notes: String?
+    @NSManaged public var notificationDate: Date?
+    @NSManaged public var isActive: Bool
+    @NSManaged public var car: Car?
+    
+    // car
+    @NSManaged public var id: UUID
+    @NSManaged public var color: String?
+    @NSManaged public var engineType: String
+    @NSManaged public var existingVinNumbers: [String]?
+    @NSManaged public var mileage: Int32
+    @NSManaged public var nameModel: String
+    @NSManaged public var photoCar: Data
+    @NSManaged public var stateNumber: String?
+    @NSManaged public var transmissionType: String
+    @NSManaged public var vinNumber: String
+    @NSManaged public var year: Int16
+    @NSManaged public var repairs: NSSet?
+    @NSManaged public var insurance: NSSet?
+    
+    // repair
+    @NSManaged public var id: UUID
+    @NSManaged public var amount: Int32
+    @NSManaged public var litresFuel: NSNumber?
+    @NSManaged public var notes: String?
+    @NSManaged public var partReplaced: String
+    @NSManaged public var parts: [String: String]?
+    @NSManaged public var photoRepair: [Data]?
+    @NSManaged public var repairCategory: String
+    @NSManaged public var repairDate: Date
+    @NSManaged public var repairMileage: Int32
+    @NSManaged public var car: Car?

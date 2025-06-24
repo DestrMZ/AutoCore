@@ -14,6 +14,11 @@
         <attribute name="year" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="insurance" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Insurance" inverseName="car" inverseEntity="Insurance"/>
         <relationship name="repairs" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Repair" inverseName="car" inverseEntity="Repair"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="vinNumber"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="Insurance" representedClassName="Insurance" syncable="YES">
         <attribute name="endDate" attributeType="Date" usesScalarValueType="NO"/>
@@ -39,8 +44,5 @@
         <attribute name="repairDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="repairMileage" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="car" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Car" inverseName="repairs" inverseEntity="Car"/>
-    </entity>
-    <entity name="VinStore" representedClassName="VinStore" syncable="YES">
-        <attribute name="allVinNumbers" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData"/>
     </entity>
 </model>

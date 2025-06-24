@@ -13,5 +13,8 @@ enum RepositoryError: Error {
     case fetchFailed
     case updateFailed
     case deleteFailed
-    case objectNotFound
+    case duplicateObject
+    case insuranceNotFound
+    case carNotFound
+    case repairNotFound
 }

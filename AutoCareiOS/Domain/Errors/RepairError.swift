@@ -28,7 +28,8 @@ enum RepairError: Error, LocalizedError {
     case fetchFailed
     case updateFailed
     case deleteFailed
-
+    case createFailed
+    
     // MARK: - Описание ошибки для UI
     
     var errorDescription: String? {
@@ -65,6 +66,8 @@ enum RepairError: Error, LocalizedError {
             return "Failed to update repair."
         case .deleteFailed:
             return "Failed to delete repair."
+        case .createFailed:
+            return "Failed to create repair."
         }
     }
 }

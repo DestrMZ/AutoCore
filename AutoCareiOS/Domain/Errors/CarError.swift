@@ -25,6 +25,7 @@ enum CarError: Error, LocalizedError {
     case updateFailed
     case vinNumberSaveFailed
     case vinAccessFailed
+    case createFailed
     
     // MARK: - Пробег
     
@@ -64,6 +65,8 @@ enum CarError: Error, LocalizedError {
             return "Failed to save VIN number."
         case .vinAccessFailed:
             return "Failed to access VIN number."
+        case .createFailed:
+            return "Failed to create car."
             
         // Пробег
         case .carNotFound:

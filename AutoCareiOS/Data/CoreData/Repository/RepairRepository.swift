@@ -20,7 +20,7 @@ class RepairRepository: RepairRepositoryProtocol {
             
         do {
             guard let entity = try context.fetch(fetchRequest).first else {
-                throw RepositoryError.objectNotFound
+                throw RepositoryError.carNotFound
             }
             
             let repair = Repair(context: context)
@@ -37,7 +37,7 @@ class RepairRepository: RepairRepositoryProtocol {
         }
     }
     
-    func getAllRepairs(for carID: UUID) throws -> [RepairModel] {
+    func fetchAllRepairs(for carID: UUID) throws -> [RepairModel] {
         let fetchRequest: NSFetchRequest<Repair> = Repair.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "car.id == %@", carID as CVarArg)
 
@@ -59,11 +59,11 @@ class RepairRepository: RepairRepositoryProtocol {
         
         do {
             guard let entityRepair = try context.fetch(fetchRequestRepair).first else {
-                throw RepositoryError.objectNotFound
+                throw RepositoryError.repairNotFound
             }
             
             guard let entityCar = try context.fetch(fetchRequestCar).first else {
-                throw RepositoryError.objectNotFound
+                throw RepositoryError.carNotFound
             }
             
             RepairMapper.mapToEntity(
@@ -84,7 +84,7 @@ class RepairRepository: RepairRepositoryProtocol {
         
         do {
             guard let entityRepair = try context.fetch(fetchRequest).first else {
-                throw RepositoryError.objectNotFound
+                throw RepositoryError.repairNotFound
             }
                 
             context.delete(entityRepair)
@@ -100,7 +100,7 @@ class RepairRepository: RepairRepositoryProtocol {
 protocol RepairRepositoryProtocol {
     func createRepair(repairModel: RepairModel, for carID: UUID) throws
     
-    func getAllRepairs(for carID: UUID) throws -> [RepairModel]
+    func fetchAllRepairs(for carID: UUID) throws -> [RepairModel]
     
     func updateRepair(repair: RepairModel, for carID: UUID) throws
     

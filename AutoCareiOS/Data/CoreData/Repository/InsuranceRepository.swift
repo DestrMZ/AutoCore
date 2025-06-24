@@ -20,7 +20,7 @@ class InsuranceRepository: InsuranceRepositoryProtocol {
         
         do {
             guard let entity = try context.fetch(fetchRequest).first else {
-                throw RepositoryError.objectNotFound
+                throw RepositoryError.carNotFound
             }
             
             let insurance = Insurance(context: context)
@@ -60,11 +60,11 @@ class InsuranceRepository: InsuranceRepositoryProtocol {
         
         do {
             guard let entityInsurance = try context.fetch(fetchRequestInsurance).first else {
-                throw RepositoryError.objectNotFound
+                throw RepositoryError.insuranceNotFound
             }
             
             guard let entityCar = try context.fetch(fetchRequestCar).first else {
-                throw RepositoryError.objectNotFound
+                throw RepositoryError.carNotFound
             }
             
             InsuranceMapper.mapToCoreData(
@@ -85,7 +85,7 @@ class InsuranceRepository: InsuranceRepositoryProtocol {
         
         do {
             guard let entityInsurance = try context.fetch(fetchRequest).first else {
-                throw RepositoryError.objectNotFound
+                throw RepositoryError.insuranceNotFound
             }
 
             context.delete(entityInsurance)

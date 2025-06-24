@@ -2,7 +2,7 @@
 //  Car+CoreDataProperties.swift
 //  AutoCareiOS
 //
-//  Created by Ivan Maslennikov on 13.06.2025.
+//  Created by Ivan Maslennikov on 24.06.2025.
 //
 //
 
@@ -32,23 +32,6 @@ extension Car {
 
 }
 
-// MARK: Generated accessors for repairs
-extension Car {
-
-    @objc(addRepairsObject:)
-    @NSManaged public func addToRepairs(_ value: Repair)
-
-    @objc(removeRepairsObject:)
-    @NSManaged public func removeFromRepairs(_ value: Repair)
-
-    @objc(addRepairs:)
-    @NSManaged public func addToRepairs(_ values: NSSet)
-
-    @objc(removeRepairs:)
-    @NSManaged public func removeFromRepairs(_ values: NSSet)
-
-}
-
 // MARK: Generated accessors for insurance
 extension Car {
 
@@ -63,6 +46,23 @@ extension Car {
 
     @objc(removeInsurance:)
     @NSManaged public func removeFromInsurance(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for repairs
+extension Car {
+
+    @objc(addRepairsObject:)
+    @NSManaged public func addToRepairs(_ value: Repair)
+
+    @objc(removeRepairsObject:)
+    @NSManaged public func removeFromRepairs(_ value: Repair)
+
+    @objc(addRepairs:)
+    @NSManaged public func addToRepairs(_ values: NSSet)
+
+    @objc(removeRepairs:)
+    @NSManaged public func removeFromRepairs(_ values: NSSet)
 
 }
 
