@@ -19,7 +19,6 @@ extension Car {
     @NSManaged public var id: UUID
     @NSManaged public var color: String?
     @NSManaged public var engineType: String
-    @NSManaged public var existingVinNumbers: [String]?
     @NSManaged public var mileage: Int32
     @NSManaged public var nameModel: String
     @NSManaged public var photoCar: Data

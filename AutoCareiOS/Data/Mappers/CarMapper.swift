@@ -21,7 +21,6 @@ struct CarMapper {
             color: entity.color,
             engineType: entity.engineType,
             transmissionType: entity.transmissionType,
-            existingVinNumbers: entity.existingVinNumbers,
             mileage: entity.mileage,
             photoCar: entity.photoCar,
             vinNumbers: entity.vinNumber,
@@ -37,7 +36,6 @@ struct CarMapper {
         entity.color = carModel.color
         entity.engineType = carModel.engineType
         entity.transmissionType = carModel.transmissionType
-        entity.existingVinNumbers = carModel.existingVinNumbers
         entity.mileage = carModel.mileage
         entity.photoCar = carModel.photoCar
         entity.vinNumber = carModel.vinNumbers

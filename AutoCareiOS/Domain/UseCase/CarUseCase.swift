@@ -54,7 +54,7 @@ final class CarUseCase: CarUseCaseProtocol {
         }
     }
     
-    func updateCar(carModel: CarModel) throws -> CarModel {
+    func updateCar(carModel: CarModel) throws {
         try validateCar(car: carModel)
         
         let oldCarModel: CarModel
@@ -67,15 +67,24 @@ final class CarUseCase: CarUseCaseProtocol {
         }
 
         do {
-            let updatedCar = try carRepository.updateCar(carModel)
             if oldCarModel.vinNumbers != carModel.vinNumbers {
                 debugPrint("[CarUseCase] VIN updated from \(oldCarModel.vinNumbers) to \(carModel.vinNumbers)")
             }
-            return updatedCar
+            try carRepository.updateCar(carModel)
         } catch RepositoryError.duplicateObject {
             throw CarError.duplicateVinNumber
         } catch {
             debugPrint("[CarUseCase] Unexpected error during update: \(error.localizedDescription)")
+            throw CarError.updateFailed
+        }
+    }
+    
+    func changeImage(for carModel: CarModel, image: Data) throws {
+        do {
+            try carRepository.changeImage(for: carModel, image: image)
+        } catch RepositoryError.carNotFound {
+            throw CarError.carNotFound
+        } catch RepositoryError.updateFailed {
             throw CarError.updateFailed
         }
     }
@@ -116,10 +125,12 @@ protocol CarUseCaseProtocol {
     
     func fetchAllCars() throws -> [CarModel]
     
-    func updateCar(carModel: CarModel) throws -> CarModel
+    func updateCar(carModel: CarModel) throws
     
     func updateMileage(for car: CarModel?, newMileage: Int32?) throws
 
+    func changeImage(for carModel: CarModel, image: Data) throws
+    
     func deleteCar(carModel: CarModel) throws
     
     func validateCar(car: CarModel) throws

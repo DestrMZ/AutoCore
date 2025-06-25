@@ -15,7 +15,6 @@ struct CarModel: Identifiable, Equatable {
     let color: String?
     let engineType: String
     let transmissionType: String
-    let existingVinNumbers: [String]?
     let mileage: Int32
     let photoCar: Data
     let vinNumbers: String

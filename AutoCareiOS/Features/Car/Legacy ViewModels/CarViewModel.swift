@@ -1,182 +1,151 @@
 //
-//  ManagerViewModel.swift
-//  carRepairApp
+//  CarViewModel.swift
+//  AutoCareiOS
 //
-//  Created by Ivan Maslennikov on 09.10.2024.
+//  Created by Ivan Maslennikov on 24.06.2025.
 //
 
 import Foundation
-import PhotosUI
+import UIKit
 
 
 class CarViewModel: ObservableObject {
     
-    private var carService = CarDataService()
+    private let carUseCase: CarUseCaseProtocol
+    
+    init(carUseCase: CarUseCaseProtocol) {
+        self.carUseCase = carUseCase
+        initializeCarSelection()
+    }
     
     @Published var nameModel: String = ""
-    @Published var year: Int16? = nil
+    @Published var year: Int16 = 0
     @Published var vinNumber: String = ""
-    @Published var color: String = ""
-    @Published var mileage: Int32? = nil
+    @Published var color: String? = nil
+    @Published var mileage: Int32 = 0
     @Published var engineType: EngineTypeEnum = .gasoline
-    @Published var transmissionType: TransmissionTypeEnum = .manual
+    @Published var transmissionType: TransmissionTypeEnum = .automatic
     @Published var photoCar: Data = Data()
-    @Published var stateNumber: String = ""
+    @Published var stateNumber: String? = nil
     
     @Published var alertMessage: String = ""
-    @Published var alertShow: Bool = false
+    @Published var isShowAlert: Bool = false
     
-    @Published var allCars: [Car] = []
+    @Published var cars: [CarModel] = []
     
-    @Published var selectedCar: Car? {
+    @Published var selectedCar: CarModel? {
         didSet {
-            if let car = selectedCar {
-                saveLastSelectAuto()
-                loadCarInfo(for: car)
-                NotificationCenter.default.post(name: .didChangeSelectedCar, object: nil, userInfo: ["selectedCar": car])
-            }
-            else if !allCars.isEmpty {
-                selectedCar = allCars.last
+            if let vin = selectedCar?.vinNumbers {
+                saveLastSelectedCarVin(vin)
+                NotificationCenter.default.post(name: .didChangeSelectedCar, object: nil, userInfo: ["selectedCar": selectedCar!])
             }
         }
     }
     
-    func initializeCarRepairApp() {
-        
-        getAllCars()
-        
-        if allCars.isEmpty {
-            print("WARNING: No cars found in database")
-            return
-        }
-        
-        if let lastSelectAuto = UserDefaults.standard.string(forKey: "currentAuto") {
-            if let car = allCars.first( where: { $0.vinNumber == lastSelectAuto}) {
-                self.selectedCar = car
-                print("Successfully loaded last selected car: \(car.nameModel ?? "Unknown"), VIN: \(car.vinNumber ?? "Unknown")")
-            } else {
-                if !allCars.isEmpty {
-                    print("WARNING: Saved VIN \(lastSelectAuto) not found in current cars")
-                    self.selectedCar = allCars.last
-                }
-            }
+    private func saveLastSelectedCarVin(_ vin: String) {
+        UserDefaults.standard.set(vin, forKey: "currentAuto")
+        debugPrint("[CarViewModel] Saved VIN: \(vin)")
+    }
+    
+    private func loadLastSelectedCarVin() -> String? {
+        return UserDefaults.standard.string(forKey: "currentAuto")
+    }
+    
+    func fetchCars() {
+        do {
+            let result = try carUseCase.fetchAllCars()
+            self.cars = result
+        } catch {
+            alertMessage = CarError.fetchFailed.localizedDescription
         }
     }
     
-    func saveLastSelectAuto() {
-        if let selectedCar = selectedCar {
-            UserDefaults.standard.set(selectedCar.vinNumber, forKey: "currentAuto")
-            print("Saved VIN: \(selectedCar.vinNumber ?? "Unknown")")
-        }
-    }
-    
-    func createNewCar(nameModel: String, year: Int16, vinNumber: String, color: String?, mileage: Int32?, engineType: EngineTypeEnum, transmissionType: TransmissionTypeEnum, photoCar: UIImage, stateNumber: String?) {
+    func initializeCarSelection() {
+        fetchCars()
         
-        alertShow = false
+        guard !cars.isEmpty else {
+            return debugPrint("[CarViewModel] No cars found in database.")}
         
-        let result = carService.creatingCar(
-            nameModel: nameModel,
-            year: year,
-            vinNumber: vinNumber,
-            color: color ?? "Black",
-            mileage: mileage ?? 1000,
-            engineType: engineType.rawValue,
-            transmissionType: transmissionType.rawValue,
-            photoCar: photoCar.jpegData(compressionQuality: 0.8),
-            stateNumber: stateNumber
-            
-        )
-        
-        switch result {
-        case .success(let car):
-            selectedCar = car
-            getAllCars()
-        case .failure(let error):
-            alertMessage = error.localizedDescription
-            alertShow = true
-        }
-    }
-    
-    
-    func editingCar(for car: Car, nameModel: String, year: Int16?, vinNumber: String?, color: String?, mileage: Int32?, engineType: EngineTypeEnum, transmissionType: TransmissionTypeEnum, photoCar: UIImage) {
-        
-        alertShow = false
-        
-        let result = carService.updateCar(
-            car: car,
-            nameModel: nameModel,
-            year: year,
-            vinNumber: vinNumber,
-            color: color,
-            mileage: mileage,
-            engineType: engineType.rawValue,
-            transmissionType: transmissionType.rawValue,
-            photoCar: photoCar.jpegData(compressionQuality: 0.8)
-        )
-        
-        switch result {
-        case .success(let car):
-            selectedCar = car
-            getAllCars()
-        case .failure(let error):
-            alertMessage = error.localizedDescription
-            alertShow = true
-        }
-    }
-    
-    func loadCarInfo(for car: Car) {
-        self.nameModel = car.nameModel ?? ""
-        self.year = car.year
-        self.vinNumber = car.vinNumber ?? ""
-        self.color = car.color ?? ""
-        self.mileage = car.mileage
-        self.engineType = EngineTypeEnum(rawValue: car.engineType ?? "") ?? .gasoline
-        self.transmissionType = TransmissionTypeEnum(rawValue: car.transmissionType ?? "") ?? .manual
-        self.photoCar = car.photoCar ?? Data()
-        self.stateNumber = car.stateNumber ?? "Empty"
-    }
-    
-    func getAllCars() {
-        let getAllCars = carService.getAllCars()
-        self.allCars = getAllCars
-    }
-
-    func saveImageCar(imageSelection: UIImage, for car: Car) {
-        if let car = self.selectedCar {
-            car.photoCar = imageSelection.jpegData(compressionQuality: 0.8)
-            carService.saveContext()
-            print("Изображение автомобиля \(car.nameModel ?? "Unknown") изменено!")
+        if let lastSelectedVin = loadLastSelectedCarVin(), let matchedCar = cars.first(where: { $0.vinNumbers == lastSelectedVin })  {
+            selectedCar = matchedCar
+            debugPrint("[CarViewModel] Loaded last selected car: \(matchedCar.nameModel), VIN: \(matchedCar.vinNumbers)")
         } else {
-            print("Ошибка при сохранении изображения автомобиля!")
+            selectedCar = cars.last
+            debugPrint("[CarViewModel] Fallback to last car in list.")
         }
     }
     
-    func deleteCar(at offset: IndexSet) {
-        print("INFO: Автомобиль \(nameModel) удален.")
-        offset.forEach { index in
-            let car = self.allCars[index]
-            
-            carService.deleteCar(car: car)
-            
-            self.allCars.remove(at: index)
-            selectedCar = nil
+    func populate(from carModel: CarModel) {
+        self.nameModel = carModel.nameModel
+        self.year = carModel.year
+        self.vinNumber = carModel.vinNumbers
+        self.color = carModel.color
+        self.mileage = carModel.mileage
+        self.engineType = EngineTypeEnum(rawValue: carModel.engineType) ?? .gasoline
+        self.transmissionType = TransmissionTypeEnum(rawValue: carModel.transmissionType) ?? .manual
+        self.photoCar = carModel.photoCar as Data
+        self.stateNumber = carModel.stateNumber
+    }
+    
+    func addCar(newCar: CarModel) {
+        do {
+            let result = try carUseCase.createCar(carModel: newCar)
+            self.cars.append(result)
+        } catch let error as CarError {
+            alertMessage = error.localizedDescription
+        } catch {
+            alertMessage = "\(error.localizedDescription)"
         }
     }
     
-    func updateMileage(for car: Car, mileage: Int32) -> (success: Bool, message: String) {
-        let result = carService.updateMileage(for: car, mileage: mileage)
+    func updateCar(carModel: CarModel) {
+        do {
+            try carUseCase.updateCar(carModel: carModel)
+        } catch let error as CarError {
+            alertMessage = error.localizedDescription
+        } catch {
+            alertMessage = "\(error.localizedDescription)"
+        }
+    }
+    
+    func updateMileage(for carModel: CarModel, newMileage: Int32) {
+        do {
+            try carUseCase.updateMileage(for: carModel, newMileage: newMileage)
+        } catch let error as CarError {
+            alertMessage = error.localizedDescription
+        } catch {
+            alertMessage = "\(error.localizedDescription)"
+        }
+    }
+    
+    func changePhotoCar(image: UIImage) {
+        guard let car = self.selectedCar else { return }
+        let data = image.jpegData(compressionQuality: 1) ?? Data()
         
-        switch result {
-        case .success:
-            self.mileage = mileage
-            
-            return (true, "Success")
-        case .failure(let error):
-            return (false, error.localizedDescription)
+        do {
+            try carUseCase.changeImage(for: car, image: data)
+            // Продумать обновление состояние UI
+        } catch let error as CarError {
+            alertMessage = error.localizedDescription
+        } catch {
+            alertMessage = "\(error.localizedDescription)"
+        }
+    }
+    
+    func deleteCar(carModel: CarModel) {
+        do {
+            try carUseCase.deleteCar(carModel: carModel)
+            if let index = cars.firstIndex(of: carModel) {
+                cars.remove(at: index)
+            }
+            selectedCar = nil
+        } catch CarError.carNotFound {
+            alertMessage = CarError.carNotFound.localizedDescription
+        } catch {
+            alertMessage = CarError.deleteFailed.localizedDescription
         }
     }
 }
-        
 
 
 extension Notification.Name {

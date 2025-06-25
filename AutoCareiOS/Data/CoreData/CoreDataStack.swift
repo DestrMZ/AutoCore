@@ -14,7 +14,9 @@ class CoreDataStack {
     
     static let shared = CoreDataStack()
     
-    private init() {}
+    private init() {
+        persistentContainer.viewContext.mergePolicy = NSMergePolicy.error
+    }
     
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "carRepairApp")
@@ -30,9 +32,9 @@ class CoreDataStack {
         return persistentContainer.viewContext
     }
     
-    func saveContent() {
+    func saveContent() { // legacy
         let context = persistentContainer.viewContext
-        
+    
         do {
             try context.save()
         } catch {
