@@ -12,10 +12,11 @@ import UIKit
 class CarViewModel: ObservableObject {
     
     private let carUseCase: CarUseCaseProtocol
+    private let userDefaultsRepository: UserSettingsRepositoryProtocol
     
-    init(carUseCase: CarUseCaseProtocol) {
+    init(carUseCase: CarUseCaseProtocol, userDefaultsRepository: UserSettingsRepositoryProtocol) {
         self.carUseCase = carUseCase
-        initializeCarSelection()
+        self.userDefaultsRepository = userDefaultsRepository
     }
     
     @Published var nameModel: String = ""
@@ -36,21 +37,12 @@ class CarViewModel: ObservableObject {
     @Published var selectedCar: CarModel? {
         didSet {
             if let vin = selectedCar?.vinNumbers {
-                saveLastSelectedCarVin(vin)
+                userDefaultsRepository.saveLastSelectedVin(vin)
                 NotificationCenter.default.post(name: .didChangeSelectedCar, object: nil, userInfo: ["selectedCar": selectedCar!])
             }
         }
     }
-    
-    private func saveLastSelectedCarVin(_ vin: String) {
-        UserDefaults.standard.set(vin, forKey: "currentAuto")
-        debugPrint("[CarViewModel] Saved VIN: \(vin)")
-    }
-    
-    private func loadLastSelectedCarVin() -> String? {
-        return UserDefaults.standard.string(forKey: "currentAuto")
-    }
-    
+  
     func fetchCars() {
         do {
             let result = try carUseCase.fetchAllCars()
@@ -66,7 +58,7 @@ class CarViewModel: ObservableObject {
         guard !cars.isEmpty else {
             return debugPrint("[CarViewModel] No cars found in database.")}
         
-        if let lastSelectedVin = loadLastSelectedCarVin(), let matchedCar = cars.first(where: { $0.vinNumbers == lastSelectedVin })  {
+        if let lastSelectedVin = userDefaultsRepository.loadLastSelectedVin(), let matchedCar = cars.first(where: { $0.vinNumbers == lastSelectedVin })  {
             selectedCar = matchedCar
             debugPrint("[CarViewModel] Loaded last selected car: \(matchedCar.nameModel), VIN: \(matchedCar.vinNumbers)")
         } else {

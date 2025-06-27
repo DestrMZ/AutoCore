@@ -13,7 +13,7 @@ class InsuranceRepository: InsuranceRepositoryProtocol {
     
     private let context = CoreDataStack.shared.context
     
-    func createInsurance(insuranceModel: InsuranceModel, for carID: UUID) throws {
+    func createInsurance(insuranceModel: InsuranceModel, for carID: UUID) throws -> InsuranceModel {
         
         let fetchRequest: NSFetchRequest<Car> = Car.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", carID as CVarArg)
@@ -31,6 +31,7 @@ class InsuranceRepository: InsuranceRepositoryProtocol {
                 for: entity)
             
             try context.save()
+            return InsuranceMapper.mapToModel(entity: insurance)
         } catch {
             debugPrint("[InsuranceRepository] Failed to create insurance – car with ID \(carID) not found: \(error.localizedDescription).")
             throw RepositoryError.createFailed
@@ -99,7 +100,7 @@ class InsuranceRepository: InsuranceRepositoryProtocol {
 
 
 protocol InsuranceRepositoryProtocol {
-    func createInsurance(insuranceModel: InsuranceModel, for carID: UUID) throws
+    func createInsurance(insuranceModel: InsuranceModel, for carID: UUID) throws -> InsuranceModel
     
     func fetchInsurances(for carID: UUID) throws -> [InsuranceModel]
     

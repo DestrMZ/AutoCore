@@ -11,6 +11,6 @@ import Foundation
 struct RepairGroup: Identifiable {
     let id = UUID()
     let monthTitle: String
-    let repairs: [Repair]
+    let repairs: [RepairModel]
     let totalAmount: Double
 }

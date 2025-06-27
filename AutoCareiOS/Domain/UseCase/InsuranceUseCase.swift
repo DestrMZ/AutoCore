@@ -16,12 +16,13 @@ class InsuranceUseCase: InsuranceUseCaseProtocol {
         self.insuranceRepository = insuranceRepository
     }
     
-    func createInsurance(for carModel: CarModel, with insuranceModel: InsuranceModel) throws {
+    func createInsurance(for carModel: CarModel, with insuranceModel: InsuranceModel) throws -> InsuranceModel {
         try validateInsurance(insuranceModel, for: carModel)
         
         do {
-            try insuranceRepository.createInsurance(insuranceModel: insuranceModel, for: carModel.id)
+            let insurance = try insuranceRepository.createInsurance(insuranceModel: insuranceModel, for: carModel.id)
             debugPrint("[InsuranceUseCase] \(insuranceModel.nameCompany) successful created!")
+            return insurance
         } catch RepositoryError.carNotFound {
             throw InsuranceError.carNotFound
         } catch RepositoryError.createFailed {
@@ -94,7 +95,7 @@ class InsuranceUseCase: InsuranceUseCaseProtocol {
 
 
 protocol InsuranceUseCaseProtocol {
-    func createInsurance(for carModel: CarModel, with insuranceModel: InsuranceModel) throws
+    func createInsurance(for carModel: CarModel, with insuranceModel: InsuranceModel) throws -> InsuranceModel
     
     func updateInsurance(for carModel: CarModel, with insuranceModel: InsuranceModel) throws
     

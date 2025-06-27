@@ -13,7 +13,7 @@ class RepairRepository: RepairRepositoryProtocol {
     
     private let context = CoreDataStack.shared.context
     
-    func createRepair(repairModel: RepairModel, for carID: UUID) throws {
+    func createRepair(repairModel: RepairModel, for carID: UUID) throws -> RepairModel {
         
         let fetchRequest: NSFetchRequest<Car> = Car.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", carID as CVarArg)
@@ -31,6 +31,7 @@ class RepairRepository: RepairRepositoryProtocol {
                 entityCar: entity)
             
             try context.save()
+            return RepairMapper.mapToModel(entity: repair)
         } catch {
             debugPrint("[RepairRepository] Failed to create repair for car ID \(carID): \(error.localizedDescription).")
             throw RepositoryError.createFailed
@@ -98,7 +99,7 @@ class RepairRepository: RepairRepositoryProtocol {
 
 
 protocol RepairRepositoryProtocol {
-    func createRepair(repairModel: RepairModel, for carID: UUID) throws
+    func createRepair(repairModel: RepairModel, for carID: UUID) throws -> RepairModel
     
     func fetchAllRepairs(for carID: UUID) throws -> [RepairModel]
     

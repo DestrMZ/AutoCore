@@ -1,8 +1,8 @@
 //
 //  RepairViewModel.swift
-//  carRepairApp
+//  AutoCareiOS
 //
-//  Created by Ivan Maslennikov on 09.10.2024.
+//  Created by Ivan Maslennikov on 26.06.2025.
 //
 
 import Foundation
@@ -10,121 +10,78 @@ import Foundation
 
 class RepairViewModel: ObservableObject {
     
-    private var repairService = RepairDataService()
+    private let repairUseCase: RepairUseCaseProtocol
     
-    @Published var repairDate = Date()
-    @Published var partReplaced = ""
-    @Published var amount: Int32? = nil
-    @Published var repairMileage: Int32? = nil
-    @Published var notes: String = ""
-    @Published var photoRepair: [Data] = [Data()]
-    @Published var repairCategory: RepairCategory = .service
+    init(repairUseCase: RepairUseCaseProtocol) {
+        self.repairUseCase = repairUseCase
+    }
+    
+    @Published var nameRepair: String = ""
+    @Published var repairDate: Date = Date()
+    @Published var amount: Int32 = 0
+    @Published var mileage: Int32 = 0
+    @Published var notes: String? = nil
+    @Published var photoRepair: [Data] = []
+    @Published var category: RepairCategory = .service
     @Published var parts: [Part] = []
     @Published var litresFuel: String = ""
     
-    @Published var car: Car? = nil
-    @Published var repairArray: [Repair] = []
+    @Published var repairs: [RepairModel] = []
     
     @Published var alertMessage: String = ""
     @Published var alertShow: Bool = false
-
-    func createNewRepair(for car: Car?, partReplaced: String, amount: Int32, repairDate: Date?, repairMileage: Int32, notes: String, photoRepair: [Data], repairCategory: RepairCategory, partsDict: [String: String], litresFuel: String) {
-        guard let car = car else { return }
-        
-        alertShow = false
-        
-        let result = repairService.creatingRepair(
-            repairDate: repairDate,
-            partReplaced: partReplaced,
-            amount: amount,
-            repairMileage: repairMileage,
-            notes: notes,
-            photoRepair: photoRepair,
-            repairCategory: repairCategory.rawValue,
-            car: car,
-            partsDict: partsDict,
-            litresFuel: Double(litresFuel)
-        )
-        
-        switch result {
-        case .success():
-            getAllRepairs(for: car)
-        case .failure(let error):
-            alertMessage = error.localizedDescription
-            alertShow = true
+    
+    func addRepair(for car: CarModel, repairModel: RepairModel) {
+        do {
+            let repair = try repairUseCase.createRepair(for: car, repairModel: repairModel)
+            self.repairs.append(repair)
+        } catch {
+            alertMessage = "\(error.localizedDescription)"
         }
     }
     
-    func editingRepair(for repair: Repair?, partReplaced: String, amount: Int32?, repairDate: Date?, repairMileage: Int32?, notes: String, photoRepair: [Data]?, repairCategory: RepairCategory, partsDict: [String: String]) {
-        
-        alertShow = false
-        
-        let result = repairService.updateRepair(
-            for: repair,
-            repairDate: repairDate,
-            partReplaced: partReplaced,
-            amount: amount,
-            repairMileage: repairMileage,
-            notes: notes,
-            photoRepair: photoRepair,
-            repairCategory: repairCategory.rawValue,
-            partsDict: partsDict
-        )
-        
-        switch result {
-        case .success():
-            alertMessage = "Repair updated successfully"
-            
-        case .failure(let error):
-            alertMessage = error.localizedDescription
-            alertShow = true
+    func updateRepair(for car: CarModel, repairModel: RepairModel) {
+        do {
+            try repairUseCase.updateRepair(repairModel: repairModel, for: car)
+        } catch {
+            alertMessage = "\(error.localizedDescription)"
         }
     }
     
-    func getRepairsGroupByMonth(for repairs: [Repair]) -> [RepairGroup] {
-        var result: [String: [Repair]] = [:]
-        
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ru_RU")
-        formatter.dateFormat = "LLLL yyyy"
-        
-        for repair in repairs {
-            guard let date = repair.repairDate else { continue }
-            
-            let month = formatter.string(from: date)
-            let key = month.prefix(1).capitalized + month.dropFirst()
-            
-            if result[key] != nil {
-                result[key]?.append(repair)
-            } else {
-                result[key] = [repair]
+    func fetchAllRepairs(for car: CarModel) {
+        do {
+            self.repairs = try repairUseCase.fetchAllRepairs(for: car)
+        } catch {
+            alertMessage = "\(error.localizedDescription)"
+        }
+    }
+    
+    func getLastRefuel(repairs: [RepairModel]) -> (litres: String, date: Date) {
+        do {
+            return try repairUseCase.fetchLatestRefueling(from: repairs)
+        } catch {
+            alertMessage = "\(error.localizedDescription)"
+            return (litres: "None", date: Date())
+        }
+    }
+    
+    func fetchRepairsGroupByMonth(for repairs: [RepairModel]) -> [RepairGroup] {
+        do {
+            return try repairUseCase.fetchRepairsGroupByMonth(for: repairs)
+        } catch {
+            alertMessage = "\(error.localizedDescription)"
+            return []
+        }
+    }
+    
+    func deleteRepair(repair: RepairModel) {
+        do {
+            try repairUseCase.deleteRepair(repairModel: repair)
+            if let index = repairs.firstIndex(of: repair) {
+                repairs.remove(at: index)
             }
-        }
-        
-        let sortedResult = result.sorted { (lhs, rhs) in
-            formatter.date(from: lhs.key)! > formatter.date(from: rhs.key)!
-        }
-        
-        return sortedResult.map { (month, repairsInMonth) in
-            let totalAmount = repairsInMonth.reduce(0) { $0 + Double($1.amount )}
-            return RepairGroup(monthTitle: month, repairs: repairsInMonth, totalAmount: totalAmount)}
-    }
-    
-    func getLastRefuel(car: Car?, repairs: [Repair]) -> (litres: String, date: Date) {
-        let result = repairService.fetchLatestRefueling(for: car, repairs: repairs)
-        return result
-    }
-    
-    func getAllRepairs(for car: Car) {
-        self.repairArray = repairService.getAllRepairs(for: car)
-    }
-    
-    func deleteRepair(_ repair: Repair) {
-        if let index = repairArray.firstIndex(where: { $0.id == repair.id }) {
-            repairArray.remove(at: index)
-            repairService.deleteRepair(at: repair)
-        } else {
-            print("WARNING: Ошибка удаления ремонта!")
+        } catch {
+            alertMessage = "\(error.localizedDescription)"
         }
     }
     
@@ -144,5 +101,4 @@ class RepairViewModel: ObservableObject {
     func loadPart(from dictionary: [String: String]) {
         self.parts = PartMappers.fromDictionary(dictionary)
     }
-    
 }
