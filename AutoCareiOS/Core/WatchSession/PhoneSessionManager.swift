@@ -8,19 +8,18 @@
 import WatchConnectivity
 import CoreData
 import Foundation
+import Combine
 
 
 
-class PhoneSessionManager: NSObject {
-    
-    static var shared = PhoneSessionManager()
+class PhoneSessionRepository: NSObject {
+     
+    static var shared = PhoneSessionRepository()
     
     private let session: WCSession
-    private var pendingExpenses: [ExpensFromWatchOS] = [] {
-        didSet {
-            NotificationCenter.default.post(name: .didReceiveNewExpense, object: nil)
-        }
-    }
+    private(set) var pendingExpenses: [ExpensFromWatchOS] = []
+    
+    let newExpensesPublished = PassthroughSubject<[ExpensFromWatchOS], Never>()
     
     override init() {
         self.session = WCSession.default
@@ -33,8 +32,9 @@ class PhoneSessionManager: NSObject {
         }
     }
     
-    func getPendingExpenses() -> [ExpensFromWatchOS] {
-        return pendingExpenses
+    func appendExpenses(expense: ExpensFromWatchOS) {
+        pendingExpenses.append(expense)
+        newExpensesPublished.send(pendingExpenses)
     }
     
     func clearPendingExpenses() {
@@ -46,7 +46,7 @@ extension Notification.Name {
     static let didReceiveNewExpense = Notification.Name("didReceiveNewExpense")
 }
 
-extension PhoneSessionManager: WCSessionDelegate {
+extension PhoneSessionRepository: WCSessionDelegate {
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         if activationState == .activated {
             print("✅ iPhone активирован! Доступность: \(session.isReachable)")

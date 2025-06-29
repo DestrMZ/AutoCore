@@ -9,6 +9,7 @@ import Foundation
 
 
 struct ExpensWatchOS {
+//    var car: CarModel
     var nameRepair: String
     var amount: Int32
     var category: String

@@ -97,14 +97,3 @@ class InsuranceRepository: InsuranceRepositoryProtocol {
         }
     }
 }
-
-
-protocol InsuranceRepositoryProtocol {
-    func createInsurance(insuranceModel: InsuranceModel, for carID: UUID) throws -> InsuranceModel
-    
-    func fetchInsurances(for carID: UUID) throws -> [InsuranceModel]
-    
-    func updateInsurance(insuranceModel: InsuranceModel, for carID: UUID) throws
-    
-    func deleteInsurance(insuranceModel: InsuranceModel) throws
-}

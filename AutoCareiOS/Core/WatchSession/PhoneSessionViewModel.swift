@@ -12,7 +12,7 @@ class PhoneSessionViewModel: ObservableObject {
     
     private var phoneSession = PhoneSessionManager.shared
     private var db = CoreDataStack.shared
-    private var repairService = RepairDataService()
+    private var repairService = RepairViewModel
     private var expenseObservationToken: NSObjectProtocol?
     private var carObservationToken: NSObjectProtocol?
     private var currentCar: Car?

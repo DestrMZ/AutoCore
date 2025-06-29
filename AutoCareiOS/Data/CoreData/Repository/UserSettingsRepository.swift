@@ -8,7 +8,7 @@
 import Foundation
 
 
-class UserSettingsRepository: UserSettingsRepositoryProtocol {
+class UserStoreRepository: UserStoreRepositoryProtocol {
     
     func saveLastSelectedVin(_ vin: String) {
         UserDefaults.standard.set(vin, forKey: "currentAuto")
@@ -18,10 +18,4 @@ class UserSettingsRepository: UserSettingsRepositoryProtocol {
     func loadLastSelectedVin() -> String? {
         UserDefaults.standard.string(forKey: "currentAuto")
     }
-}
-
-
-protocol UserSettingsRepositoryProtocol {
-    func saveLastSelectedVin(_ vin: String)
-    func loadLastSelectedVin() -> String?
 }

@@ -8,9 +8,9 @@
 import Foundation
 import WatchConnectivity
 
-class WatchSessionManager: NSObject {
+class WatchSessionRepository: NSObject {
 
-    static let shared = WatchSessionManager()
+    static let shared = WatchSessionRepository()
     
     private let session: WCSession
     
@@ -43,7 +43,25 @@ class WatchSessionManager: NSObject {
     }
 }
 
-extension WatchSessionManager: WCSessionDelegate {
+extension WatchSessionRepository: WCSessionDelegate {
+    func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
+        guard let carsArray = applicationContext["cars"] as? [[String: String]] else {
+            print("Не удалось распарсить массив машин")
+            return
+        }
+        
+        let cars = carsArray.compactMap { dict -> CarFromiOS? in
+            guard
+                let idStr = dict["id"], let id = UUID(uuidString: idStr),
+                let name = dict["nameModel"],
+                let photoBase64 = dict["photo"],
+                let photoData = Data(base64Encoded: photoBase64)
+            else { return nil }
+            
+            return CarFromiOS(id: id, nameModel: name, photo: photoData)
+        }
+    }
+    
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         if activationState == .activated {
             print("Сессия активирована")

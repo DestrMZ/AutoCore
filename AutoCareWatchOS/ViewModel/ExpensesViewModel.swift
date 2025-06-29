@@ -11,6 +11,7 @@ import SwiftUI
 
 class ExpensesViewModel: ObservableObject {
     
+//    @Published var car:
     @Published var nameRepair: String = ""
     @Published var amount: Int32 = 0
     @Published var category: RepairCategoryForWatchOS = .service

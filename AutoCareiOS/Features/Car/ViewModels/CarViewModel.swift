@@ -12,11 +12,9 @@ import UIKit
 class CarViewModel: ObservableObject {
     
     private let carUseCase: CarUseCaseProtocol
-    private let userDefaultsRepository: UserSettingsRepositoryProtocol
     
-    init(carUseCase: CarUseCaseProtocol, userDefaultsRepository: UserSettingsRepositoryProtocol) {
+    init(carUseCase: CarUseCaseProtocol) {
         self.carUseCase = carUseCase
-        self.userDefaultsRepository = userDefaultsRepository
     }
     
     @Published var nameModel: String = ""
@@ -36,9 +34,8 @@ class CarViewModel: ObservableObject {
     
     @Published var selectedCar: CarModel? {
         didSet {
-            if let vin = selectedCar?.vinNumbers {
-                userDefaultsRepository.saveLastSelectedVin(vin)
-                NotificationCenter.default.post(name: .didChangeSelectedCar, object: nil, userInfo: ["selectedCar": selectedCar!])
+            if let car = selectedCar {
+                carUseCase.selectCar(car: car)
             }
         }
     }
@@ -52,16 +49,13 @@ class CarViewModel: ObservableObject {
         }
     }
     
-    func initializeCarSelection() {
+    func initializeCar() {
         fetchCars()
         
-        guard !cars.isEmpty else {
-            return debugPrint("[CarViewModel] No cars found in database.")}
-        
-        if let lastSelectedVin = userDefaultsRepository.loadLastSelectedVin(), let matchedCar = cars.first(where: { $0.vinNumbers == lastSelectedVin })  {
-            selectedCar = matchedCar
-            debugPrint("[CarViewModel] Loaded last selected car: \(matchedCar.nameModel), VIN: \(matchedCar.vinNumbers)")
-        } else {
+        do {
+            let currentCar = try carUseCase.initializeCar(cars: self.cars)
+        } catch {
+            alertMessage = CarError.initializeFailed.localizedDescription
             selectedCar = cars.last
             debugPrint("[CarViewModel] Fallback to last car in list.")
         }
@@ -137,9 +131,4 @@ class CarViewModel: ObservableObject {
             alertMessage = CarError.deleteFailed.localizedDescription
         }
     }
-}
-
-
-extension Notification.Name {
-    static let didChangeSelectedCar = Notification.Name("didChangeSelectedCar")
 }

@@ -6,14 +6,37 @@
 //
 
 import Foundation
+import Combine
 
 
 final class CarUseCase: CarUseCaseProtocol {
     
     private let carRepository: CarRepositoryProtocol
+    private let userStoreRepository: UserStoreRepositoryProtocol
     
-    init(carRepository: CarRepositoryProtocol) {
+    let selectedCarPublisher: PassthroughSubject<CarModel, Never> = .init()
+    
+    init(carRepository: CarRepositoryProtocol, userStoreRepository: UserStoreRepositoryProtocol) {
         self.carRepository = carRepository
+        self.userStoreRepository = userStoreRepository
+    }
+    
+    func selectCar(car: CarModel) {
+        userStoreRepository.saveLastSelectedVin(car.vinNumbers)
+        selectedCarPublisher.send(car)
+    }
+    
+    func initializeCar(cars: [CarModel]) throws -> CarModel {
+        
+        guard !cars.isEmpty else {
+            throw CarError.fetchFailed
+        }
+        
+        if let lastSelectedVin = userStoreRepository.loadLastSelectedVin(), let matchedCar = cars.first(where: { $0.vinNumbers == lastSelectedVin })  {
+            return matchedCar
+        }
+        
+        throw CarError.initializeFailed
     }
     
     func createCar(carModel: CarModel) throws -> CarModel {
@@ -122,6 +145,10 @@ final class CarUseCase: CarUseCaseProtocol {
 
 protocol CarUseCaseProtocol {
     func createCar(carModel: CarModel) throws -> CarModel
+    
+    func selectCar(car: CarModel)
+    
+    func initializeCar(cars: [CarModel]) throws -> CarModel
     
     func fetchAllCars() throws -> [CarModel]
     
