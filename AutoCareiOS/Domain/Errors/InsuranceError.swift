@@ -46,8 +46,6 @@ enum InsuranceError: Error, LocalizedError {
             return "End date cannot be in the past."
         case .notificationSetInPast:
             return "Notification date cannot be set in the past."
-        case .carNotAttached:
-            return "No car is associated with this insurance."
 
         // Ошибки хранилища
         case .saveFailed:
@@ -62,6 +60,8 @@ enum InsuranceError: Error, LocalizedError {
             return "Failed to create insurance."
         case .insuranceNotFound:
             return "Insurance not found."
+        case .carNotFound:
+            return "Car not found."
         }
     }
 }

@@ -8,12 +8,10 @@
 import SwiftUI
 
 struct AddInsuranceSheet: View {
-    @ObservedObject var insuranceViewModel: InsuranceViewModel
+    @EnvironmentObject var insuranceViewModel: InsuranceViewModel
     @Environment(\.dismiss) var dismiss
-
-    @State var isPresented: Bool = false
     
-    var car: Car?
+    var car: CarModel
     
     var body: some View {
         NavigationStack {
@@ -64,28 +62,32 @@ struct AddInsuranceSheet: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         dismiss()
-                        insuranceViewModel.resetFields()
+                        insuranceViewModel.resetField()
                     }
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
+                        let insurance = InsuranceModel(
+                            id: UUID(),
+                            type: insuranceViewModel.type,
+                            nameCompany: insuranceViewModel.nameCompany,
+                            startDate: insuranceViewModel.startDate,
+                            endDate: insuranceViewModel.endDate,
+                            price: insuranceViewModel.price,
+                            notes: insuranceViewModel.notes,
+                            notificationDate: insuranceViewModel.notificationDate,
+                            isActive: true)
+                        
                         if let existing = insuranceViewModel.selectedInsurance {
-                            insuranceViewModel.editingInsurance(
-                                for: existing,
-                                type: insuranceViewModel.type,
-                                nameCompany: insuranceViewModel.nameCompany,
-                                startDate: insuranceViewModel.startDate,
-                                endDate: insuranceViewModel.endDate,
-                                price: insuranceViewModel.price,
-                                notes: insuranceViewModel.notes,
-                                notificationDate: insuranceViewModel.notificationDate)
+                            insuranceViewModel.updateInsurance(for: car, with: insurance)
                         } else {
-                            insuranceViewModel.createInsurance(for: car)
+                            insuranceViewModel.addInsurance(for: car, with: insurance)
                         }
+                        
                         if !insuranceViewModel.alertShow {
                             dismiss()
-                            insuranceViewModel.resetFields()
+                            insuranceViewModel.resetField()
                             insuranceViewModel.selectedInsurance = nil
                         }
                     }
@@ -94,14 +96,14 @@ struct AddInsuranceSheet: View {
             .alert(isPresented: $insuranceViewModel.alertShow) {
                 Alert(
                     title: Text(NSLocalizedString("😳 Wow...", comment: "")),
-                    message: Text(insuranceViewModel.alertMessage ?? ""))
+                    message: Text(insuranceViewModel.alertMessage))
             }
         }
     }
 }
 
 
-#Preview {
-    let car = Car(context: CoreDataStack.shared.context)
-    AddInsuranceSheet(insuranceViewModel: InsuranceViewModel(), car: car)
-}
+//#Preview {
+//    let car = Car(context: CoreDataStack.shared.context)
+//    AddInsuranceSheet(insuranceViewModel: InsuranceViewModel(), car: car)
+//}

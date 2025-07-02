@@ -14,7 +14,6 @@ struct MainView: View {
     @EnvironmentObject var repairViewModel: RepairViewModel
     @EnvironmentObject var settingsViewModel: SettingsViewModel
     
-    
     @State private var selectedTab: CustomTapBar.TabItems = .cars
     @State private var showTapBar: Bool = true
     
@@ -48,8 +47,8 @@ struct MainView: View {
 }
 
 
-#Preview {
-    MainView()
-        .environmentObject(CarViewModel())
-        .environmentObject(RepairViewModel())
-}
+//#Preview {
+//    MainView()
+//        .environmentObject(CarViewModel())
+//        .environmentObject(RepairViewModel())
+//}

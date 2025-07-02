@@ -9,13 +9,13 @@ import SwiftUI
 
 struct InsuranceListSelection: View {
     
-    @ObservedObject var insuranceViewModel: InsuranceViewModel
+    @EnvironmentObject var insuranceViewModel: InsuranceViewModel
     @Environment(\.dismiss) var dismiss
     
     @State var showSheet: Bool = false
     @State var showDeleteConfirmation: Bool = false
     
-    var selectedCar: Car?
+    var selectedCar: CarModel
    
     var body: some View {
         NavigationStack {
@@ -34,12 +34,12 @@ struct InsuranceListSelection: View {
                             .clipShape(Circle())
                     }
                     .sheet(isPresented: $showSheet) {
-                        AddInsuranceSheet(insuranceViewModel: insuranceViewModel, car: selectedCar)
+                        AddInsuranceSheet(car: selectedCar)
                     }
                 }
                 .padding(.horizontal, 10)
                 
-                if insuranceViewModel.allInsurances.isEmpty {
+                if insuranceViewModel.insurances.isEmpty {
                     VStack(alignment: .center, spacing: 12) {
                         Image(systemName: "doc.plaintext")
                             .resizable()
@@ -63,7 +63,7 @@ struct InsuranceListSelection: View {
                     .background(.ultraThinMaterial)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
                 } else {
-                    ForEach(insuranceViewModel.allInsurances, id: \.self) { insurance in
+                    ForEach(insuranceViewModel.insurances, id: \.self) { insurance in
                         InsuranceCardView(
                             insuranceCompany: insurance.nameCompany,
                             insuranceType: insurance.type,
@@ -85,7 +85,7 @@ struct InsuranceListSelection: View {
                         }
                         .alert("Confirm deletion?", isPresented: $showDeleteConfirmation) {
                             Button("Yes", role: .destructive) {
-                                if let index = insuranceViewModel.allInsurances.firstIndex(of: insurance) {
+                                if let index = insuranceViewModel.insurances.firstIndex(of: insurance) {
                                     insuranceViewModel.deleteInsurance(at: IndexSet(integer: index))
                                 }
                             }

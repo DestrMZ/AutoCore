@@ -25,7 +25,7 @@ class CarViewModel: ObservableObject {
     @Published var engineType: EngineTypeEnum = .gasoline
     @Published var transmissionType: TransmissionTypeEnum = .automatic
     @Published var photoCar: Data = Data()
-    @Published var stateNumber: String? = nil
+    @Published var stateNumber: String = ""
     
     @Published var alertMessage: String = ""
     @Published var isShowAlert: Bool = false

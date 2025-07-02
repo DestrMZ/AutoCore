@@ -12,9 +12,8 @@ import TipKit
 struct CarProfileView: View {
     @EnvironmentObject var carViewModel: CarViewModel
     @EnvironmentObject var repairViewModel: RepairViewModel
+    @EnvironmentObject var insuranceViewModel: InsuranceViewModel
     @Environment(\.dismiss) var dismiss
-    
-    @StateObject var insuranceViewModel = InsuranceViewModel()
 
     @State var isSelecting: Bool = false
     @State var showQuestionMark: Bool = false
@@ -38,6 +37,7 @@ struct CarProfileView: View {
                         Button(action: {
                             copyToClipboard(text: carViewModel.stateNumber)
                             provideHapticFeedbackHeavy()
+                            
                         }) {
                             LicensePlateView(stateNumber: carViewModel.stateNumber)
                         }
@@ -65,7 +65,9 @@ struct CarProfileView: View {
                         
                         WebViewScreen()
                         
-                        InsuranceListSelection(insuranceViewModel: insuranceViewModel, selectedCar: carViewModel.selectedCar)
+                        if let selectedCar = carViewModel.selectedCar {
+                            InsuranceListSelection(insuranceViewModel: insuranceViewModel, selectedCar: selectedCar)
+                        }
                     }
                     .padding(.horizontal)
                     

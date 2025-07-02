@@ -49,18 +49,23 @@ struct AddCarView: View {
                 .toolbar {
                     ToolbarItem(placement: .confirmationAction) {
                         Button("Save") {
-                            carViewModel.createNewCar(
+                            let newCar = CarModel(
+                                id: UUID(),
                                 nameModel: tempNameModel,
                                 year: tempYear ?? 0,
-                                vinNumber: tempVinNumber,
                                 color: tempColor,
-                                mileage: tempMileage,
-                                engineType: tempEngineType,
-                                transmissionType: tempTransmissionType,
-                                photoCar: avatarImage ?? UIImage(),
+                                engineType: tempEngineType.rawValue,
+                                transmissionType: tempTransmissionType.rawValue,
+                                mileage: tempMileage ?? 0,
+                                photoCar: avatarImage?.jpegData(compressionQuality: 1) ?? Data(),
+                                vinNumbers: tempVinNumber,
+                                repairs: [],
+                                insurance: [],
                                 stateNumber: tempStateNumber
-                                )
-                            if !carViewModel.alertShow {
+                            )
+                            carViewModel.addCar(newCar: newCar)
+                            
+                            if !carViewModel.isShowAlert {
                                 dismiss()
                             }
                         }
@@ -74,7 +79,7 @@ struct AddCarView: View {
                 }
             }
         }
-        .alert(isPresented: $carViewModel.alertShow) {
+        .alert(isPresented: $carViewModel.isShowAlert) {
             Alert(
                 title: Text("Notice"),
                 message: Text(carViewModel.alertMessage),
@@ -197,7 +202,7 @@ struct AddCarView: View {
     }
 }
 
-#Preview {
-    AddCarView()
-        .environmentObject(CarViewModel())
-}
+//#Preview {
+//    AddCarView()
+//        .environmentObject(CarViewModel())
+//}
