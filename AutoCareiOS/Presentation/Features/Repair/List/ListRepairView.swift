@@ -22,7 +22,7 @@ struct ListRepairView: View {
     
     var body: some View {
         
-        if carViewModel.allCars.isEmpty {
+        if carViewModel.cars.isEmpty {
             
             EmptyCarList()
             
@@ -33,7 +33,7 @@ struct ListRepairView: View {
                     ScrollView {
                         VStack {
                             
-                            if repairViewModel.repairArray.isEmpty {
+                            if repairViewModel.repairs.isEmpty {
                                 emptyRepairList
                             } else {
                                 VStack {
@@ -64,7 +64,7 @@ struct ListRepairView: View {
             .onAppear {
                 if let selectedCar = carViewModel.selectedCar {
 //                    phoneViewModel.setCurrentCar(selectedCar) //
-                    repairViewModel.getAllRepairs(for: selectedCar)
+                    repairViewModel.fetchAllRepairs(for: selectedCar)
                 } else {
                     print("Repairs для автомобиля \(carViewModel.nameModel) не найдены.")
                 }
@@ -72,12 +72,12 @@ struct ListRepairView: View {
         }
     }
     
-    private var filteredRepairs: [Repair] {
+    private var filteredRepairs: [RepairModel] {
         if searchText.isEmpty {
-            return repairViewModel.repairArray.reversed()
+            return repairViewModel.repairs.reversed()
         } else {
-            return repairViewModel.repairArray.filter { repair in
-                repair.partReplaced!.lowercased().contains(searchText.lowercased())
+            return repairViewModel.repairs.filter { repair in
+                repair.partReplaced.lowercased().contains(searchText.lowercased())
             }
         }
     }
@@ -100,9 +100,9 @@ struct ListRepairView: View {
     }
     
     private var listRepairView: some View {
-        let groupedRepair = repairViewModel.getRepairsGroupByMonth(for: filteredRepairs)
+        let groupedRepair: [RepairGroup] = repairViewModel.fetchRepairsGroupByMonth(for: filteredRepairs)
         
-        return ForEach(groupedRepair) { group in
+        return ForEach(groupedRepair, id: \.id) { group in
             HStack() {
                 Text("\(group.monthTitle)")
                     .font(.headline)
@@ -118,24 +118,27 @@ struct ListRepairView: View {
             .padding(5)
             Divider()
                 
-            ForEach(group.repairs) { repair in
-                NavigationLink(destination: DetailRepairView(repair: repair)
-                    .onAppear { showTapBar = false }
-                    .onDisappear { showTapBar = true }) {
-                        ListRowView(repair: repair)
-                            .padding(.vertical, 5)
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .contextMenu {
-                        Button(action: {
-                            repairViewModel.deleteRepair(repair)
-                        }) {
-                            Text("Delete repair")
-                            Image(systemName: "trash")
-                        }
-                    }
-//                Divider()
-//                    .background(Color.gray)
+            let repairs: [RepairModel] = group.repairs
+
+            ForEach(repairs) { repair in
+//                NavigationLink(destination: DetailRepairView(repair: repair))
+//                    .onAppear { showTapBar = false }
+//                    .onDisappear { showTapBar = true }) {
+//                        ListRowView(repair: repair)
+//                            .padding(.vertical, 5)
+//                    }
+//                    .buttonStyle(PlainButtonStyle())
+//                    .contextMenu {
+//                        Button(action: {
+//                            repairViewModel.deleteRepair(repair)
+//                        }) {
+//                            Text("Delete repair")
+//                            Image(systemName: "trash")
+//                        }
+//                    }
+                ListRowView(repair: repair)
+                    .padding(.vertical, 5)
+
             }
         }
     }

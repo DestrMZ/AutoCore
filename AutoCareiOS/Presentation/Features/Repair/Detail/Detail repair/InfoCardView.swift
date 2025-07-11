@@ -20,7 +20,7 @@ struct InfoCardView: View {
     @State private var alertMessage: String = ""
     @State private var alertShow: Bool = false
     
-    let repair: Repair
+    let repair: RepairModel
     
     var body: some View {
         VStack(spacing: 10) {
@@ -49,7 +49,7 @@ struct InfoCardView: View {
             InfoCard(
                 icon: "tag.fill",
                 title: NSLocalizedString("Category", comment: "InfoCard"),
-                value: "\(NSLocalizedString(repair.repairCategory ?? "Unknown", comment: "InfoCard"))",
+                value: "\(NSLocalizedString(repair.repairCategory, comment: "InfoCard"))",
                 color: .primary,
                 inputType: .picker($category),
                 isEditing: $isRepairEditing,
@@ -75,24 +75,24 @@ struct InfoCardView: View {
 }
 
 
-#Preview {
-    let context = CoreDataStack.shared.context
-    let repair = Repair(context: context)
-    repair.partReplaced = "Brake pads"
-    repair.repairDate = Date()
-    repair.amount = 100000
-    repair.repairMileage = 10000
-    repair.repairCategory = "Service"
-    repair.notes = "Replaced pads"
-    
-    return InfoCardView(
-        isRepairEditing: .constant(true),
-        cost: .constant(Int(repair.amount)),
-        mileage: .constant(Int(repair.repairMileage)),
-        category: .constant(.service),
-        notes: .constant(repair.notes ?? ""),
-        repair: repair)
-}
+//#Preview {
+//    let context = CoreDataStack.shared.context
+//    let repair = Repair(context: context)
+//    repair.partReplaced = "Brake pads"
+//    repair.repairDate = Date()
+//    repair.amount = 100000
+//    repair.repairMileage = 10000
+//    repair.repairCategory = "Service"
+//    repair.notes = "Replaced pads"
+//    
+//    return InfoCardView(
+//        isRepairEditing: .constant(true),
+//        cost: .constant(Int(repair.amount)),
+//        mileage: .constant(Int(repair.repairMileage)),
+//        category: .constant(.service),
+//        notes: .constant(repair.notes ?? ""),
+//        repair: repair)
+//}
 
 // ---------------------------------------------------------------
 

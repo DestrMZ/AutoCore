@@ -9,52 +9,52 @@ import SwiftUI
 
 
 struct PartsView: View {
-    
     @Binding var isRepairEditing: Bool
     @Binding var partsList: [Part]
     
-    @State var copiedPartArticle: String = ""
-    @State var newPart: Part = Part(article: "", name: "")
+    @State private var copiedPartArticle: String = ""
+    @State private var newPart: Part = Part(article: "", name: "")
     
-    let repair: Repair
- 
+    let repair: RepairModel
+
     var body: some View {
-        VStack(alignment: .leading ,spacing: 12) {
+        VStack(alignment: .leading, spacing: 12) {
             Label("Parts", systemImage: "wrench.and.screwdriver.fill")
                 .font(.headline)
             
-            if let parts = repair.parts {
-                
-                if isRepairEditing { // If editing mode
-                    ForEach(partsList.indices, id: \.self) { index in
-                        HStack {
-                            PartsRowView(part: $partsList[index])
-                            Button(action: {
-                                partsList.remove(at: index)
-                            }) {
-                                Image(systemName: "minus.circle.fill")
-                                    .foregroundStyle(.red)
-                            }
-                        }
-                    }
+            if isRepairEditing {
+                ForEach(partsList.indices, id: \.self) { index in
                     HStack {
-                        PartsRowView(part: $newPart)
+                        PartsRowView(part: $partsList[index])
                         Button(action: {
-                            partsList.append(newPart)
-                            newPart = Part(article: "", name: "")
+                            partsList.remove(at: index)
                         }) {
-                            Image(systemName: "plus.circle.fill")
-                                .foregroundStyle(.green)
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundStyle(.red)
                         }
                     }
-                } else {
-                    ForEach(Array(parts.sorted { $0.key < $1.key }), id: \.key) { part in
-                        
+                }
+                
+                HStack {
+                    PartsRowView(part: $newPart)
+                    Button(action: {
+                        guard !newPart.article.isEmpty, !newPart.name.isEmpty else { return }
+                        partsList.append(newPart)
+                        newPart = Part(article: "", name: "")
+                    }) {
+                        Image(systemName: "plus.circle.fill")
+                            .foregroundStyle(.green)
+                    }
+                }
+            } else {
+                #warning("Show parts from repair")
+                let parts = repair.parts
+                if !parts.isEmpty {
+                    ForEach(parts.sorted(by: { $0.key < $1.key }), id: \.key) { part in
                         HStack {
                             Button(action: {
                                 copyToClipboard(text: part.key)
-                                provideHapticFeedbackHeavy() // Haptic feedback
-                                
+                                provideHapticFeedbackHeavy()
                                 copiedPartArticle = part.key
                             }) {
                                 Text(part.key)
@@ -64,13 +64,18 @@ struct PartsView: View {
                                     .background(Color.secondary.opacity(0.1))
                                     .clipShape(RoundedRectangle(cornerRadius: 6))
                             }
+
                             Spacer()
-                            
+
                             Text(part.value)
                                 .foregroundStyle(.secondary)
                         }
                         .padding(.horizontal, 8)
                     }
+                } else {
+                    Text("No parts recorded")
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal, 8)
                 }
             }
         }
@@ -78,28 +83,5 @@ struct PartsView: View {
         .background(Color(.systemBackground))
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
-
     }
-}
-
-
-#Preview {
-    let context = CoreDataStack.shared.context
-    let repair = Repair(context: context)
-    repair.partReplaced = "Brake pads"
-    repair.amount = 100_000
-    repair.repairMileage = 123_000
-    repair.repairDate = Date()
-    repair.notes = "Brake pads were replaced"
-    repair.parts = ["EF31": "Generator", "E531": "Starter"]
-    repair.repairCategory = "Service"
-    repair.litresFuel = 10
-    
-    return PartsView(
-        isRepairEditing: .constant(false),
-        partsList: .constant([Part(article: "EF31", name: "Generator")]),
-        repair: repair
-    )
-    .environmentObject(RepairViewModel())
-    .environmentObject(SettingsViewModel())
 }

@@ -24,6 +24,9 @@ struct CarProfileView: View {
         NavigationStack {
             ZStack(alignment: .top) {
                 CarAvatarView(image: UIImage(data: carViewModel.photoCar))
+                    .onAppear {
+                        print("photo \(carViewModel.nameModel)")
+                    }
                 
                 ScrollView {
                     VStack {
@@ -43,7 +46,7 @@ struct CarProfileView: View {
                         }
                         
                         HStack(spacing: 16) {
-                            Label(String(carViewModel.year ?? 1999), systemImage: "calendar")
+                            Label(String(carViewModel.year), systemImage: "calendar")
                             
                             Button(action: {
                                 copyToClipboard(text: carViewModel.vinNumber)
@@ -66,7 +69,7 @@ struct CarProfileView: View {
                         WebViewScreen()
                         
                         if let selectedCar = carViewModel.selectedCar {
-                            InsuranceListSelection(insuranceViewModel: insuranceViewModel, selectedCar: selectedCar)
+                            InsuranceListSelection(selectedCar: selectedCar)
                         }
                     }
                     .padding(.horizontal)
@@ -119,11 +122,11 @@ struct CarProfileView: View {
     }
 }
 
-#Preview {
-    CarProfileView(showTapBar: .constant(true))
-        .environmentObject(CarViewModel())
-        .environmentObject(RepairViewModel())
-}
+//#Preview {
+//    CarProfileView(showTapBar: .constant(true))
+//        .environmentObject(CarViewModel())
+//        .environmentObject(RepairViewModel())
+//}
 
 
 

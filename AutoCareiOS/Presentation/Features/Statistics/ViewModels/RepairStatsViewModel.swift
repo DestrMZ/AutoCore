@@ -11,14 +11,14 @@ import DGCharts
 
 struct RepairStatsCalculator {
     
-    var repairs: [Repair]
+    var repairs: [RepairModel]
     
     func getRepairCategoriesAndAmounts(selectPeriod: FilterDate) -> [PieChartDataEntry] {
         var categoriesAmount: [String: Int] = [:]
         let filter = filterRepairs(filter: selectPeriod)
         
         for repair in filter {
-            let categories = NSLocalizedString(repair.repairCategory ?? "Unknown", comment: "")
+            let categories = NSLocalizedString(repair.repairCategory, comment: "")
             let amount = Int(repair.amount)
             
             if let existingKey = categoriesAmount[categories] {
@@ -43,12 +43,12 @@ struct RepairStatsCalculator {
         let currentYear = Calendar.current.component(.year, from: Date())
         
         let repairs = repairs.filter { // Фильтруем и выбираем ремонты только текущего года
-            let repairYear = Calendar.current.component(.year, from: $0.repairDate ?? Date())
+            let repairYear = Calendar.current.component(.year, from: $0.repairDate)
             return repairYear == currentYear
         }
         
         for repair in repairs {
-            let date = Calendar.current.component(.month, from: repair.repairDate ?? Date())
+            let date = Calendar.current.component(.month, from: repair.repairDate)
             let amount = Double(repair.amount)
             
             monthAmount[date, default: 0] += amount
@@ -84,7 +84,7 @@ struct RepairStatsCalculator {
         let filterCategoriesAndAmount = filterRepairs(filter: selectedPeriod)
         
         for repair in filterCategoriesAndAmount {
-            let cat = repair.repairCategory ?? "nil"
+            let cat = repair.repairCategory
             let amount = Int(repair.amount)
             
             if let existingKey = categoriesAndAmount[cat] {
@@ -109,19 +109,19 @@ struct RepairStatsCalculator {
     }
     
     // Метод фильтрует ремонты по выбранному периоду времени
-    func filterRepairs(filter: FilterDate) -> [Repair] {
+    func filterRepairs(filter: FilterDate) -> [RepairModel] {
         let currentDate = Date()
         
         switch filter {
         case .week:
             let oneWeekAgo = Calendar.current.date(byAdding: .day, value: -7, to: currentDate) ?? Date()
-            return repairs.filter { $0.repairDate ?? Date() > oneWeekAgo && $0.repairDate ?? Date() <= currentDate }
+            return repairs.filter { $0.repairDate > oneWeekAgo && $0.repairDate <= currentDate }
         case .month:
             let oneMonthAgo = Calendar.current.date(byAdding: .month, value: -1, to: currentDate) ?? Date()
-            return repairs.filter { $0.repairDate ?? Date() > oneMonthAgo && $0.repairDate ?? Date() <= currentDate }
+            return repairs.filter { $0.repairDate > oneMonthAgo && $0.repairDate <= currentDate }
         case .year:
             let oneYearAgo = Calendar.current.date(byAdding: .year, value: -1, to: currentDate) ?? Date()
-            return repairs.filter { $0.repairDate ?? Date() > oneYearAgo && $0.repairDate ?? Date() <= currentDate }
+            return repairs.filter { $0.repairDate > oneYearAgo && $0.repairDate <= currentDate }
 //        case .allTime:
 //            let allTimeAgo = Calendar.current.date(byAdding: .year, value: .max, to: currentDate) ?? Date()
 //            return repairVM.repairArray.filter { $0.repairDate ?? Date() > allTimeAgo }
@@ -132,10 +132,9 @@ struct RepairStatsCalculator {
             let startOfDay = Calendar.current.startOfDay(for: startDate)
             let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: endDate)?.addingTimeInterval(-1) ?? endDate
             return repairs.filter {
-                guard let repairDate = $0.repairDate else { return false }
-                return repairDate >= startOfDay && repairDate <= endOfDay
+                let repairDate = $0.repairDate
+                return $0.repairDate >= startOfDay && repairDate <= endOfDay
             }
         }
-    }
-    
+    }   
 }

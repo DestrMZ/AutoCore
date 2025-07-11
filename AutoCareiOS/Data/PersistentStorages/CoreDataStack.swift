@@ -20,6 +20,12 @@ class CoreDataStack {
     
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "carRepairApp")
+        
+        if let storeDescription = container.persistentStoreDescriptions.first {
+            storeDescription.shouldMigrateStoreAutomatically = true
+            storeDescription.shouldInferMappingModelAutomatically = true
+        }
+        
         container.loadPersistentStores { storeDescription, error in
             if let error = error as? NSError {
                 print("WARNING! COREDATASTACK: Ошибка загрузки Persistent Container: \(error), \(error.userInfo)")
@@ -32,7 +38,7 @@ class CoreDataStack {
         return persistentContainer.viewContext
     }
     
-    func saveContent() { // legacy
+    func saveContent() { // LEGACY
         let context = persistentContainer.viewContext
     
         do {

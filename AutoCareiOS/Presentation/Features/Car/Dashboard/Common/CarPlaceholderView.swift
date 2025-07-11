@@ -10,12 +10,12 @@ import SwiftUI
 struct CarPlaceholderView: View {
     
     let imagePlaceHolder: UIImage = UIImage(named: "imageNotCar 1") ?? UIImage()
-    let car: Car
+    let car: CarModel
 
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                if let imageData = car.photoCar, let image = UIImage(data: imageData) {
+                if let image = UIImage(data: car.photoCar) {
                     Image(uiImage: image)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
@@ -32,7 +32,7 @@ struct CarPlaceholderView: View {
                 
                 VStack {
                     Spacer()
-                    Text(car.nameModel ?? "Unknown")
+                    Text(car.nameModel)
                         .font(.title2.bold())
                         .foregroundColor(.white)
                         .shadow(radius: 3)
@@ -46,7 +46,7 @@ struct CarPlaceholderView: View {
 }
 
 
-#Preview {
-    let car = Car(context: CoreDataStack.shared.context)
-    CarPlaceholderView(car: car)
-}
+//#Preview {
+//    let car = Car(context: CoreDataStack.shared.context)
+//    CarPlaceholderView(car: car)
+//}

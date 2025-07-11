@@ -17,19 +17,20 @@ struct CarSelectionCarouselView: View {
     @State var isAdditingNewCar: Bool = false
     @State var showDeleteConfirmantion: Bool = false
     @State var сarForRemoval: String = ""
-
+    @State var carToDelete: CarModel? = nil
+    
     var body: some View {
         
         ZStack {
             TabView(selection: $selectedTabIndex) {
-                ForEach(Array(carViewModel.allCars.enumerated()), id: \.offset) { index, car in
+                ForEach(Array(carViewModel.cars.enumerated()), id: \.offset) { index, car in
                     
                     CarPlaceholderView(car: car)
                         .frame(width: UIScreen.main.bounds.width * 0.95, height: 500)
                         .padding(.vertical, 10)
                         .animation(.easeInOut(duration: 0.5), value: selectedTabIndex)
                         .onTapGesture {
-                                carViewModel.selectedCar = carViewModel.allCars[selectedTabIndex]
+                                carViewModel.selectedCar = carViewModel.cars[selectedTabIndex]
                             withAnimation {
                                 isSelecting = false
                             }
@@ -46,7 +47,8 @@ struct CarSelectionCarouselView: View {
                         .overlay(alignment: .topTrailing) {
                             Button(action: {
                                 showDeleteConfirmantion = true
-                                сarForRemoval = car.nameModel ?? "No data"
+                                сarForRemoval = car.nameModel
+                                carToDelete = car
                             }) {
                                 Image(systemName: "trash.fill")
                                     .font(Font.system(size: 25))
@@ -62,7 +64,7 @@ struct CarSelectionCarouselView: View {
                 }) {
                     AddPlaceholderCarView()
                 }
-                .tag(carViewModel.allCars.count)
+                .tag(carViewModel.cars.count)
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
         }
@@ -73,8 +75,9 @@ struct CarSelectionCarouselView: View {
             Alert(title: Text("Delete car"),
                   message: Text("Are you sure want to delete \(сarForRemoval)"),
                   primaryButton: .destructive(Text("Yes")) {
-                let indexForDelete = IndexSet(integer: selectedTabIndex)
-                carViewModel.deleteCar(at: indexForDelete)
+                if let car = carToDelete {
+                    carViewModel.deleteCar(carModel: car)
+                }
 
                 dismiss()
             },
@@ -84,7 +87,7 @@ struct CarSelectionCarouselView: View {
     }
 }
 
-#Preview {
-    CarSelectionCarouselView(isSelecting: .constant(true))
-        .environmentObject(CarViewModel())
-}
+//#Preview {
+//    CarSelectionCarouselView(isSelecting: .constant(true))
+//        .environmentObject(CarViewModel())
+//}

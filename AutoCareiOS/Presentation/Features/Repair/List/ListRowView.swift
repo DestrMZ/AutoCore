@@ -12,14 +12,13 @@ struct ListRowView: View {
     @EnvironmentObject var repairViewModel: RepairViewModel
     @EnvironmentObject var settingsViewModel: SettingsViewModel
     
-    var repair: Repair
+    var repair: RepairModel
     
     var body: some View {
         
         VStack {
             HStack {
-                if let repairCategoryString = repair.repairCategory,
-                    let repairCategory = RepairCategory(rawValue: repairCategoryString) {
+                if let repairCategory = RepairCategory(rawValue: repair.repairCategory) {
                     Image(repairCategory.imageIcon)
                         .resizable()
                         .renderingMode(.template)
@@ -30,7 +29,7 @@ struct ListRowView: View {
                 
                 VStack(alignment: .leading) {
                     
-                    Text("\(repair.partReplaced ?? "Unknow part")")
+                    Text("\(repair.partReplaced)")
                         .font(.title3)
                         .bold()
                         .lineLimit(1)
@@ -39,7 +38,7 @@ struct ListRowView: View {
                         .font(.subheadline)
                         .lineLimit(1)
                     
-                    Text("Due: \(repair.repairDate?.formatted(.dateTime.year().month().day()) ?? "Unknown date")")
+                    Text("Due: \(repair.repairDate.formatted(.dateTime.year().month().day()))")
                         .font(.subheadline)
                         .foregroundColor(Color.gray)
                 }
@@ -61,29 +60,29 @@ struct ListRowView: View {
 
 
 
-#Preview {
-    let context = CoreDataStack.shared.context
-    
-    let exampleRepair = Repair(context: context)
-    exampleRepair.partReplaced = "Brake Pads"
-    exampleRepair.repairDate = Date()
-    exampleRepair.amount = 200
-    exampleRepair.repairMileage = 15000
-    exampleRepair.repairCategory = RepairCategory.other.imageIcon
-    
-    let anotherRepair = Repair(context: context)
-    anotherRepair.partReplaced = "Engine Oil"
-    anotherRepair.repairDate = Date().addingTimeInterval(-86400)
-    anotherRepair.amount = 50
-    anotherRepair.repairMileage = 30000
-    anotherRepair.repairCategory = RepairCategory.service.imageIcon
-    
-    let repairViewModel = RepairViewModel()
-    
-    return List {
-        ListRowView(repair: exampleRepair)
-            .environmentObject(repairViewModel)
-        ListRowView(repair: anotherRepair)
-            .environmentObject(repairViewModel)
-    }
-}
+//#Preview {
+//    let context = CoreDataStack.shared.context
+//    
+//    let exampleRepair = Repair(context: context)
+//    exampleRepair.partReplaced = "Brake Pads"
+//    exampleRepair.repairDate = Date()
+//    exampleRepair.amount = 200
+//    exampleRepair.repairMileage = 15000
+//    exampleRepair.repairCategory = RepairCategory.other.imageIcon
+//    
+//    let anotherRepair = Repair(context: context)
+//    anotherRepair.partReplaced = "Engine Oil"
+//    anotherRepair.repairDate = Date().addingTimeInterval(-86400)
+//    anotherRepair.amount = 50
+//    anotherRepair.repairMileage = 30000
+//    anotherRepair.repairCategory = RepairCategory.service.imageIcon
+//    
+//    let repairViewModel = RepairViewModel()
+//    
+//    return List {
+//        ListRowView(repair: exampleRepair)
+//            .environmentObject(repairViewModel)
+//        ListRowView(repair: anotherRepair)
+//            .environmentObject(repairViewModel)
+//    }
+//}

@@ -9,18 +9,7 @@
 /* Begin PBXBuildFile section */
 		5C158F512DC74DB000BEC527 /* DatePickerRange in Frameworks */ = {isa = PBXBuildFile; productRef = 5C158F502DC74DB000BEC527 /* DatePickerRange */; };
 		5C158F542DC74DBD00BEC527 /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 5C158F532DC74DBD00BEC527 /* DGCharts */; };
-		5CF673BD2D80929E00BC73C8 /* AutoCareWatchOS.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 5CF673B02D80929C00BC73C8 /* AutoCareWatchOS.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		5CF673BB2D80929E00BC73C8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5C2004FE2CB714BA0058D993 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 5CF673AF2D80929C00BC73C8;
-			remoteInfo = "AutoCareWatch Watch App";
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		5CF673C12D80929E00BC73C8 /* Embed Watch Content */ = {
@@ -29,7 +18,6 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				5CF673BD2D80929E00BC73C8 /* AutoCareWatchOS.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -38,7 +26,6 @@
 
 /* Begin PBXFileReference section */
 		5C2005062CB714BB0058D993 /* AutoCareiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AutoCareiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		5CF673B02D80929C00BC73C8 /* AutoCareWatchOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AutoCareWatchOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -150,104 +137,6 @@
 			);
 			target = 5C2005052CB714BA0058D993 /* AutoCareiOS */;
 		};
-		5C18EE202DB567B5009BE4ED /* Exceptions for "AutoCareiOS" folder in "AutoCareWatchOS" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Application/AutoCareiOS.swift,
-				Application/ContentView.swift,
-				Application/DIContainer/AppDIContainer.swift,
-				Application/MainView.swift,
-				Core/Notification/NotificationService.swift,
-				Core/WatchSession/PhoneSessionManager.swift,
-				Core/WatchSession/PhoneSessionViewModel.swift,
-				"Data/PersistentStorages/Car/Car+CoreDataClass.swift",
-				"Data/PersistentStorages/Car/Car+CoreDataProperties.swift",
-				Data/PersistentStorages/carRepairApp.xcdatamodeld,
-				Data/PersistentStorages/CoreDataStack.swift,
-				"Data/PersistentStorages/Insurance/Insurance+CoreDataClass.swift",
-				"Data/PersistentStorages/Insurance/Insurance+CoreDataProperties.swift",
-				"Data/PersistentStorages/Repair/Repair+CoreDataClass.swift",
-				"Data/PersistentStorages/Repair/Repair+CoreDataProperties.swift",
-				Data/Repositories/CarRepository.swift,
-				Data/Repositories/InsuranceRepository.swift,
-				Data/Repositories/RepairRepository.swift,
-				Data/Repositories/UserSettingsRepository.swift,
-				Domain/Entities/Enums/EngineTypeEnum.swift,
-				Domain/Entities/Enums/RepairCategory.swift,
-				Domain/Entities/Enums/TransmissionTypeEnum.swift,
-				Domain/Entities/Enums/TypeCar.swift,
-				Domain/UseCase/CarUseCase.swift,
-				Info.plist,
-				Presentation/Features/Car/Add/AddCarView.swift,
-				Presentation/Features/Car/Dashboard/CarProfileView.swift,
-				Presentation/Features/Car/Dashboard/CarTabContainerView.swift,
-				Presentation/Features/Car/Dashboard/Common/AddNewCarView.swift,
-				Presentation/Features/Car/Dashboard/Common/CarAvatarView.swift,
-				Presentation/Features/Car/Dashboard/Common/CarDrawerView.swift,
-				Presentation/Features/Car/Dashboard/Common/CardView.swift,
-				Presentation/Features/Car/Dashboard/Common/CarPlaceholderView.swift,
-				Presentation/Features/Car/Dashboard/Common/LicensePlateView.swift,
-				Presentation/Features/Car/Dashboard/Common/MaintenanceView.swift,
-				Presentation/Features/Car/Dashboard/Common/MileageCardView.swift,
-				Presentation/Features/Car/Dashboard/Common/RefuelCardView.swift,
-				Presentation/Features/Car/Dashboard/Common/SheetUpdateMileageView.swift,
-				Presentation/Features/Car/Dashboard/Insurance/AddInsuranceSheet.swift,
-				Presentation/Features/Car/Dashboard/Insurance/InsuranceCardView.swift,
-				Presentation/Features/Car/Dashboard/Insurance/InsuranceListSelection.swift,
-				Presentation/Features/Car/Dashboard/WebKit/WebView.swift,
-				Presentation/Features/Car/Dashboard/WebKit/WebViewScreen.swift,
-				Presentation/Features/Car/Edit/EditCarView.swift,
-				Presentation/Features/Car/Select/EmptyCarList.swift,
-				Presentation/Features/Car/Select/SelectCarView.swift,
-				Presentation/Features/Car/Select/SelectRowCarView.swift,
-				Presentation/Features/Car/ViewModels/CarViewModel.swift,
-				Presentation/Features/Car/ViewModels/InsuranceViewModel.swift,
-				Presentation/Features/Repair/Add/AddRepairView.swift,
-				"Presentation/Features/Repair/Detail/Detail repair/HeaderView.swift",
-				"Presentation/Features/Repair/Detail/Detail repair/ImageView.swift",
-				"Presentation/Features/Repair/Detail/Detail repair/InfoCardView.swift",
-				"Presentation/Features/Repair/Detail/Detail repair/PartsView.swift",
-				Presentation/Features/Repair/Detail/DetailRepairView.swift,
-				Presentation/Features/Repair/List/ListRepairView.swift,
-				Presentation/Features/Repair/List/ListRowView.swift,
-				Presentation/Features/Repair/Parts/PartsRowView.swift,
-				Presentation/Features/Settings/ViewModels/SettingsViewModel.swift,
-				Presentation/Features/Settings/Views/SettingsView.swift,
-				Presentation/Features/Statistics/Charts/UIKitCombinedChartView.swift,
-				Presentation/Features/Statistics/Charts/UIKitPieChartView.swift,
-				Presentation/Features/Statistics/Filters/SelectDateView.swift,
-				Presentation/Features/Statistics/View/StatisticsView.swift,
-				Presentation/Features/Statistics/ViewModels/RepairStatsViewModel.swift,
-				"Presentation/Models UI/PartsModel.swift",
-				"Presentation/Models UI/RepairGroup.swift",
-				Resources/Assets.xcassets,
-				Resources/Localizable.xcstrings,
-				"Resources/Preview Assets.xcassets",
-				"Shared /AlertTest.swift",
-				"Shared /AlertToast/ActivityIndicator.swift",
-				"Shared /AlertToast/AlertView.swift",
-				"Shared /AlertToast/BlurView.swift",
-				"Shared /UIComponents /CustomPickerField.swift",
-				"Shared /UIComponents /CustomTapBar.swift",
-				"Shared /UIComponents /CustomUITextField.swift",
-				"Shared /UIComponents /FullScreenImageView.swift",
-				"Shared /UIComponents /SearchBar.swift",
-				"Shared /Utilities /UtilityFunctions.swift",
-				"Shared /Utils/Mappers/CarMapper.swift",
-				"Shared /Utils/Mappers/InsuranceMapper.swift",
-				"Shared /Utils/Mappers/PartsMapper.swift",
-				"Shared /Utils/Mappers/RepairMapper.swift",
-				Task.md,
-			);
-			target = 5CF673AF2D80929C00BC73C8 /* AutoCareWatchOS */;
-		};
-		5C7321992D9F0F7300DF9AAA /* Exceptions for "AutoCareWatchOS" folder in "AutoCareWatchOS" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 5CF673AF2D80929C00BC73C8 /* AutoCareWatchOS */;
-		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -255,16 +144,12 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				5C18EE1E2DB567B5009BE4ED /* Exceptions for "AutoCareiOS" folder in "AutoCareiOS" target */,
-				5C18EE202DB567B5009BE4ED /* Exceptions for "AutoCareiOS" folder in "AutoCareWatchOS" target */,
 			);
 			path = AutoCareiOS;
 			sourceTree = "<group>";
 		};
 		5CF673B12D80929C00BC73C8 /* AutoCareWatchOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				5C7321992D9F0F7300DF9AAA /* Exceptions for "AutoCareWatchOS" folder in "AutoCareWatchOS" target */,
-			);
 			path = AutoCareWatchOS;
 			sourceTree = "<group>";
 		};
@@ -277,13 +162,6 @@
 			files = (
 				5C158F542DC74DBD00BEC527 /* DGCharts in Frameworks */,
 				5C158F512DC74DB000BEC527 /* DatePickerRange in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		5CF673AD2D80929C00BC73C8 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,7 +181,6 @@
 			isa = PBXGroup;
 			children = (
 				5C2005062CB714BB0058D993 /* AutoCareiOS.app */,
-				5CF673B02D80929C00BC73C8 /* AutoCareWatchOS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -323,7 +200,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				5CF673BC2D80929E00BC73C8 /* PBXTargetDependency */,
 			);
 			name = AutoCareiOS;
 			packageProductDependencies = (
@@ -332,29 +208,6 @@
 			);
 			productName = carRepairApp;
 			productReference = 5C2005062CB714BB0058D993 /* AutoCareiOS.app */;
-			productType = "com.apple.product-type.application";
-		};
-		5CF673AF2D80929C00BC73C8 /* AutoCareWatchOS */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 5CF673BE2D80929E00BC73C8 /* Build configuration list for PBXNativeTarget "AutoCareWatchOS" */;
-			buildPhases = (
-				5CF673AC2D80929C00BC73C8 /* Sources */,
-				5CF673AD2D80929C00BC73C8 /* Frameworks */,
-				5CF673AE2D80929C00BC73C8 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				5C18EDEA2DB567B5009BE4ED /* AutoCareiOS */,
-				5CF673B12D80929C00BC73C8 /* AutoCareWatchOS */,
-			);
-			name = AutoCareWatchOS;
-			packageProductDependencies = (
-			);
-			productName = "AutoCareWatch Watch App";
-			productReference = 5CF673B02D80929C00BC73C8 /* AutoCareWatchOS.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -369,9 +222,6 @@
 				TargetAttributes = {
 					5C2005052CB714BA0058D993 = {
 						CreatedOnToolsVersion = 16.0;
-					};
-					5CF673AF2D80929C00BC73C8 = {
-						CreatedOnToolsVersion = 16.2;
 					};
 				};
 			};
@@ -395,20 +245,12 @@
 			projectRoot = "";
 			targets = (
 				5C2005052CB714BA0058D993 /* AutoCareiOS */,
-				5CF673AF2D80929C00BC73C8 /* AutoCareWatchOS */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		5C2005042CB714BA0058D993 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		5CF673AE2D80929C00BC73C8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -425,22 +267,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		5CF673AC2D80929C00BC73C8 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		5CF673BC2D80929E00BC73C8 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 5CF673AF2D80929C00BC73C8 /* AutoCareWatchOS */;
-			targetProxy = 5CF673BB2D80929E00BC73C8 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		5C2005172CB714BC0058D993 /* Debug */ = {
@@ -648,70 +475,6 @@
 			};
 			name = Release;
 		};
-		5CF673BF2D80929E00BC73C8 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconWatch;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"AutoCareWatchOS\"";
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = AutoCareWatchOS/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = AutoCare;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.ivanMaslennikov.AutoCare;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ivanMaslennikov.AutoCare.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 11.2;
-			};
-			name = Debug;
-		};
-		5CF673C02D80929E00BC73C8 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconWatch;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"AutoCareWatchOS\"";
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = AutoCareWatchOS/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = AutoCare;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.ivanMaslennikov.AutoCare;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ivanMaslennikov.AutoCare.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 11.2;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -729,15 +492,6 @@
 			buildConfigurations = (
 				5C20051A2CB714BC0058D993 /* Debug */,
 				5C20051B2CB714BC0058D993 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		5CF673BE2D80929E00BC73C8 /* Build configuration list for PBXNativeTarget "AutoCareWatchOS" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				5CF673BF2D80929E00BC73C8 /* Debug */,
-				5CF673C02D80929E00BC73C8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

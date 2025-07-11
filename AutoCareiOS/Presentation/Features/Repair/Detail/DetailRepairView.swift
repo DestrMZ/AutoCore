@@ -23,17 +23,19 @@ struct DetailRepairView: View {
     @State private var editedNotes: String = ""
     @State private var editPartsRepair: [Part] = []
     @State private var editedPhotoRepair: [UIImage] = []
+    @State private var editedLitres: Double = 0
     
-    var repair: Repair
+    var repair: RepairModel
+    var car: CarModel
     
     private func loadRepairForEditing() {
-        editedPartName = repair.partReplaced ?? ""
-        editedRepairDate = repair.repairDate ?? Date()
+        editedPartName = repair.partReplaced
+        editedRepairDate = repair.repairDate
         editedCost = Int(repair.amount)
         editedMileage = Int(repair.repairMileage)
-        editCategory = RepairCategory(rawValue: repair.repairCategory ?? RepairCategory.service.rawValue) ?? .service
+        editCategory = RepairCategory(rawValue: repair.repairCategory) ?? .service
         editedNotes = repair.notes ?? ""
-        editedPhotoRepair = ImageMapper.convertToUIImage(images: repair.photoRepair)
+        editedPhotoRepair = ImageMapper.convertToUIImage(images: repair.photoRepairs)
     }
     
     var body: some View {
@@ -54,7 +56,7 @@ struct DetailRepairView: View {
                     notes: $editedNotes,
                     repair: repair)
                 
-                if isRepairEditing || !(repair.parts?.isEmpty ?? true) {
+                if isRepairEditing || !(repair.parts.isEmpty) {
                     PartsView(
                         isRepairEditing: $isRepairEditing,
                         partsList: $editPartsRepair,
@@ -63,7 +65,7 @@ struct DetailRepairView: View {
                 
                 Divider()
                 
-                if isRepairEditing || !(repair.photoRepair?.isEmpty ?? true) {
+                if isRepairEditing || !(repair.photoRepairs?.isEmpty ?? true) {
                     ImageView(
                         isRepairEditing: $isRepairEditing,
                         photoRepair: $editedPhotoRepair,
@@ -76,16 +78,17 @@ struct DetailRepairView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(isRepairEditing ? "Save" : "Edit", action: {
                     if isRepairEditing {
-                        repairViewModel.editingRepair(
-                            for: repair,
-                            partReplaced: editedPartName,
+                        repairViewModel.updateRepair(for: car, repairModel: RepairModel(
+                            id: repair.id,
                             amount: Int32(editedCost ?? 0),
-                            repairDate: editedRepairDate,
-                            repairMileage: Int32(editedMileage ?? 0),
+                            litresFuel: editedLitres,
                             notes: editedNotes,
-                            photoRepair: ImageMapper.convertToData(images: editedPhotoRepair),
-                            repairCategory: editCategory,
-                            partsDict: PartMappers.toDictionary(editPartsRepair))
+                            partReplaced: editedPartName,
+                            parts: PartMappers.toDictionary(editPartsRepair),
+                            photoRepairs: ImageMapper.convertToData(images: editedPhotoRepair),
+                            repairCategory: editCategory.rawValue,
+                            repairDate: editedRepairDate,
+                            repairMileage: Int32(editedMileage ?? 0)))
                     }
                     isRepairEditing.toggle()
                 })
@@ -101,22 +104,22 @@ struct DetailRepairView: View {
 }
 
 
-#Preview {
-    let context = CoreDataStack.shared.context
-    
-    let repair = Repair(context: context)
-    repair.partReplaced = "Brake pads"
-    repair.amount = 100_000
-    repair.repairMileage = 123_000
-    repair.repairDate = Date()
-    repair.notes = "Brake pads were replaced"
-    repair.parts = ["EF31": "Generator", "E531": "Generator"]
-    repair.repairCategory = "Service"
-    repair.litresFuel = NSNumber(value: 10)
-    
-    return DetailRepairView(repair: repair)
-        .environmentObject(RepairViewModel())
-        .environmentObject(SettingsViewModel())
-}
+//#Preview {
+//    let context = CoreDataStack.shared.context
+//    
+//    let repair = Repair(context: context)
+//    repair.partReplaced = "Brake pads"
+//    repair.amount = 100_000
+//    repair.repairMileage = 123_000
+//    repair.repairDate = Date()
+//    repair.notes = "Brake pads were replaced"
+//    repair.parts = ["EF31": "Generator", "E531": "Generator"]
+//    repair.repairCategory = "Service"
+//    repair.litresFuel = NSNumber(value: 10)
+//    
+//    return DetailRepairView(repair: repair)
+//        .environmentObject(RepairViewModel())
+//        .environmentObject(SettingsViewModel())
+//}
 
 

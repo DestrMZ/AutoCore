@@ -31,14 +31,7 @@ struct SheetUpdateMileageView: View {
                                 return
                             }
                             
-                            let result = carViewModel.updateMileage(for: car, mileage: mileageInt)
-                            
-                            if result.success {
-                                dismiss()
-                            } else {
-                                alertTitle = result.message
-                                showAlert = true
-                            }
+                            carViewModel.updateMileage(for: car, newMileage: mileageInt)
                         }
                     }) {
                         Label(NSLocalizedString("Update Mileage", comment: ""), systemImage: "checkmark.circle.fill")
@@ -58,12 +51,12 @@ struct SheetUpdateMileageView: View {
         }
 }
 
-#Preview {
-    let car = Car(context: CoreDataStack.shared.context)
-    car.mileage = 125000
-    let carViewModel = CarViewModel()
-    carViewModel.selectedCar = car
-    
-    return SheetUpdateMileageView()
-        .environmentObject(carViewModel)
-}
+//#Preview {
+//    let car = Car(context: CoreDataStack.shared.context)
+//    car.mileage = 125000
+//    let carViewModel = CarViewModel()
+//    carViewModel.selectedCar = car
+//    
+//    return SheetUpdateMileageView()
+//        .environmentObject(carViewModel)
+//}

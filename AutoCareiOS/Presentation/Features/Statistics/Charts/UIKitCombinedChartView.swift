@@ -12,7 +12,7 @@ import SwiftUI
 
 struct UIKitCombinedChartView: UIViewRepresentable {
     
-    var selectedCar: Car
+    var selectedCar: CarModel
     var entityForBar: [BarChartDataEntry]
     var entityForLine: [ChartDataEntry]
     
@@ -67,17 +67,17 @@ struct UIKitCombinedChartView: UIViewRepresentable {
 }
 
 
-struct UIKitBarChartView_Previews: PreviewProvider {
-    static var previews: some View {
-        let mokCar = Car(context: CoreDataStack.shared.persistentContainer.viewContext)
-        let entityBar = DateOfAmount.BarChartAllEntity(entity: DateOfAmount.allEntityBar)
-        let entityLine = DateOfAmount.BarChartAllEntity(entity: DateOfAmount.allEntityLine)
-        return UIKitCombinedChartView(selectedCar: mokCar, entityForBar: entityBar, entityForLine: entityLine)
-            .environmentObject(CarViewModel())
-            .environmentObject(RepairViewModel())
-            .frame(width: 400, height: 400)
-    }
-}
+//struct UIKitBarChartView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let mokCar = Car(context: CoreDataStack.shared.persistentContainer.viewContext)
+//        let entityBar = DateOfAmount.BarChartAllEntity(entity: DateOfAmount.allEntityBar)
+//        let entityLine = DateOfAmount.BarChartAllEntity(entity: DateOfAmount.allEntityLine)
+//        return UIKitCombinedChartView(selectedCar: mokCar, entityForBar: entityBar, entityForLine: entityLine)
+//            .environmentObject(CarViewModel())
+//            .environmentObject(RepairViewModel())
+//            .frame(width: 400, height: 400)
+//    }
+//}
 
 // TEST
 struct DateOfAmount {

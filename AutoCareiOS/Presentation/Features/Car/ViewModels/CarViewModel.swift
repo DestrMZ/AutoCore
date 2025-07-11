@@ -15,6 +15,8 @@ class CarViewModel: ObservableObject {
     
     init(carUseCase: CarUseCaseProtocol) {
         self.carUseCase = carUseCase
+        
+        initializeCar()
     }
     
     @Published var nameModel: String = ""
@@ -54,6 +56,8 @@ class CarViewModel: ObservableObject {
         
         do {
             let currentCar = try carUseCase.initializeCar(cars: self.cars)
+            populate(from: currentCar)
+            debugPrint("Initialized car: \(String(describing: currentCar.nameModel))")
         } catch {
             alertMessage = CarError.initializeFailed.localizedDescription
             selectedCar = cars.last
@@ -62,6 +66,7 @@ class CarViewModel: ObservableObject {
     }
     
     func populate(from carModel: CarModel) {
+        self.selectedCar = carModel
         self.nameModel = carModel.nameModel
         self.year = carModel.year
         self.vinNumber = carModel.vinNumbers
@@ -70,7 +75,7 @@ class CarViewModel: ObservableObject {
         self.engineType = EngineTypeEnum(rawValue: carModel.engineType) ?? .gasoline
         self.transmissionType = TransmissionTypeEnum(rawValue: carModel.transmissionType) ?? .manual
         self.photoCar = carModel.photoCar as Data
-        self.stateNumber = carModel.stateNumber
+        self.stateNumber = carModel.stateNumber ?? ""
     }
     
     func addCar(newCar: CarModel) {

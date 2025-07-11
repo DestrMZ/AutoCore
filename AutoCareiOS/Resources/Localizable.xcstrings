@@ -134,6 +134,7 @@
       }
     },
     "Add Car" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ru" : {
           "stringUnit" : {
@@ -178,6 +179,7 @@
       }
     },
     "Add your first car to unlock full functionality." : {
+      "extractionState" : "stale",
       "localizations" : {
         "ru" : {
           "stringUnit" : {
@@ -299,6 +301,7 @@
       }
     },
     "Car Info" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ru" : {
           "stringUnit" : {
@@ -309,6 +312,7 @@
       }
     },
     "Car not found." : {
+      "extractionState" : "stale",
       "localizations" : {
         "ru" : {
           "stringUnit" : {
@@ -357,6 +361,7 @@
       }
     },
     "Change" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ru" : {
           "stringUnit" : {
@@ -386,6 +391,7 @@
 
     },
     "Copy VIN-Number" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ru" : {
           "stringUnit" : {
@@ -459,6 +465,7 @@
       }
     },
     "Delete repair" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ru" : {
           "stringUnit" : {
@@ -906,6 +913,7 @@
       }
     },
     "Mileage exceeds maximum value." : {
+      "extractionState" : "stale",
       "localizations" : {
         "ru" : {
           "stringUnit" : {
@@ -916,6 +924,7 @@
       }
     },
     "Mileage must be non-negative." : {
+      "extractionState" : "stale",
       "localizations" : {
         "ru" : {
           "stringUnit" : {
@@ -946,6 +955,7 @@
       }
     },
     "Model Name" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ru" : {
           "stringUnit" : {
@@ -966,6 +976,7 @@
       }
     },
     "My Cars" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ru" : {
           "stringUnit" : {
@@ -1000,6 +1011,9 @@
 
     },
     "No license plate" : {
+
+    },
+    "No parts recorded" : {
 
     },
     "Not selected" : {
@@ -1308,6 +1322,7 @@
       }
     },
     "Some data is invalid." : {
+      "extractionState" : "stale",
       "localizations" : {
         "ru" : {
           "stringUnit" : {
@@ -1560,6 +1575,7 @@
       }
     },
     "Yes, delete" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ru" : {
           "stringUnit" : {

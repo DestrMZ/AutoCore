@@ -17,12 +17,13 @@ struct AutoCareiOS: App {
                 .environmentObject(container.carViewModel)
                 .environmentObject(container.repairViewModel)
                 .environmentObject(container.insuranceViewModel)
-            #warning("Fix this later")
-//                .preferredColorScheme(settingsViewModel.changeColorScheme())
+                .environmentObject(container.settingsViewModel)
+                .preferredColorScheme(container.settingsViewModel.changeColorScheme())
 //                .onAppear {
 //                    carViewModel.initializeCarRepairApp()
 //                    NotificationService.shared.requestNotificationPermission()
 //                }
+                #warning("Fix this later")
         }
     }
 }

@@ -11,7 +11,7 @@ import DGCharts
 
 struct UIKitPieChartView: UIViewRepresentable {
 
-    var selectedCar: Car
+    var selectedCar: CarModel
     var entity: [PieChartDataEntry]
 
 
@@ -43,16 +43,16 @@ struct UIKitPieChartView: UIViewRepresentable {
 }
 
 
-struct UIKitPieChartView_Preview: PreviewProvider {
-    static var previews: some View {
-        let mockCar = Car(context: CoreDataStack.shared.persistentContainer.viewContext)
-        let entityes = CategoriesAndAmount.PieChartAllEntity(entity: CategoriesAndAmount.allEntity)
-
-        return UIKitPieChartView(selectedCar: mockCar, entity: entityes)
-            .environmentObject(CarViewModel())
-            .environmentObject(RepairViewModel())
-    }
-}
+//struct UIKitPieChartView_Preview: PreviewProvider {
+//    static var previews: some View {
+//        let mockCar = Car(context: CoreDataStack.shared.persistentContainer.viewContext)
+//        let entityes = CategoriesAndAmount.PieChartAllEntity(entity: CategoriesAndAmount.allEntity)
+//
+//        return UIKitPieChartView(selectedCar: mockCar, entity: entityes)
+//            .environmentObject(CarViewModel())
+//            .environmentObject(RepairViewModel())
+//    }
+//}
 
 
 struct CategoriesAndAmount {

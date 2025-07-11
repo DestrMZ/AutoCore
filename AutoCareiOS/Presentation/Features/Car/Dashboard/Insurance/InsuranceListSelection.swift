@@ -63,7 +63,7 @@ struct InsuranceListSelection: View {
                     .background(.ultraThinMaterial)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
                 } else {
-                    ForEach(insuranceViewModel.insurances, id: \.self) { insurance in
+                    ForEach(insuranceViewModel.insurances, id: \.id) { insurance in
                         InsuranceCardView(
                             insuranceCompany: insurance.nameCompany,
                             insuranceType: insurance.type,
@@ -85,9 +85,7 @@ struct InsuranceListSelection: View {
                         }
                         .alert("Confirm deletion?", isPresented: $showDeleteConfirmation) {
                             Button("Yes", role: .destructive) {
-                                if let index = insuranceViewModel.insurances.firstIndex(of: insurance) {
-                                    insuranceViewModel.deleteInsurance(at: IndexSet(integer: index))
-                                }
+                                insuranceViewModel.deleteInsurance(insuranceModel: insurance)
                             }
                             Button("Cancel", role: .cancel) { dismiss() }
                         }
@@ -96,16 +94,15 @@ struct InsuranceListSelection: View {
             }
         }
         .onAppear {
-            insuranceViewModel.loadInsurances(car: selectedCar)
+            insuranceViewModel.fetchAllInsurance(for: selectedCar)
         }
         .onChange(of: selectedCar) { newValue in
-        guard let selectedCar = newValue else { return }
-            insuranceViewModel.loadInsurances(car: selectedCar)
+            insuranceViewModel.fetchAllInsurance(for: newValue)
         }
     }
 }
 
 
-#Preview {
-    InsuranceListSelection(insuranceViewModel: InsuranceViewModel())
-}
+//#Preview {
+//    InsuranceListSelection(insuranceViewModel: InsuranceViewModel())
+//}

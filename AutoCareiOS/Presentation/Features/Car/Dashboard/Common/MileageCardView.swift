@@ -61,7 +61,7 @@ struct MileageCardView: View {
     }
 }
 
-#Preview {
-    MileageCardView()
-        .environmentObject(CarViewModel())
-}
+//#Preview {
+//    MileageCardView()
+//        .environmentObject(CarViewModel())
+//}

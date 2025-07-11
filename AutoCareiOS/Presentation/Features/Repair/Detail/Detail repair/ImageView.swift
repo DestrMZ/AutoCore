@@ -21,12 +21,12 @@ struct ImageView: View {
     @State var fullScreenPhoto: UIImage? = UIImage()
     @State var isFullScreenShow: Bool = false
     
-    let repair: Repair
+    let repair: RepairModel
     
     var body: some View {
         let displayPhotos = isRepairEditing
             ? photoRepair
-        : ImageMapper.convertToUIImage(images: repair.photoRepair) // !!!!!!!!!
+        : ImageMapper.convertToUIImage(images: repair.photoRepairs) // !!!!!!!!!
         #warning("Обрати внимание, не работает функционал по выводу изображения на полный экран!")
         VStack(alignment: .leading, spacing: 12) {
             Label("Photos", systemImage: "photo.stack.fill")

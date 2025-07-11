@@ -1,6 +1,38 @@
 #                                      Task
 ---------------------------------------------------------------------------------------------------------------------------------------------------
 
+
+Шаг
+Действие
+Пример файла
+1
+DI-контейнер
+AppDIContainer.swift
+2
+Подключение ViewModel в @main App
+AutoCareiOS.swift
+3
+Починить AddCarView, MainView
+AddCarView.swift
+4
+Переписать все .environmentObject или @StateObject
+В каждой View
+5
+WatchOS: приём и отображение машин
+WatchSessionManager
+6
+WatchOS: выбор машины и отправка
+ExpensesViewModel
+7
+Удалить устаревший код
+CoreDataStack.shared
+
+
+
+
+
+
+
 Задачи на завтра: 
 
 3. Подумать как можно оформить "AddCarView" более строгом и современном виде

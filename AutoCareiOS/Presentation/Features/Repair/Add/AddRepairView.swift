@@ -43,19 +43,19 @@ struct AddRepairView: View {
                     .toolbar {
                         ToolbarItem(placement: .confirmationAction) {
                             Button("Save") {
-                                if let selectedCar = carViewModel.selectedCar {
-                                    repairViewModel.createNewRepair(
-                                        for: selectedCar,
-                                        partReplaced: nameRepair,
-                                        amount: amountRepair ?? -1 ,
-                                        repairDate: dateOfRepair,
-                                        repairMileage: mileageRepair ?? -1,
+                                if let car = carViewModel.selectedCar {
+                                    repairViewModel.addRepair(for: car, repairModel: RepairModel(
+                                        id: UUID(),
+                                        amount: amountRepair ?? 0,
+                                        litresFuel: Double(litresFuel),
                                         notes: notesRepair,
-                                        photoRepair: photoRepair,
-                                        repairCategory: repairCategory,
-                                        partsDict: repairViewModel.savePart(parts: parts),
-                                        litresFuel: litresFuel
-                                    )
+                                        partReplaced: nameRepair,
+                                        parts: repairViewModel.savePart(parts: parts),
+                                        photoRepairs: photoRepair,
+                                        repairCategory: repairCategory.rawValue,
+                                        repairDate: dateOfRepair,
+                                        repairMileage: mileageRepair ?? 0))
+                                    
                                     dismiss()
                                 }
                             }.disabled(nameRepair.isEmpty || amountRepair ?? 0 <= 0 || mileageRepair ?? 0 <= 0)
@@ -250,9 +250,9 @@ struct AddButtonRepairView: View {
     }
 }
 
-#Preview {
-    AddRepairView()
-        .environmentObject(CarViewModel())
-        .environmentObject(RepairViewModel())
-}
+//#Preview {
+//    AddRepairView()
+//        .environmentObject(CarViewModel())
+//        .environmentObject(RepairViewModel())
+//}
 

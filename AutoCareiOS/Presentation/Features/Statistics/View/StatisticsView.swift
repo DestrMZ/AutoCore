@@ -21,12 +21,12 @@ struct StatisticsView: View {
     
     @State var isDatePickerVisabillity: Bool = false
     
-    var selectedCar: Car? {
+    var selectedCar: CarModel? {
         carViewModel.selectedCar
     }
     
-    var repairs: [Repair] {
-        repairViewModel.repairArray
+    var repairs: [RepairModel] {
+        repairViewModel.repairs
     }
     
     var statsCalc: RepairStatsCalculator {
@@ -54,7 +54,7 @@ struct StatisticsView: View {
     }
     
     var body: some View {
-        if carViewModel.allCars.isEmpty {
+        if carViewModel.cars.isEmpty {
             
             EmptyCarList()
             
@@ -131,7 +131,7 @@ struct StatisticsView: View {
             }
             .onAppear {
                 if let car = selectedCar {
-                    repairViewModel.getAllRepairs(for: car)
+                    repairViewModel.fetchAllRepairs(for: car)
                 }
             }
             .sheet(isPresented: $isDatePickerVisabillity) {
@@ -149,8 +149,8 @@ struct StatisticsView: View {
     }
 }
 
-#Preview {
-    StatisticsView()
-        .environmentObject(CarViewModel())
-        .environmentObject(RepairViewModel())
-}
+//#Preview {
+//    StatisticsView()
+//        .environmentObject(CarViewModel())
+//        .environmentObject(RepairViewModel())
+//}

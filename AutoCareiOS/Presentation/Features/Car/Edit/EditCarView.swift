@@ -27,24 +27,24 @@ struct EditCarView: View {
     @State private var alertMessageVIN: Bool = false
     @FocusState var isKeyboardActive: Bool
 
-    var editingForCar: Car?
+    var editingForCar: CarModel?
     
     func initTemp() {
         if let car = editingForCar {
-            tempNameModel = car.nameModel ?? "Not found"
+            tempNameModel = car.nameModel
             tempYear = car.year
-            tempVinNumber = car.vinNumber ?? "Not found VIN"
+            tempVinNumber = car.vinNumbers
             tempMileage = car.mileage
             tempColor = car.color ?? "Default color"
-            tempEngineType = EngineTypeEnum(rawValue: car.engineType ?? "") ?? .gasoline
-            tempTransmissionType = TransmissionTypeEnum(rawValue: car.transmissionType ?? "") ?? .automatic
-            avatarImage = UIImage(data: car.photoCar ?? Data())
+            tempEngineType = EngineTypeEnum(rawValue: car.engineType) ?? .gasoline
+            tempTransmissionType = TransmissionTypeEnum(rawValue: car.transmissionType) ?? .automatic
+            avatarImage = UIImage(data: car.photoCar)
         }
     }
     
     var body: some View {
         NavigationStack {
-            ScrollView(.vertical) {
+            ScrollView(.vertical, showsIndicators: false) {
                 HStack { // IMAGE
                     PhotosPicker(selection: $selectionImageCar, matching: .images) {
                         
@@ -80,16 +80,6 @@ struct EditCarView: View {
                                         .clipShape(Circle())
                                 }
                             }
-                            
-                            //                        Text(NSLocalizedString("Change", comment: ""))
-                            //                            .font(.system(size: 12, weight: .medium))
-                            //                            .foregroundStyle(.white)
-                            //                            .padding(.vertical, 4)
-                            //                            .padding(.horizontal, 8)
-                            //                            .background(Color.black.opacity(0.6))
-                            //                            .clipShape(Capsule())
-                            //                            .padding(.top, 65)
-                            
                         }
                     }
                     .onChange(of: selectionImageCar) {newValue in
@@ -106,8 +96,6 @@ struct EditCarView: View {
                                 }
                             }
                         }
-                        
-                        
                     }
                 }
                 .padding(.top, 10)
@@ -210,50 +198,48 @@ struct EditCarView: View {
                 .onAppear {
                     initTemp()
                 }
-                .toolbar {
-                    ToolbarItem(placement: .keyboard) {
-                        HStack {
-                            Spacer()
-                            Button(action: {
-                                isKeyboardActive = false
-                            }) {
-                                Image(systemName: "keyboard.chevron.compact.down")
-                            }
-                        }
-                    }
-                }
-            }
-            
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                }
                 
-                ToolbarItem(placement: .confirmationAction) {
-                    Button(action: {
-                        
-                        if let car = editingForCar {
-                            
-                            carViewModel.editingCar(
-                                for: car,
-                                nameModel: tempNameModel,
-                                year: tempYear,
-                                vinNumber: tempVinNumber,
-                                color: tempColor,
-                                mileage: tempMileage,
-                                engineType: tempEngineType,
-                                transmissionType: tempTransmissionType,
-                                photoCar: avatarImage ?? UIImage())
-                                dismiss()
-                        }
-                    }) {
-                        Text("Save")
-                    }.disabled(isFormIncomplete(nameModel: tempNameModel, vinNumber: tempVinNumber, year: tempYear, mileage: tempMileage))
-                }
             }
-            .navigationBarTitle(NSLocalizedString("Edit car", comment: ""), displayMode: .inline)
+//            .toolbar {
+//                ToolbarItem(placement: .cancellationAction) {
+//                    Button("Cancel") {
+//                        dismiss()
+//                    }
+//                }
+//                
+//                ToolbarItem(placement: .confirmationAction) {
+//                    Button(action: {
+//                        
+//                        if let car = editingForCar {
+//                            
+//                            carViewModel.updateCar(carModel: CarModel(
+//                                id: car.id,
+//                                nameModel: tempNameModel,
+//                                year: tempYear,
+//                                engineType: tempEngineType,
+//                                transmissionType: tempTransmissionType,
+//                                mileage: tempMileage,
+//                                photoCar: avatarImage,
+//                                vinNumbers: tempVinNumber))
+//
+//                        }
+//                    }) {
+//                        Text("Save")
+//                    }.disabled(isFormIncomplete(nameModel: tempNameModel, vinNumber: tempVinNumber, year: tempYear, mileage: tempMileage))
+//                }
+//                
+//                ToolbarItem(placement: .keyboard) {
+//                    HStack {
+//                        Spacer()
+//                        Button(action: {
+//                            isKeyboardActive = false
+//                        }) {
+//                            Image(systemName: "keyboard.chevron.compact.down")
+//                        }
+//                    }
+//                }
+//            }
+//            .navigationBarTitle(NSLocalizedString("Edit car", comment: ""), displayMode: .inline)
         }
         .cornerRadius(12)
         .shadow(radius: 5)
@@ -269,7 +255,7 @@ struct EditCarView: View {
 }
 
 
-#Preview {
-    EditCarView()
-        .environmentObject(CarViewModel())
-}
+//#Preview {
+//    EditCarView()
+//        .environmentObject(CarViewModel())
+//}

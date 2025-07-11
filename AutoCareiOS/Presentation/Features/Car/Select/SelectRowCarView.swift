@@ -12,13 +12,13 @@ struct SelectRowCarView: View {
     @EnvironmentObject var carViewModel: CarViewModel
     @EnvironmentObject var settingsViewModel: SettingsViewModel
     
-    var car: Car
+    var car: CarModel
     
     var body: some View {
         
         VStack(alignment: .leading) {
             HStack {
-                if let imageData = car.photoCar, let image = UIImage(data: imageData) {
+                if let image = UIImage(data: car.photoCar) {
                     Image(uiImage: image)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
@@ -55,10 +55,10 @@ struct SelectRowCarView: View {
                 }
                 
                 VStack(alignment: .leading) {
-                    Text("\(car.nameModel ?? "Unknown")")
+                    Text("\(car.nameModel)")
                         .font(.title3)
                         .bold()
-                    Text("VIN Number: \(car.vinNumber ?? "Unknown")")
+                    Text("VIN Number: \(car.vinNumbers)")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -67,32 +67,32 @@ struct SelectRowCarView: View {
     }
 }
 
-#Preview {
-    let context = CoreDataStack.shared.context
-    
-    let car1 = Car(context: context)
-    car1.nameModel = "Audi"
-    car1.mileage = 100_000
-    car1.vinNumber = "123456789"
-    
-    let car2 = Car(context: context)
-    car2.nameModel = "BMW"
-    car2.mileage = 200_000
-    car2.vinNumber = "987654321"
-    
-    let car3 = Car(context: context)
-    car3.nameModel = "Mercedes"
-    car3.mileage = 300_000
-    car3.vinNumber = "654321098"
-    
-    let carViewModel = CarViewModel()
-    
-    return Group {
-        SelectRowCarView(car: car1)
-            .environmentObject(carViewModel)
-        SelectRowCarView(car: car2)
-            .environmentObject(carViewModel)
-        SelectRowCarView(car: car3)
-            .environmentObject(carViewModel)
-    }
-}
+//#Preview {
+//    let context = CoreDataStack.shared.context
+//    
+//    let car1 = Car(context: context)
+//    car1.nameModel = "Audi"
+//    car1.mileage = 100_000
+//    car1.vinNumber = "123456789"
+//    
+//    let car2 = Car(context: context)
+//    car2.nameModel = "BMW"
+//    car2.mileage = 200_000
+//    car2.vinNumber = "987654321"
+//    
+//    let car3 = Car(context: context)
+//    car3.nameModel = "Mercedes"
+//    car3.mileage = 300_000
+//    car3.vinNumber = "654321098"
+//    
+//    let carViewModel = CarViewModel()
+//    
+//    return Group {
+//        SelectRowCarView(car: car1)
+//            .environmentObject(carViewModel)
+//        SelectRowCarView(car: car2)
+//            .environmentObject(carViewModel)
+//        SelectRowCarView(car: car3)
+//            .environmentObject(carViewModel)
+//    }
+//}

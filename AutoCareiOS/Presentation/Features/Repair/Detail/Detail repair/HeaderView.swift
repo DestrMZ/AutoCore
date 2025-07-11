@@ -15,7 +15,7 @@ struct HeaderView: View {
     @Binding var partName: String
     @Binding var repairDate: Date
     
-    let repair: Repair
+    let repair: RepairModel
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -29,7 +29,7 @@ struct HeaderView: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             } else {
-                Text(repair.partReplaced ?? "Unknown name")
+                Text(repair.partReplaced)
                     .font(.title)
                     .fontWeight(.bold)
                 

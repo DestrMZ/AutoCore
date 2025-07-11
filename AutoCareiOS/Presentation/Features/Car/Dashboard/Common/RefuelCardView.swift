@@ -60,10 +60,9 @@ struct RefuelCardView: View {
 
     private func updateRefuelData() {
         if let car = carViewModel.selectedCar {
-            repairViewModel.getAllRepairs(for: car)
-            let result = repairViewModel.getLastRefuel(car: car, repairs: repairViewModel.repairArray)
-            liters = result.litres
-            date = result.date
+            let repairs = repairViewModel.getLastRefuel(repairs: repairViewModel.repairs)
+            liters = repairs.litres
+            date = repairs.date
         }
     }
 
@@ -75,7 +74,7 @@ struct RefuelCardView: View {
     }
 }
 
-#Preview {
-    RefuelCardView(liters: "35.7", date: Calendar.current.date(byAdding: .day, value: -3, to: Date())!)
-        .environmentObject(CarViewModel())
-}
+//#Preview {
+//    RefuelCardView(liters: "35.7", date: Calendar.current.date(byAdding: .day, value: -3, to: Date())!)
+//        .environmentObject(CarViewModel())
+//}
