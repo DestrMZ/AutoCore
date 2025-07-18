@@ -34,6 +34,7 @@ class InsuranceRepository: InsuranceRepositoryProtocol {
             return InsuranceMapper.mapToModel(entity: insurance)
         } catch {
             debugPrint("[InsuranceRepository] Failed to create insurance – car with ID \(carID) not found: \(error.localizedDescription).")
+            context.rollback()
             throw RepositoryError.createFailed
         }
     }
@@ -76,6 +77,7 @@ class InsuranceRepository: InsuranceRepositoryProtocol {
             try context.save()
         } catch {
             debugPrint("[InsuranceRepository] Failed to update insurance with ID \(insuranceModel.id): \(error.localizedDescription).")
+            context.rollback()
             throw RepositoryError.updateFailed
         }
     }
@@ -93,6 +95,7 @@ class InsuranceRepository: InsuranceRepositoryProtocol {
             try context.save()
         } catch {
             debugPrint("[InsuranceRepository] Failed to delete insurance with ID \(insuranceModel.id): \(error.localizedDescription).")
+            context.rollback()
             throw RepositoryError.deleteFailed
         }
     }

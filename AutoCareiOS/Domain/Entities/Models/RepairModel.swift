@@ -10,13 +10,13 @@ import Foundation
 
 struct RepairModel: Identifiable, Equatable {
     let id: UUID
-    let amount: Int32
-    let litresFuel: Double?
-    let notes: String?
-    let partReplaced: String
-    let parts: [String: String]
-    let photoRepairs: [Data]?
-    let repairCategory: String
-    let repairDate: Date
-    let repairMileage: Int32
+    var amount: Int32
+    var litresFuel: Double?
+    var notes: String?
+    var partReplaced: String
+    var parts: [String: String]
+    var photoRepairs: [Data]?
+    var repairCategory: String
+    var repairDate: Date
+    var repairMileage: Int32
 }

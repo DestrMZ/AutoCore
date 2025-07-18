@@ -38,6 +38,7 @@ class CarViewModel: ObservableObject {
         didSet {
             if let car = selectedCar {
                 carUseCase.selectCar(car: car)
+                populate(from: car)
             }
         }
     }
@@ -47,26 +48,35 @@ class CarViewModel: ObservableObject {
             let result = try carUseCase.fetchAllCars()
             self.cars = result
         } catch {
-            alertMessage = CarError.fetchFailed.localizedDescription
+            alertMessage = error.localizedDescription
+            isShowAlert = true
         }
     }
-    
+     
     func initializeCar() {
         fetchCars()
         
         do {
-            let currentCar = try carUseCase.initializeCar(cars: self.cars)
-            populate(from: currentCar)
-            debugPrint("Initialized car: \(String(describing: currentCar.nameModel))")
-        } catch {
-            alertMessage = CarError.initializeFailed.localizedDescription
+            if let currentCar = try carUseCase.initializeCar(cars: self.cars) {
+                selectedCar = currentCar
+                debugPrint("[CarViewModel] Initialized car: \(String(describing: currentCar.nameModel))")
+            } else {
+                selectedCar = nil
+                debugPrint("[CarViewModel] No cars available.")
+            }
+        } catch CarError.initializeFailed {
             selectedCar = cars.last
+            alertMessage = CarError.initializeFailed.localizedDescription
+            isShowAlert = true
             debugPrint("[CarViewModel] Fallback to last car in list.")
+        } catch {
+            alertMessage = error.localizedDescription
+            isShowAlert = true
+            debugPrint("[CarViewModel] Unexpected error during initializeCar: \(error.localizedDescription)")
         }
     }
     
     func populate(from carModel: CarModel) {
-        self.selectedCar = carModel
         self.nameModel = carModel.nameModel
         self.year = carModel.year
         self.vinNumber = carModel.vinNumbers
@@ -84,8 +94,10 @@ class CarViewModel: ObservableObject {
             self.cars.append(result)
         } catch let error as CarError {
             alertMessage = error.localizedDescription
+            isShowAlert = true
         } catch {
-            alertMessage = "\(error.localizedDescription)"
+            alertMessage = error.localizedDescription
+            isShowAlert = true
         }
     }
     
@@ -94,8 +106,10 @@ class CarViewModel: ObservableObject {
             try carUseCase.updateCar(carModel: carModel)
         } catch let error as CarError {
             alertMessage = error.localizedDescription
+            isShowAlert = true
         } catch {
-            alertMessage = "\(error.localizedDescription)"
+            alertMessage = error.localizedDescription
+            isShowAlert = true
         }
     }
     
@@ -104,8 +118,10 @@ class CarViewModel: ObservableObject {
             try carUseCase.updateMileage(for: carModel, newMileage: newMileage)
         } catch let error as CarError {
             alertMessage = error.localizedDescription
+            isShowAlert = true
         } catch {
-            alertMessage = "\(error.localizedDescription)"
+            alertMessage = error.localizedDescription
+            isShowAlert = true
         }
     }
     
@@ -118,8 +134,10 @@ class CarViewModel: ObservableObject {
             // Продумать обновление состояние UI
         } catch let error as CarError {
             alertMessage = error.localizedDescription
+            isShowAlert = true
         } catch {
-            alertMessage = "\(error.localizedDescription)"
+            alertMessage = error.localizedDescription
+            isShowAlert = true
         }
     }
     
@@ -130,10 +148,12 @@ class CarViewModel: ObservableObject {
                 cars.remove(at: index)
             }
             selectedCar = nil
-        } catch CarError.carNotFound {
-            alertMessage = CarError.carNotFound.localizedDescription
+        } catch let error as CarError {
+            alertMessage = error.localizedDescription
+            isShowAlert = true
         } catch {
-            alertMessage = CarError.deleteFailed.localizedDescription
+            alertMessage = error.localizedDescription
+            isShowAlert = true
         }
     }
 }

@@ -34,6 +34,7 @@ class RepairRepository: RepairRepositoryProtocol {
             return RepairMapper.mapToModel(entity: repair)
         } catch {
             debugPrint("[RepairRepository] Failed to create repair for car ID \(carID): \(error.localizedDescription).")
+            context.rollback()
             throw RepositoryError.createFailed
         }
     }
@@ -75,6 +76,7 @@ class RepairRepository: RepairRepositoryProtocol {
             try context.save()
         } catch {
             debugPrint("[RepairRepository] Failed to update repair with ID \(repair.id): \(error.localizedDescription).")
+            context.rollback()
             throw RepositoryError.updateFailed
         }
     }
@@ -92,6 +94,7 @@ class RepairRepository: RepairRepositoryProtocol {
             try context.save()
         } catch {
             debugPrint("[RepairRepository] Failed to delete repair with ID \(repair.id): \(error.localizedDescription).")
+            context.rollback()
             throw RepositoryError.deleteFailed
         }
     }

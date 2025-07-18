@@ -37,15 +37,4 @@ class CoreDataStack {
     var context: NSManagedObjectContext {
         return persistentContainer.viewContext
     }
-    
-    func saveContent() { // LEGACY
-        let context = persistentContainer.viewContext
-    
-        do {
-            try context.save()
-        } catch {
-            let nsError = error as NSError
-            fatalError("WARNING! COREDATASTACK: Ошибка сохранения: \(nsError), \(nsError.userInfo)")
-        }
-    }
 }

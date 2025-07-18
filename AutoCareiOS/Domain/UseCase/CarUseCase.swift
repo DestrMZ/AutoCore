@@ -26,10 +26,10 @@ final class CarUseCase: CarUseCaseProtocol {
         selectedCarPublisher.send(car)
     }
     
-    func initializeCar(cars: [CarModel]) throws -> CarModel {
+    func initializeCar(cars: [CarModel]) throws -> CarModel? {
         
         guard !cars.isEmpty else {
-            throw CarError.fetchFailed
+            return nil
         }
         
         if let lastSelectedVin = userStoreRepository.loadLastSelectedVin(), let matchedCar = cars.first(where: { $0.vinNumbers == lastSelectedVin })  {
@@ -148,7 +148,7 @@ protocol CarUseCaseProtocol {
     
     func selectCar(car: CarModel)
     
-    func initializeCar(cars: [CarModel]) throws -> CarModel
+    func initializeCar(cars: [CarModel]) throws -> CarModel?
     
     func fetchAllCars() throws -> [CarModel]
     

@@ -100,48 +100,45 @@ struct ListRepairView: View {
     }
     
     private var listRepairView: some View {
-        let groupedRepair: [RepairGroup] = repairViewModel.fetchRepairsGroupByMonth(for: filteredRepairs)
+        let groups = repairViewModel.fetchRepairsGroupByMonth(for: filteredRepairs)
         
-        return ForEach(groupedRepair, id: \.id) { group in
-            HStack() {
-                Text("\(group.monthTitle)")
-                    .font(.headline)
-                    .foregroundStyle(.primary)
-                
-                Spacer()
-            
-                Text("\(String(format: "%.2f", group.totalAmount)) $")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .bold()
-            }
-            .padding(5)
-            Divider()
-                
-            let repairs: [RepairModel] = group.repairs
+        return ForEach(groups, id: \.id) { group in
+            VStack(alignment: .leading, spacing: 0) {
+                HStack {
+                    Text(group.monthTitle)
+                        .font(.headline)
+                    Spacer()
+                    Text("\(String(format: "%.2f", group.totalAmount)) $")
+                        .font(.subheadline)
+                        .bold()
+                }
+                .padding(5)
 
-            ForEach(repairs) { repair in
-//                NavigationLink(destination: DetailRepairView(repair: repair))
-//                    .onAppear { showTapBar = false }
-//                    .onDisappear { showTapBar = true }) {
-//                        ListRowView(repair: repair)
-//                            .padding(.vertical, 5)
-//                    }
-//                    .buttonStyle(PlainButtonStyle())
-//                    .contextMenu {
-//                        Button(action: {
-//                            repairViewModel.deleteRepair(repair)
-//                        }) {
-//                            Text("Delete repair")
-//                            Image(systemName: "trash")
-//                        }
-//                    }
-                ListRowView(repair: repair)
-                    .padding(.vertical, 5)
+                Divider()
 
+                ForEach(group.repairs) { repair in
+                    if let car = carViewModel.selectedCar {
+                        NavigationLink(destination: DetailRepairView(repair: repair, car: car)
+                            .onAppear { showTapBar = false }
+                            .onDisappear { showTapBar = true }) {
+                                ListRowView(repair: repair)
+                                    .padding(.vertical, 7)
+                            }
+                            .contextMenu {
+                                Button("Delete repair") {
+                                    repairViewModel.deleteRepair(repair: repair)
+                                
+                            }
+                    }
+                    
+                        
+                    }
+                
+                }
             }
         }
     }
+
     
     private var addButton: some View {
         HStack {

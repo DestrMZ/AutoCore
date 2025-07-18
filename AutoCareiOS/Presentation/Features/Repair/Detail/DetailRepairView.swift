@@ -104,22 +104,37 @@ struct DetailRepairView: View {
 }
 
 
-//#Preview {
-//    let context = CoreDataStack.shared.context
-//    
-//    let repair = Repair(context: context)
-//    repair.partReplaced = "Brake pads"
-//    repair.amount = 100_000
-//    repair.repairMileage = 123_000
-//    repair.repairDate = Date()
-//    repair.notes = "Brake pads were replaced"
-//    repair.parts = ["EF31": "Generator", "E531": "Generator"]
-//    repair.repairCategory = "Service"
-//    repair.litresFuel = NSNumber(value: 10)
-//    
-//    return DetailRepairView(repair: repair)
-//        .environmentObject(RepairViewModel())
-//        .environmentObject(SettingsViewModel())
-//}
+#Preview {
+    let mockRepair = RepairModel(
+        id: UUID(),
+        amount: 15000,
+        litresFuel: 0,
+        notes: "Замена масла и фильтров",
+        partReplaced: "Масляный фильтр",
+        parts: ["F123": "Фильтр"],
+        photoRepairs: nil,
+        repairCategory: RepairCategory.service.rawValue,
+        repairDate: Date(),
+        repairMileage: 120000
+    )
 
+    let mockCar = CarModel(
+        id: UUID(),
+        nameModel: "Toyota Corolla",
+        year: 2015,
+        color: "Белый",
+        engineType: "gasoline",
+        transmissionType: "automatic",
+        mileage: 120000,
+        photoCar: Data(),
+        vinNumbers: "JTDBL40E799999999",
+        repairs: [mockRepair],
+        insurance: nil,
+        stateNumber: "А123ВС"
+    )
 
+    let mockRepairViewModel = RepairViewModel(repairUseCase: RepairUseCase(repairRepository: MockRepairRepository()))
+    let mockSettingsViewModel = SettingsViewModel()
+    
+    DetailRepairView(repair: mockRepair, car: mockCar)
+}

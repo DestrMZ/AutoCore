@@ -134,6 +134,10 @@
 				"Shared /Utils/Mappers/RepairMapper.swift",
 				"Shared /WatchBridge/ExpensFromWatchOS.swift",
 				Task.md,
+				Tests/Mocks/Repositories/MockCarRepository.swift,
+				Tests/Mocks/Repositories/MockInsuranceRepository.swift,
+				Tests/Mocks/Repositories/MockRepairRepository.swift,
+				Tests/Mocks/UseCases/MockCarUseCase.swift,
 			);
 			target = 5C2005052CB714BA0058D993 /* AutoCareiOS */;
 		};

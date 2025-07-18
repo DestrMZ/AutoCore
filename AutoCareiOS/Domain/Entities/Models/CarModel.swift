@@ -10,15 +10,15 @@ import Foundation
 
 struct CarModel: Identifiable, Equatable {
     let id: UUID
-    let nameModel: String
-    let year: Int16
-    let color: String?
-    let engineType: String
-    let transmissionType: String
-    let mileage: Int32
-    let photoCar: Data
-    let vinNumbers: String
-    let repairs: [RepairModel]?
-    let insurance: [InsuranceModel]?
-    let stateNumber: String?
+    var nameModel: String
+    var year: Int16
+    var color: String?
+    var engineType: String
+    var transmissionType: String
+    var mileage: Int32
+    var photoCar: Data
+    var vinNumbers: String
+    var repairs: [RepairModel]?
+    var insurance: [InsuranceModel]?
+    var stateNumber: String?
 }

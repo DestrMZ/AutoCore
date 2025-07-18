@@ -79,7 +79,7 @@ struct AddInsuranceSheet: View {
                             notificationDate: insuranceViewModel.notificationDate,
                             isActive: true)
                         
-                        if let existing = insuranceViewModel.selectedInsurance {
+                        if insuranceViewModel.selectedInsurance != nil {
                             insuranceViewModel.updateInsurance(for: car, with: insurance)
                         } else {
                             insuranceViewModel.addInsurance(for: car, with: insurance)

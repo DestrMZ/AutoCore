@@ -31,6 +31,7 @@ class CarRepository: CarRepositoryProtocol {
                 throw RepositoryError.duplicateObject
             } else {
                 debugPrint("[CarRepository] Failed to save car: \(error.localizedDescription).")
+                context.rollback()
                 throw RepositoryError.createFailed
             }
         }
@@ -106,6 +107,7 @@ class CarRepository: CarRepositoryProtocol {
             try context.save()
         } catch {
             debugPrint("[CarRepository] Failed to update mileage: \(error.localizedDescription).")
+            context.rollback()
             throw RepositoryError.updateFailed
         }
     }
@@ -123,6 +125,7 @@ class CarRepository: CarRepositoryProtocol {
             try context.save()
         } catch {
             debugPrint("[CarRepository] Failed to update image Car: \(error.localizedDescription).")
+            context.rollback()
             throw RepositoryError.updateFailed
         }
     }
@@ -139,6 +142,7 @@ class CarRepository: CarRepositoryProtocol {
             try context.save()
         } catch {
             debugPrint("[CarRepository] Failed to delete car: \(error.localizedDescription)")
+            context.rollback()
             throw RepositoryError.deleteFailed
         }
     }

@@ -59,7 +59,7 @@ struct RefuelCardView: View {
     }
 
     private func updateRefuelData() {
-        if let car = carViewModel.selectedCar {
+        if carViewModel.selectedCar != nil {
             let repairs = repairViewModel.getLastRefuel(repairs: repairViewModel.repairs)
             liters = repairs.litres
             date = repairs.date

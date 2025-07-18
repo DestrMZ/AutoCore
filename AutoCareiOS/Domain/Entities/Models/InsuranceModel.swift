@@ -10,12 +10,12 @@ import Foundation
 
 struct InsuranceModel: Identifiable, Equatable {
     let id: UUID
-    let type: String
-    let nameCompany: String
-    let startDate: Date
-    let endDate: Date
-    let price: Int32
-    let notes: String?
-    let notificationDate: Date?
-    let isActive: Bool
+    var type: String
+    var nameCompany: String
+    var startDate: Date
+    var endDate: Date
+    var price: Int32
+    var notes: String?
+    var notificationDate: Date?
+    var isActive: Bool
 }

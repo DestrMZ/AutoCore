@@ -24,9 +24,6 @@ struct CarProfileView: View {
         NavigationStack {
             ZStack(alignment: .top) {
                 CarAvatarView(image: UIImage(data: carViewModel.photoCar))
-                    .onAppear {
-                        print("photo \(carViewModel.nameModel)")
-                    }
                 
                 ScrollView {
                     VStack {

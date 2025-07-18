@@ -465,7 +465,6 @@
       }
     },
     "Delete repair" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ru" : {
           "stringUnit" : {

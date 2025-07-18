@@ -13,8 +13,8 @@ struct CardView: View {
     var body: some View {
         VStack(spacing: 25) {
             InfoCardRow(label: "Year", value: "\(car.year)")
-            InfoCardRow(label: "Engine", value: "\(car.engineType ?? "Gasoline")")
-            InfoCardRow(label: "Transmission", value: "\(car.transmissionType ?? "Automatic")")
+            InfoCardRow(label: "Engine", value: "\(car.engineType)")
+            InfoCardRow(label: "Transmission", value: "\(car.transmissionType)")
         }
         .padding()
 //        .background(.ultraThinMaterial)
