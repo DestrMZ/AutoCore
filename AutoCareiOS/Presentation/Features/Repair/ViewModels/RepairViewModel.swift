@@ -37,6 +37,7 @@ class RepairViewModel: ObservableObject {
             self.repairs.append(repair)
         } catch {
             alertMessage = "\(error.localizedDescription)"
+            alertShow = true
         }
     }
     
@@ -45,6 +46,7 @@ class RepairViewModel: ObservableObject {
             try repairUseCase.updateRepair(repairModel: repairModel, for: car)
         } catch {
             alertMessage = "\(error.localizedDescription)"
+            alertShow = true
         }
     }
     
@@ -82,6 +84,7 @@ class RepairViewModel: ObservableObject {
             }
         } catch {
             alertMessage = "\(error.localizedDescription)"
+            alertShow = true
         }
     }
     

@@ -104,6 +104,13 @@ struct DetailRepairView: View {
 }
 
 
+private var mockPhotoRepairs: [Data] {
+    guard let image1 = UIImage(named: "elantra"),
+          let image2 = UIImage(named: "carPrototype") else { return [] }
+
+    return ImageMapper.convertToData(images: [image1, image2])
+}
+
 #Preview {
     let mockRepair = RepairModel(
         id: UUID(),
@@ -111,8 +118,8 @@ struct DetailRepairView: View {
         litresFuel: 0,
         notes: "Замена масла и фильтров",
         partReplaced: "Масляный фильтр",
-        parts: ["F123": "Фильтр"],
-        photoRepairs: nil,
+        parts: ["F123": "Фильтр", "F124": "Масло"],
+        photoRepairs: mockPhotoRepairs,
         repairCategory: RepairCategory.service.rawValue,
         repairDate: Date(),
         repairMileage: 120000

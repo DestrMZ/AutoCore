@@ -1085,6 +1085,9 @@
         }
       }
     },
+    "Ops" : {
+
+    },
     "Ops... Value must be greater than zero." : {
       "comment" : "InfoCardEND",
       "localizations" : {

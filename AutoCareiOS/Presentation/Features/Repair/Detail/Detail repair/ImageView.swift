@@ -26,8 +26,8 @@ struct ImageView: View {
     var body: some View {
         let displayPhotos = isRepairEditing
             ? photoRepair
-        : ImageMapper.convertToUIImage(images: repair.photoRepairs) // !!!!!!!!!
-        #warning("Обрати внимание, не работает функционал по выводу изображения на полный экран!")
+        : ImageMapper.convertToUIImage(images: repair.photoRepairs)
+        
         VStack(alignment: .leading, spacing: 12) {
             Label("Photos", systemImage: "photo.stack.fill")
                 .font(.headline)
@@ -44,7 +44,7 @@ struct ImageView: View {
                                 .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
                                 .onTapGesture {
                                     if !isRepairEditing {
-                                        fullScreenPhoto = photoRepair[index]
+                                        fullScreenPhoto = displayPhotos[index]
                                         isFullScreenShow = true
                                     }
                                 }

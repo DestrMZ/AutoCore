@@ -94,6 +94,11 @@
 				Presentation/Features/Car/ViewModels/CarViewModel.swift,
 				Presentation/Features/Car/ViewModels/InsuranceViewModel.swift,
 				Presentation/Features/Repair/Add/AddRepairView.swift,
+				Presentation/Features/Repair/Add/Common/AddButtonRepairView.swift,
+				Presentation/Features/Repair/Add/Common/RepairCategorySelectorView.swift,
+				Presentation/Features/Repair/Add/Common/RepairFormFieldsView.swift,
+				Presentation/Features/Repair/Add/Common/RepairPartsListView.swift,
+				Presentation/Features/Repair/Add/Common/RepairPhotoPickerView.swift,
 				"Presentation/Features/Repair/Detail/Detail repair/HeaderView.swift",
 				"Presentation/Features/Repair/Detail/Detail repair/ImageView.swift",
 				"Presentation/Features/Repair/Detail/Detail repair/InfoCardView.swift",
@@ -137,7 +142,6 @@
 				Tests/Mocks/Repositories/MockCarRepository.swift,
 				Tests/Mocks/Repositories/MockInsuranceRepository.swift,
 				Tests/Mocks/Repositories/MockRepairRepository.swift,
-				Tests/Mocks/UseCases/MockCarUseCase.swift,
 			);
 			target = 5C2005052CB714BA0058D993 /* AutoCareiOS */;
 		};

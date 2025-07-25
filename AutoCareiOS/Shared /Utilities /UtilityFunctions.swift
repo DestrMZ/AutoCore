@@ -66,6 +66,14 @@ func numberFormatterForMileage() -> NumberFormatter {
     return formatter
 }
 
+func numberFormatterForLitres() -> NumberFormatter {
+    let formatter = NumberFormatter()
+    formatter.minimumFractionDigits = 0
+    formatter.maximumFractionDigits = 2
+    formatter.numberStyle = .decimal
+    return formatter
+}
+
 /// Копирует переданный текст в буфер обмена.
 /// - Parameter text: Текст, который нужно скопировать в буфер обмена.
 func copyToClipboard(text: String) {
