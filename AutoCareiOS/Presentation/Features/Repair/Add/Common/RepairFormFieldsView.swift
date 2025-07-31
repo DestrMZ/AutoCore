@@ -12,11 +12,11 @@ import SwiftUI
 struct RepairFormFieldsView: View {
     
     @Binding var nameRepair: String
-    @Binding var amountRepair: Int32?
-    @Binding var mileageRepair: Int32?
+    @Binding var amountRepair: String
+    @Binding var mileageRepair: String
     @Binding var dateOfRepair: Date
     @Binding var notesRepair: String
-    @Binding var litresFuel: Double?
+    @Binding var litresFuel: String
     @Binding var selectedCaregory: RepairCategory
     
     @FocusState.Binding var focusedField: Field?
@@ -33,29 +33,19 @@ struct RepairFormFieldsView: View {
             RepairCategorySelectorView(selectedCaregory: $selectedCaregory)
             
             if selectedCaregory == .fuel {
-                TextField("How many liters were poured?", value: $litresFuel, formatter: numberFormatterForLitres())
+                TextField("How many liters were poured?", text: $litresFuel)
                     .keyboardType(.numberPad)
                     .disableAutocorrection(true)
                     .shadow(radius: 5)
                     .focused($focusedField, equals: .litresFuel)
             }
             
-            TextField("Amount", value: $amountRepair, formatter: numberFormatterForCoast())
+            TextField("Amount", text: $amountRepair)
                 .keyboardType(.numberPad)
-                .onChange(of: amountRepair) { newValue in
-                    if let newValue = newValue {
-                        amountRepair = validForAmount(newValue)
-                    }
-                }
                 .focused($focusedField, equals: .amountRepair)
             
-            TextField("Mileage", value: $mileageRepair, formatter: numberFormatterForMileage())
+            TextField("Mileage", text: $mileageRepair)
                 .keyboardType(.numberPad)
-                .onChange(of: mileageRepair) { newValue in
-                    if let newValue = newValue {
-                        mileageRepair = validForMileage(newValue)
-                    }
-                }
                 .focused($focusedField, equals: .mileageRepair)
             
             DatePicker("Date of repair", selection: $dateOfRepair, displayedComponents: [.date])

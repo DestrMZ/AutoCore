@@ -12,40 +12,35 @@ import Combine
 
 struct AddRepairView: View {
     
-    @EnvironmentObject var repairViewModel: RepairViewModel
     @EnvironmentObject var carViewModel: CarViewModel
     @Environment(\.dismiss) var dismiss
     
-    @State private var nameRepair: String = ""
-    @State private var amountRepair: Int32? = nil
-    @State private var mileageRepair: Int32? = nil
-    @State private var dateOfRepair: Date = Date()
-    @State private var notesRepair: String = ""
-    @State private var litresFuel: Double? = nil
-    @State private var photoRepair: [Data] = []
-    @State private var repairCategory: RepairCategory = .service
-    @State private var parts: [Part] = [Part(article: "", name: "")]
+    @StateObject var addRepairViewModel: AddRepairViewModel = AddRepairViewModel(
+            repairUseCase: AppDIContainer.shared.repairUseCase,
+            sharedRepair: AppDIContainer.shared.sharedRepair
+        )
+    
     @State private var showSuccessMessage: Bool = false
     
     @FocusState var focusedField: Field?
-    
+ 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
                     RepairFormFieldsView(
-                        nameRepair: $nameRepair,
-                        amountRepair: $amountRepair,
-                        mileageRepair: $mileageRepair,
-                        dateOfRepair: $dateOfRepair,
-                        notesRepair: $notesRepair,
-                        litresFuel: $litresFuel,
-                        selectedCaregory: $repairCategory, focusedField: $focusedField)
+                        nameRepair: $addRepairViewModel.nameRepair,
+                        amountRepair: $addRepairViewModel.amountRepair,
+                        mileageRepair: $addRepairViewModel.mileageRepair,
+                        dateOfRepair: $addRepairViewModel.dateRepair,
+                        notesRepair: $addRepairViewModel.notesRepiar,
+                        litresFuel: $addRepairViewModel.litresRepair,
+                        selectedCaregory: $addRepairViewModel.categoryRepair, focusedField: $focusedField)
                     
-                    RepairPartsListView(parts: $parts)
+                    RepairPartsListView(addRepairViewModel: addRepairViewModel, parts: $addRepairViewModel.partsRepair)
                     
                     RepairPhotoPickerView(
-                        photoRepair: $photoRepair,
+                        photoRepair: $addRepairViewModel.photoRepair,
                         showSuccessMessage: $showSuccessMessage)
                     
                 }
@@ -54,21 +49,11 @@ struct AddRepairView: View {
                     ToolbarItem(placement: .confirmationAction) {
                         Button("Save", action: {
                             if let car = carViewModel.selectedCar {
-                                repairViewModel.addRepair(for: car, repairModel: RepairModel(
-                                    id: UUID(),
-                                    amount: amountRepair ?? 0,
-                                    litresFuel: litresFuel,
-                                    notes: notesRepair,
-                                    partReplaced: nameRepair,
-                                    parts: repairViewModel.savePart(parts: parts),
-                                    photoRepairs: photoRepair,
-                                    repairCategory: repairCategory.rawValue,
-                                    repairDate: dateOfRepair,
-                                    repairMileage: mileageRepair ?? 0
-                                ))
-                                if !repairViewModel.alertShow {
-                                    dismiss()
-                                }
+                                addRepairViewModel.addRepair(for: car)
+                            }
+                            
+                            if !addRepairViewModel.alertShow {
+                                dismiss()
                             }
                         })
                     }
@@ -83,8 +68,8 @@ struct AddRepairView: View {
                 Spacer()
             }
         }
-        .alert(isPresented: $repairViewModel.alertShow) {
-            Alert(title: Text("Ops"), message: Text(repairViewModel.alertMessage), dismissButton: .cancel())
+        .alert(isPresented: $addRepairViewModel.alertShow) {
+            Alert(title: Text("Ops"), message: Text(addRepairViewModel.alertMessage), dismissButton: .cancel())
         }
         .toast(isPresenting: $showSuccessMessage) {
             AlertToast(

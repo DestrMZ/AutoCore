@@ -9,15 +9,24 @@ import SwiftUI
 
 @main
 struct AutoCareiOS: App {
-    let container = AppDIContainer()
+    let container = AppDIContainer.shared
     
     var body: some Scene {
         WindowGroup {
             ContentView()
+            
                 .environmentObject(container.carViewModel)
                 .environmentObject(container.repairViewModel)
                 .environmentObject(container.insuranceViewModel)
+            
+            
                 .environmentObject(container.settingsViewModel)
+            
+            
+                .environmentObject(container.sharedRepair)
+                .environmentObject(container.sharedCar)
+            
+            
                 .preferredColorScheme(container.settingsViewModel.changeColorScheme())
 //                .onAppear {
 //                    carViewModel.initializeCarRepairApp()

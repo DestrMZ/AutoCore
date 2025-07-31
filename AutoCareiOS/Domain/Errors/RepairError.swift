@@ -15,6 +15,7 @@ enum RepairError: Error, LocalizedError {
     case missingAmount
     case missingMileage
     case invalidAmountFormat
+    case invalidLitresFuelFormat
     case invalidMileageFormat
     case mileageExceedsLimit
     case tooManyPhotos
@@ -46,6 +47,8 @@ enum RepairError: Error, LocalizedError {
             return "Repair amount must be a valid number."
         case .invalidMileageFormat:
             return "Mileage must be a valid number."
+        case .invalidLitresFuelFormat:
+            return "Litres of fuel must be a valid number."
         case .mileageExceedsLimit:
             return "Mileage exceeds realistic limit (5,000,000)."
         case .tooManyPhotos:

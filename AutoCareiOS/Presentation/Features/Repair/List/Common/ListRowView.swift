@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ListRowView: View {
     
-    @EnvironmentObject var repairViewModel: RepairViewModel
     @EnvironmentObject var settingsViewModel: SettingsViewModel
     
     var repair: RepairModel

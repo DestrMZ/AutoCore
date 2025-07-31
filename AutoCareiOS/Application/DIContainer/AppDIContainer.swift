@@ -9,12 +9,17 @@ import Foundation
 
 
 final class AppDIContainer {
+    static let shared = AppDIContainer()
     
     // Repository
     let carRepository = CarRepository()
     let repairRepository = RepairRepository()
     let insuranceRepository = InsuranceRepository()
     let userStoreRepository = UserStoreRepository()
+    
+    // Shared-data
+    let sharedRepair = SharedRepairStore()
+    let sharedCar = SharedCarStore()
     
     // UseCase
     lazy var carUseCase = CarUseCase(carRepository: carRepository, userStoreRepository: userStoreRepository)

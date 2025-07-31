@@ -20,26 +20,27 @@ class RepairViewModel: ObservableObject {
     @Published var repairDate: Date = Date()
     @Published var amount: Int32 = 0
     @Published var mileage: Int32 = 0
-    @Published var notes: String? = nil
+    @Published var notes: String = ""
     @Published var photoRepair: [Data] = []
     @Published var category: RepairCategory = .service
-    @Published var parts: [Part] = []
-    @Published var litresFuel: String = ""
+    @Published var parts: [Part] = [Part(article: "", name: "")]
+
+    @Published var litresFuel: Double? = nil
     
     @Published var repairs: [RepairModel] = []
     
     @Published var alertMessage: String = ""
     @Published var alertShow: Bool = false
     
-    func addRepair(for car: CarModel, repairModel: RepairModel) {
-        do {
-            let repair = try repairUseCase.createRepair(for: car, repairModel: repairModel)
-            self.repairs.append(repair)
-        } catch {
-            alertMessage = "\(error.localizedDescription)"
-            alertShow = true
-        }
-    }
+//    func addRepair(for car: CarModel, repairModel: RepairModel) {
+//        do {
+//            let repair = try repairUseCase.createRepair(for: car, repairModel: repairModel)
+//            self.repairs.append(repair)
+//        } catch {
+//            alertMessage = "\(error.localizedDescription)"
+//            alertShow = true
+//        }
+//    }
     
     func updateRepair(for car: CarModel, repairModel: RepairModel) {
         do {
@@ -50,13 +51,13 @@ class RepairViewModel: ObservableObject {
         }
     }
     
-    func fetchAllRepairs(for car: CarModel) {
-        do {
-            self.repairs = try repairUseCase.fetchAllRepairs(for: car)
-        } catch {
-            alertMessage = "\(error.localizedDescription)"
-        }
-    }
+//    func fetchAllRepairs(for car: CarModel) {
+//        do {
+//            self.repairs = try repairUseCase.fetchAllRepairs(for: car)
+//        } catch {
+//            alertMessage = "\(error.localizedDescription)"
+//        }
+//    }
     
     func getLastRefuel(repairs: [RepairModel]) -> (litres: String, date: Date) {
         do {
@@ -67,41 +68,56 @@ class RepairViewModel: ObservableObject {
         }
     }
     
-    func fetchRepairsGroupByMonth(for repairs: [RepairModel]) -> [RepairGroup] {
-        do {
-            return try repairUseCase.fetchRepairsGroupByMonth(for: repairs)
-        } catch {
-            alertMessage = "\(error.localizedDescription)"
-            return []
-        }
-    }
+//    func fetchRepairsGroupByMonth(for repairs: [RepairModel]) -> [RepairGroup] {
+//        do {
+//            return try repairUseCase.fetchRepairsGroupByMonth(for: repairs)
+//        } catch {
+//            alertMessage = "\(error.localizedDescription)"
+//            return []
+//        }
+//    }
     
-    func deleteRepair(repair: RepairModel) {
-        do {
-            try repairUseCase.deleteRepair(repairModel: repair)
-            if let index = repairs.firstIndex(of: repair) {
-                repairs.remove(at: index)
-            }
-        } catch {
-            alertMessage = "\(error.localizedDescription)"
-            alertShow = true
-        }
-    }
+//    func deleteRepair(repair: RepairModel) {
+//        do {
+//            try repairUseCase.deleteRepair(repairModel: repair)
+//            if let index = repairs.firstIndex(of: repair) {
+//                repairs.remove(at: index)
+//            }
+//        } catch {
+//            alertMessage = "\(error.localizedDescription)"
+//            alertShow = true
+//        }
+//    }
+    
+//    func toRepairModel() -> RepairModel {
+//        return RepairModel(
+//            id: UUID(),
+//            amount: self.amount,
+//            litresFuel: self.litresFuel,
+//            notes: self.notes,
+//            partReplaced: self.nameRepair,
+//            parts: savePart(parts: self.parts),
+//            photoRepairs: self.photoRepair,
+//            repairCategory: self.category.rawValue,
+//            repairDate: self.repairDate,
+//            repairMileage: self.mileage
+//        )
+//    }
     
     // MARK: Method for work struct Part
-    func addPart(for parts: inout [Part]) {
-        parts.append(Part(article: "", name: ""))
-    }
-    
-    func removePart(for parts: inout [Part], to index: Int) {
-        parts.remove(at: index)
-    }
-    
-    func savePart(parts: [Part]) -> [String: String] {
-        PartMappers.toDictionary(self.parts)
-    }
-    
-    func loadPart(from dictionary: [String: String]) {
-        self.parts = PartMappers.fromDictionary(dictionary)
-    }
+//    func addPart(for parts: inout [Part]) {
+//        parts.append(Part(article: "", name: ""))
+//    }
+//    
+//    func removePart(for parts: inout [Part], to index: Int) {
+//        parts.remove(at: index)
+//    }
+//    
+//    func savePart(parts: [Part]) -> [String: String] {
+//        PartMappers.toDictionary(self.parts)
+//    }
+//    
+//    func loadPart(from dictionary: [String: String]) {
+//        self.parts = PartMappers.fromDictionary(dictionary)
+//    }
 }

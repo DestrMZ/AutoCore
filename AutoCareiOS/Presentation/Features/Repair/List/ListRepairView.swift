@@ -24,7 +24,7 @@ struct ListRepairView: View {
         
         if carViewModel.cars.isEmpty {
             
-            EmptyCarList()
+//            EmptyCarList()
             
         } else {
             
@@ -63,7 +63,6 @@ struct ListRepairView: View {
             }
             .onAppear {
                 if let selectedCar = carViewModel.selectedCar {
-//                    phoneViewModel.setCurrentCar(selectedCar) //
                     repairViewModel.fetchAllRepairs(for: selectedCar)
                 } else {
                     print("Repairs для автомобиля \(carViewModel.nameModel) не найдены.")
@@ -140,14 +139,14 @@ struct ListRepairView: View {
     }
 
     
-    private var addButton: some View {
-        HStack {
-            Spacer()
-            AddButtonRepairView(isPresented: $isPresented)
-                .padding(.horizontal, 30)
-                .padding(.bottom, 90)
-        }
-    }
+//    private var addButton: some View {
+//        HStack {
+//            Spacer()
+//            AddButtonRepairView(isPresented: $isPresented)
+//                .padding(.horizontal, 30)
+//                .padding(.bottom, 90)
+//        }
+//    }
 }
 
 

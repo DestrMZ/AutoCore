@@ -122,7 +122,7 @@ class RepairUseCase: RepairUseCaseProtocol {
         }
 
         if let litres = repairModel.litresFuel, litres < 0 {
-            throw RepairError.invalidAmountFormat
+            throw RepairError.invalidLitresFuelFormat
         }
 
         if let photos = repairModel.photoRepairs, photos.count > 10 {
