@@ -12,17 +12,18 @@ import Combine
 
 struct AddRepairView: View {
     
-    @EnvironmentObject var carViewModel: CarViewModel
+    let container: AppDIContainer
+    
     @Environment(\.dismiss) var dismiss
-    
-    @StateObject var addRepairViewModel: AddRepairViewModel = AddRepairViewModel(
-            repairUseCase: AppDIContainer.shared.repairUseCase,
-            sharedRepair: AppDIContainer.shared.sharedRepair
-        )
-    
+
+    @StateObject var addRepairViewModel: AddRepairViewModel
     @State private var showSuccessMessage: Bool = false
     
     @FocusState var focusedField: Field?
+    
+    init(container: AppDIContainer) {
+        self._addRepairViewModel = StateObject(wrappedValue: AddRepairViewModel(repairUseCase: container.repairUseCase, sharedRepairStore: container.sharedRepair))
+    }
  
     var body: some View {
         NavigationStack {
@@ -120,8 +121,9 @@ struct AddRepairView: View {
     let mockCarVM = CarViewModel(carUseCase: CarUseCase(carRepository: MockCarRepository(), userStoreRepository: UserStoreRepository()))
     let mockRepairVM = RepairViewModel(repairUseCase: RepairUseCase(repairRepository: MockRepairRepository()))
     
+    let container = AppDIContainer()
     
-    AddRepairView()
+    AddRepairView(container: container)
         .environmentObject(mockCarVM)
         .environmentObject(mockRepairVM)
 }

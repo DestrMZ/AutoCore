@@ -10,13 +10,13 @@ import SwiftUI
 
 struct RepairGroupedListView: View {
     
-    @ObservedObject var listViewModel: RepairListViewModel
-    
-    @EnvironmentObject var sharedRepairStore: SharedRepairStore
-    @EnvironmentObject var sharedCarStore: SharedCarStore
+    @ObservedObject var listViewModel: ListRepairViewModel
+    @ObservedObject var sharedRepairStore: SharedRepairStore
         
     @Binding var searchText: String
     @Binding var showTapBar: Bool
+    
+    let selectedCar: CarModel?
     
     private var filteredRepairs: [RepairModel] {
             if searchText.isEmpty {
@@ -46,7 +46,7 @@ struct RepairGroupedListView: View {
                    Divider()
 
                    ForEach(group.repairs) { repair in
-                       if let car = sharedCarStore.selectedCar {
+                       if let car = selectedCar {
                            NavigationLink(
                                destination: DetailRepairView(repair: repair, car: car)
                                    .onAppear { showTapBar = false }

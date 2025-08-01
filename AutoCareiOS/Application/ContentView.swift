@@ -11,16 +11,17 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @EnvironmentObject var carViewModel: CarViewModel
+    let container: AppDIContainer
     
     var body: some View {
         VStack {
-            MainView()
+            MainView(container: container)
         }
     }
 }
 
 
 #Preview {
-    ContentView()
+    let container: AppDIContainer = .shared
+    ContentView(container: container)
 }

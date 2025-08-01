@@ -8,11 +8,10 @@
 import SwiftUI
 
 struct MainView: View {
+
+    let container: AppDIContainer
     
     @Namespace private var animationNamespace
-    @EnvironmentObject var carViewModel: CarViewModel
-    @EnvironmentObject var repairViewModel: RepairViewModel
-    @EnvironmentObject var settingsViewModel: SettingsViewModel
     
     @State private var selectedTab: CustomTapBar.TabItems = .cars
     @State private var showTapBar: Bool = true
@@ -23,7 +22,7 @@ struct MainView: View {
             case .cars:
                 CarProfileView(showTapBar: $showTapBar)
             case .repair:
-                ListRepairView(showTapBar: $showTapBar)
+                ListRepairView(container: container, showTapBar: $showTapBar)
             case .statistics:
                 StatisticsView()
             case .settings:

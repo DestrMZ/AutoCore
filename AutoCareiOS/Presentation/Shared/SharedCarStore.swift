@@ -7,9 +7,8 @@
 
 import Foundation
 
+
 final class SharedCarStore: ObservableObject {
-    
-    @Published var cars: [Car] = []
-    @Published var selectedCar: Car?
-    
+    @Published var cars: [CarModel] = []
+    @Published var selectedCar: CarModel?
 }

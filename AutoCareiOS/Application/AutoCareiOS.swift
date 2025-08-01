@@ -13,26 +13,8 @@ struct AutoCareiOS: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
-            
-                .environmentObject(container.carViewModel)
-                .environmentObject(container.repairViewModel)
-                .environmentObject(container.insuranceViewModel)
-            
-            
-                .environmentObject(container.settingsViewModel)
-            
-            
-                .environmentObject(container.sharedRepair)
-                .environmentObject(container.sharedCar)
-            
-            
-                .preferredColorScheme(container.settingsViewModel.changeColorScheme())
-//                .onAppear {
-//                    carViewModel.initializeCarRepairApp()
-//                    NotificationService.shared.requestNotificationPermission()
-//                }
-                #warning("Fix this later")
+            ContentView(container: container)
+//                .preferredColorScheme(container.settingsViewModel.changeColorScheme())
         }
     }
 }

@@ -12,25 +12,27 @@ import UIKit
 class CarViewModel: ObservableObject {
     
     private let carUseCase: CarUseCaseProtocol
+    private let sharedCarStore: SharedCarStoreProtocol
     
-    init(carUseCase: CarUseCaseProtocol) {
+    init(carUseCase: CarUseCaseProtocol, sharedCarStore: SharedCarStoreProtocol) {
         self.carUseCase = carUseCase
+        self.sharedCarStore = sharedCarStore
         
         initializeCar()
     }
     
-    @Published var nameModel: String = ""
-    @Published var year: Int16 = 0
-    @Published var vinNumber: String = ""
-    @Published var color: String? = nil
-    @Published var mileage: Int32 = 0
-    @Published var engineType: EngineTypeEnum = .gasoline
-    @Published var transmissionType: TransmissionTypeEnum = .automatic
-    @Published var photoCar: Data = Data()
-    @Published var stateNumber: String = ""
-    
-    @Published var alertMessage: String = ""
-    @Published var isShowAlert: Bool = false
+//    @Published var nameModel: String = ""
+//    @Published var year: Int16 = 0
+//    @Published var vinNumber: String = ""
+//    @Published var color: String? = nil
+//    @Published var mileage: Int32 = 0
+//    @Published var engineType: EngineTypeEnum = .gasoline
+//    @Published var transmissionType: TransmissionTypeEnum = .automatic
+//    @Published var photoCar: Data = Data()
+//    @Published var stateNumber: String = ""
+//    
+//    @Published var alertMessage: String = ""
+//    @Published var isShowAlert: Bool = false
     
     @Published var cars: [CarModel] = []
     
@@ -88,18 +90,18 @@ class CarViewModel: ObservableObject {
         self.stateNumber = carModel.stateNumber ?? ""
     }
     
-    func addCar(newCar: CarModel) {
-        do {
-            let result = try carUseCase.createCar(carModel: newCar)
-            self.cars.append(result)
-        } catch let error as CarError {
-            alertMessage = error.localizedDescription
-            isShowAlert = true
-        } catch {
-            alertMessage = error.localizedDescription
-            isShowAlert = true
-        }
-    }
+//    func addCar(newCar: CarModel) {
+//        do {
+//            let result = try carUseCase.createCar(carModel: newCar)
+//            self.cars.append(result)
+//        } catch let error as CarError {
+//            alertMessage = error.localizedDescription
+//            isShowAlert = true
+//        } catch {
+//            alertMessage = error.localizedDescription
+//            isShowAlert = true
+//        }
+//    }
     
     func updateCar(carModel: CarModel) {
         do {

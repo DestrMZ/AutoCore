@@ -8,21 +8,17 @@
 import Foundation
 
 
-class RepairListViewModel: ObservableObject {
+class ListRepairViewModel: ObservableObject {
     
-    private let repairUseCase: RepairUseCase
-    private let sharedRepairStore: SharedRepairStore
+    private let repairUseCase: RepairUseCaseProtocol
+    private var sharedRepairStore: SharedRepairStoreProtocol
     
     @Published var alertMessage: String?
     @Published var alertShow: Bool = false
     
-    init(repairUseCase: RepairUseCase, sharedRepairStore: SharedRepairStore) {
+    init(repairUseCase: RepairUseCaseProtocol, sharedRepairStore: SharedRepairStoreProtocol) {
         self.repairUseCase = repairUseCase
         self.sharedRepairStore = sharedRepairStore
-    }
-    
-    var repairs: [RepairModel] {
-        sharedRepairStore.repairs
     }
     
     func fetchAllRepairs(for car: CarModel) {

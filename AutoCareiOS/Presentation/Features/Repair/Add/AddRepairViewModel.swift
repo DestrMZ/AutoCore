@@ -11,11 +11,11 @@ import Foundation
 class AddRepairViewModel: ObservableObject {
     
     private let repairUseCase: RepairUseCaseProtocol
-    private let sharedRepair: SharedRepairStore
+    private var sharedRepairStore: SharedRepairStore
     
-    init(repairUseCase: RepairUseCaseProtocol, sharedRepair: SharedRepairStore) {
+    init(repairUseCase: RepairUseCaseProtocol, sharedRepairStore: SharedRepairStore) {
         self.repairUseCase = repairUseCase
-        self.sharedRepair = sharedRepair
+        self.sharedRepairStore = sharedRepairStore
     }
     
     @Published var nameRepair: String = ""
@@ -32,7 +32,7 @@ class AddRepairViewModel: ObservableObject {
     @Published var alertShow: Bool = false
     
     var repairs: [RepairModel] {
-        sharedRepair.repairs
+        sharedRepairStore.repairs
     }
     
     func addRepair(for car: CarModel) {
@@ -42,7 +42,7 @@ class AddRepairViewModel: ObservableObject {
         
         do {
             let repair = try repairUseCase.createRepair(for: car, repairModel: repairModel)
-            sharedRepair.repairs.append(repair)
+            sharedRepairStore.repairs.append(repair)
         } catch {
             alertMessage = error.localizedDescription
             alertShow = true

@@ -9,7 +9,5 @@ import Foundation
 
 
 final class SharedRepairStore: ObservableObject {
-    
     @Published var repairs: [RepairModel] = []
-    
 }
