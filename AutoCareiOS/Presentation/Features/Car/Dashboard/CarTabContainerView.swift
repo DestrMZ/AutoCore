@@ -69,7 +69,7 @@ struct CarSelectionCarouselView: View {
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
         }
         .fullScreenCover(isPresented: $isAdditingNewCar) {
-            AddCarView()
+            AddCarView(container: <#AppDIContainer#>)
         }
         .alert(isPresented: $showDeleteConfirmantion) {
             Alert(title: Text("Delete car"),

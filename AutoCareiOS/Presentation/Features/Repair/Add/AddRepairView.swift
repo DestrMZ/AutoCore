@@ -22,6 +22,7 @@ struct AddRepairView: View {
     @FocusState var focusedField: Field?
     
     init(container: AppDIContainer) {
+        self.container = container
         self._addRepairViewModel = StateObject(wrappedValue: AddRepairViewModel(repairUseCase: container.repairUseCase, sharedRepairStore: container.sharedRepair))
     }
  

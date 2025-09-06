@@ -10,7 +10,10 @@ import PhotosUI
 
 struct AddCarView: View {
     
-    @EnvironmentObject var carViewModel: CarViewModel
+    let container: AppDIContainer
+    
+    @StateObject var addCarViewModel: AddCarViewModel
+    
     @Environment(\.dismiss) var dismiss
     
     @State private var tempNameModel: String = ""
@@ -26,6 +29,13 @@ struct AddCarView: View {
     @State private var avatarImage: UIImage?
     
     @FocusState var isKeyboardActive: Bool
+    
+    init(container: AppDIContainer) {
+        self.container = container
+        self._addCarViewModel = StateObject(wrappedValue: AddCarViewModel(
+            carUseCase: container.carUseCase,
+            sharedCarStore: container.sharedCar))
+    }
     
     var body: some View {
         
@@ -63,9 +73,9 @@ struct AddCarView: View {
                                 insurance: [],
                                 stateNumber: tempStateNumber
                             )
-                            carViewModel.addCar(newCar: newCar)
+                            addCarViewModel.addCar(newCar: newCar)
                             
-                            if !carViewModel.isShowAlert {
+                            if !addCarViewModel.isShowAlert {
                                 dismiss()
                             }
                         }
@@ -79,10 +89,10 @@ struct AddCarView: View {
                 }
             }
         }
-        .alert(isPresented: $carViewModel.isShowAlert) {
+        .alert(isPresented: $addCarViewModel.isShowAlert) {
             Alert(
                 title: Text("Notice"),
-                message: Text(carViewModel.alertMessage),
+                message: Text(addCarViewModel.alertMessage),
                 dismissButton: .default(Text("Okey"))
                 )
         }

@@ -35,8 +35,8 @@ class AddCarViewModel: ObservableObject {
     func addCar(newCar: CarModel) {
         do {
             let result = try carUseCase.createCar(carModel: newCar)
-            self.sharedCarStore.cars.append(result)
-            self.sharedCarStore.selectedCar = result
+            self.sharedCarStore.addCar(result)
+            self.sharedCarStore.selectCar(result)
         } catch let error as CarError {
             alertMessage = error.localizedDescription
             isShowAlert = true

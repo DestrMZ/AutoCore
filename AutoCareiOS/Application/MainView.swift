@@ -20,7 +20,7 @@ struct MainView: View {
         ZStack {
             switch selectedTab {
             case .cars:
-                CarProfileView(showTapBar: $showTapBar)
+                CarProfileView(container: container, showTapBar: $showTapBar)
             case .repair:
                 ListRepairView(container: container, showTapBar: $showTapBar)
             case .statistics:

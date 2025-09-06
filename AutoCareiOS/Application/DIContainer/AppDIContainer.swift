@@ -27,3 +27,4 @@ final class AppDIContainer {
     lazy var repairUseCase = RepairUseCase(repairRepository: repairRepository)
     lazy var insuranceUseCase = InsuranceUseCase(insuranceRepository: insuranceRepository)
 }
+                                                       
