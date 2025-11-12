@@ -11,10 +11,6 @@ import TipKit
 
 struct CarProfileView: View {
     
-    let container: AppDIContainer
-    
-    @ObservedObject var sharedCarStore: SharedCarStore
-    
     @EnvironmentObject var carViewModel: CarViewModel
     @Environment(\.dismiss) var dismiss
 
@@ -22,11 +18,6 @@ struct CarProfileView: View {
     @State var showQuestionMark: Bool = false
     
     @Binding var showTapBar: Bool
-    
-    init(container: AppDIContainer, selectedCar: CarModel?, showTapBar: Binding<Bool>) {
-        self.container = container
-        self._selectedCar = State(wrappedValue: container.sharedCar.selectedCar)
-    }
    
     var body: some View {
         NavigationStack {

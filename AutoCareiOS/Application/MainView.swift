@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct MainView: View {
-
-    let container: AppDIContainer
     
     @Namespace private var animationNamespace
     
@@ -20,9 +18,9 @@ struct MainView: View {
         ZStack {
             switch selectedTab {
             case .cars:
-                CarProfileView(container: container, showTapBar: $showTapBar)
+                CarProfileView(showTapBar: $showTapBar)
             case .repair:
-                ListRepairView(container: container, showTapBar: $showTapBar)
+                ListRepairView(showTapBar: $showTapBar)
             case .statistics:
                 StatisticsView()
             case .settings:

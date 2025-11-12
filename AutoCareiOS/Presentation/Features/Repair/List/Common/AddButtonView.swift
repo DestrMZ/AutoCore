@@ -17,11 +17,22 @@ struct AddButtonView: View {
         Button(action: {
             isPresented = true
         }) {
-            Image(systemName: "plus.circle.fill")
-                .resizable()
-                .frame(width: 60, height: 60)
-                .foregroundColor(.primary)
+            if #available(iOS 26.0, *) {
+                Image(systemName: "plus")
+                    .frame(width: 60.0, height: 60.0)
+                    .font(.system(size: 36))
+                    .glassEffect()
+            } else {
+                Image(systemName: "plus.circle.fill")
+                    .resizable()
+                    .frame(width: 60, height: 60)
+                    .foregroundColor(.primary)
+            }
         }
     }
 }
 
+
+#Preview {
+    AddCarView()
+}

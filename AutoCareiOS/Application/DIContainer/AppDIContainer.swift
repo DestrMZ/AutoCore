@@ -16,15 +16,16 @@ final class AppDIContainer {
     let repairRepository = RepairRepository()
     let insuranceRepository = InsuranceRepository()
     let userStoreRepository = UserStoreRepository()
-    
-    // Shared-data
-    let sharedRepair = SharedRepairStore()
-    let sharedCar = SharedCarStore()
-    let sharedInsurance = SharedInsuranceStore()
-    
+
     // UseCase
     lazy var carUseCase = CarUseCase(carRepository: carRepository, userStoreRepository: userStoreRepository)
     lazy var repairUseCase = RepairUseCase(repairRepository: repairRepository)
     lazy var insuranceUseCase = InsuranceUseCase(insuranceRepository: insuranceRepository)
+    
+    // ViewModels
+    lazy var carViewModel = CarViewModel(carUseCase: carUseCase)
+    lazy var repairViewModel = RepairViewModel(repairUseCase: repairUseCase)
+    lazy var insuranceViewModel = InsuranceViewModel(insuranceUseCase: insuranceUseCase)
+    lazy var settingsViewModel = SettingsViewModel()
 }
                                                        

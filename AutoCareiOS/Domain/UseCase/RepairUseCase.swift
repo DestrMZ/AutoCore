@@ -8,7 +8,7 @@
 import Foundation
 
 
-class RepairUseCase: RepairUseCaseProtocol {
+final class RepairUseCase: RepairUseCaseProtocol {
     
     private let repairRepository: RepairRepositoryProtocol
     

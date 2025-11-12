@@ -11,17 +11,15 @@ import SwiftUI
 
 struct ContentView: View {
     
-    let container: AppDIContainer
     
     var body: some View {
         VStack {
-            MainView(container: container)
+            MainView()
         }
     }
 }
 
 
 #Preview {
-    let container: AppDIContainer = .shared
-    ContentView(container: container)
+    ContentView()
 }

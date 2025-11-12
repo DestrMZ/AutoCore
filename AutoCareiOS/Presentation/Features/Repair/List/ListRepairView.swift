@@ -9,93 +9,128 @@ import SwiftUI
 
 
 struct ListRepairView: View {
-    
-    let container: AppDIContainer
-    
-    @StateObject var listRepairViewModel: ListRepairViewModel
-    
-    @State var searchText: String = ""
+    @EnvironmentObject var carViewModel: CarViewModel
+    @EnvironmentObject var repairViewModel: RepairViewModel
+
+    @State private var searchText: String = ""
     @State private var searchBarHeight: CGFloat = 0
-    @State var isPresented: Bool = false
-    @State private var isExpanded = true
-    
+    @State private var isPresented: Bool = false
+
     @Binding var showTapBar: Bool
-    
-    init(container: AppDIContainer, showTapBar: Binding<Bool>) {
-        self._listRepairViewModel = StateObject(wrappedValue: ListRepairViewModel(
-            repairUseCase: container.repairUseCase,
-            sharedRepairStore: container.sharedRepair))
-        self._showTapBar = showTapBar
-    }
-    
+
+    private let tabBarHeight: CGFloat = 85
+
     var body: some View {
-        
-        if listRepairViewModel.repairs.isEmpty {
-            EmptyRepairView()
-        } else {
-            
-            NavigationStack {
-                ZStack(alignment: .bottomTrailing) {
+        NavigationStack {
+            Group {
+                if carViewModel.selectedCar == nil {
+                    EmptyCarsView()
+                } else if repairViewModel.repairs.isEmpty {
+                    EmptyRepairView()
+                } else {
                     ScrollView {
-                        VStack {
-                            
-                            if repairViewModel.repairs.isEmpty {
-                                emptyRepairList
-                            } else {
-                                VStack {
-                                    Text("\(carViewModel.nameModel)")
-                                        .font(.headline)
-                                        .foregroundColor(.secondary)
-                                        .padding(.bottom, 10)
-                                    
-                                    SearchBar(text: $searchText, keyboardHeight: $searchBarHeight, placeholder: NSLocalizedString("Search repair", comment: ""))
-                                    
-                                    listRepairView
-                                        .padding(.bottom, 1)
-                                }
-                            }
+                        VStack(alignment: .center, spacing: 10) {
+                            Text(carViewModel.nameModel)
+                                .font(.title3)
+                                .foregroundColor(.secondary)
+                                .bold()
+
+                            SearchBar(
+                                text: $searchText,
+                                keyboardHeight: $searchBarHeight,
+                                placeholder: NSLocalizedString("Search repair", comment: ""))
+
+                            RepairGroupedListView(
+                                searchText: $searchText,
+                                showTapBar: $showTapBar,
+                                selectedCar: carViewModel.selectedCar)
+                            .padding(.bottom, 1)
+                            .buttonStyle(.plain)            
                         }
                         .padding(.horizontal, 15)
                     }
-                    
-                    addButton
                 }
             }
-            .navigationTitle("Repairs")
-            .sheet(isPresented: $isPresented) {
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+            .overlay(alignment: .bottomTrailing) {
                 if carViewModel.selectedCar != nil {
-                    AddRepairView(construct: container)
-                }
-            }
-            .onAppear {
-                if let selectedCar = carViewModel.selectedCar {
-                    repairViewModel.fetchAllRepairs(for: selectedCar)
-                } else {
-                    print("Repairs для автомобиля \(carViewModel.nameModel) не найдены.")
+                    AddButtonView(isPresented: $isPresented)
+                        .padding(.trailing, 25)
+                        .padding(.bottom, 20 + (showTapBar ? tabBarHeight : 85))
                 }
             }
         }
+        .sheet(isPresented: $isPresented) {
+            AddRepairView()
+        }
+        .task(id: carViewModel.selectedCar?.id) {
+            if let selectedCar = carViewModel.selectedCar {
+                repairViewModel.fetchAllRepairs(for: selectedCar)
+            }
+        }
     }
-    
-    
-    
-    
-    
-
-    
-//    private var addButton: some View {
-//        HStack {
-//            Spacer()
-//            AddButtonRepairView(isPresented: $isPresented)
-//                .padding(.horizontal, 30)
-//                .padding(.bottom, 90)
-//        }
-//    }
 }
 
 
-//#Preview {
-//    ListRepairView()
-//        .environmentObject(RepairViewModel())
-//        .environmentObject(CarViewModel())
-//}
+#Preview {
+    // Build dependencies for CarViewModel
+    let carRepositoryMock = MockCarRepository()
+    let userStoreRepository = UserStoreRepository()
+    let carUseCase = CarUseCase(carRepository: carRepositoryMock, userStoreRepository: userStoreRepository)
+    let carViewModel = CarViewModel(carUseCase: carUseCase)
+    
+    // Build dependencies for RepairViewModel
+    let repairRepositoryMock = MockRepairRepository()
+    let repairUseCase = RepairUseCase(repairRepository: repairRepositoryMock)
+    let repairViewModel = RepairViewModel(repairUseCase: repairUseCase)
+    
+    let repair2 = RepairModel(
+        id: UUID(),
+        amount: 3200,
+        litresFuel: 42.5,
+        notes: "Заправка АИ‑95",
+        partReplaced: "Топливо",
+        parts: [:],
+        photoRepairs: nil,
+        repairCategory: RepairCategory.fuel.rawValue,
+        repairDate: Calendar.current.date(byAdding: .day, value: -3, to: Date()) ?? Date(),
+        repairMileage: 124_100
+    )
+    
+    let repair = RepairModel(
+        id: UUID(),
+        amount: 8900,
+        litresFuel: nil,
+        notes: "Замена передних тормозных колодок",
+        partReplaced: "Тормозные колодки передние",
+        parts: ["BP-1234": "Колодки передние", "GR-001": "Смазка направляющих"],
+        photoRepairs: nil,
+        repairCategory: RepairCategory.service.rawValue,
+        repairDate: Calendar.current.date(byAdding: .day, value: -10, to: Date()) ?? Date(),
+        repairMileage: 123_450
+    )
+    
+    let car = CarModel(
+        id: UUID(),
+        nameModel: "Toyota Corolla",
+        year: 2015,
+        color: "White",
+        engineType: "gasoline",
+        transmissionType: "automatic",
+        mileage: 124_500,
+        photoCar: Data(),
+        vinNumbers: "JTDBL40E799999999",
+        repairs: [repair, repair2],
+        insurance: nil,
+        stateNumber: "A123BC"
+    )
+    
+    carViewModel.selectedCar = car
+    repairViewModel.repairs.append(repair)
+    
+    return ListRepairView(showTapBar: .constant(false))
+        .environmentObject(repairViewModel)
+        .environmentObject(carViewModel)
+        .environmentObject(SettingsViewModel())
+}

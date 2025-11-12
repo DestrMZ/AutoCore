@@ -55,7 +55,8 @@ final class CarUseCase: CarUseCaseProtocol {
     
     func fetchAllCars() throws -> [CarModel] {
         do {
-            return try carRepository.fetchAllCars()
+            let cars =  try carRepository.fetchAllCars()
+            return cars
         } catch RepositoryError.fetchFailed {
             throw CarError.fetchFailed
         }

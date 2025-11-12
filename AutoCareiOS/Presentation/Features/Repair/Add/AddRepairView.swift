@@ -12,37 +12,41 @@ import Combine
 
 struct AddRepairView: View {
     
-    let container: AppDIContainer
+    @EnvironmentObject var carViewModel: CarViewModel
+    @EnvironmentObject var repairViewModel: RepairViewModel
     
     @Environment(\.dismiss) var dismiss
 
-    @StateObject var addRepairViewModel: AddRepairViewModel
     @State private var showSuccessMessage: Bool = false
     
     @FocusState var focusedField: Field?
     
-    init(container: AppDIContainer) {
-        self.container = container
-        self._addRepairViewModel = StateObject(wrappedValue: AddRepairViewModel(repairUseCase: container.repairUseCase, sharedRepairStore: container.sharedRepair))
-    }
- 
+    @State var nameRepair: String = ""
+    @State var amountRepair: String = ""
+    @State var mileageRepair: String = ""
+    @State var dateOfRepair: Date = Date()
+    @State var notesRepair: String = ""
+    @State var litresFuel: String = ""
+    @State var selectedCaregory: RepairCategory = .fuel
+    @State var parts: [Part] = [Part(article: "", name: "")]
+
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
                     RepairFormFieldsView(
-                        nameRepair: $addRepairViewModel.nameRepair,
-                        amountRepair: $addRepairViewModel.amountRepair,
-                        mileageRepair: $addRepairViewModel.mileageRepair,
-                        dateOfRepair: $addRepairViewModel.dateRepair,
-                        notesRepair: $addRepairViewModel.notesRepiar,
-                        litresFuel: $addRepairViewModel.litresRepair,
-                        selectedCaregory: $addRepairViewModel.categoryRepair, focusedField: $focusedField)
+                        nameRepair: $nameRepair,
+                        amountRepair: $amountRepair,
+                        mileageRepair: $mileageRepair,
+                        dateOfRepair: $dateOfRepair,
+                        notesRepair: $notesRepair,
+                        litresFuel: $litresFuel,
+                        selectedCaregory: $selectedCaregory, focusedField: $focusedField)
                     
-                    RepairPartsListView(addRepairViewModel: addRepairViewModel, parts: $addRepairViewModel.partsRepair)
+                    RepairPartsListView(parts: $parts)
                     
                     RepairPhotoPickerView(
-                        photoRepair: $addRepairViewModel.photoRepair,
+                        photoRepair: $repairViewModel.photoRepair,
                         showSuccessMessage: $showSuccessMessage)
                     
                 }
@@ -51,10 +55,17 @@ struct AddRepairView: View {
                     ToolbarItem(placement: .confirmationAction) {
                         Button("Save", action: {
                             if let car = carViewModel.selectedCar {
-                                addRepairViewModel.addRepair(for: car)
+                                repairViewModel.addRepair(for: car, repairModel: RepairModel(
+                                    id: UUID(),
+                                    amount: Int32(amountRepair) ?? 0,
+                                    partReplaced: nameRepair,
+                                    parts: PartMappers.toDictionary(parts),
+                                    repairCategory: selectedCaregory.rawValue,
+                                    repairDate: dateOfRepair,
+                                    repairMileage: Int32(mileageRepair) ?? 0))
                             }
                             
-                            if !addRepairViewModel.alertShow {
+                            if !repairViewModel.alertShow {
                                 dismiss()
                             }
                         })
@@ -70,8 +81,8 @@ struct AddRepairView: View {
                 Spacer()
             }
         }
-        .alert(isPresented: $addRepairViewModel.alertShow) {
-            Alert(title: Text("Ops"), message: Text(addRepairViewModel.alertMessage), dismissButton: .cancel())
+        .alert(isPresented: $repairViewModel.alertShow) {
+            Alert(title: Text("Ops"), message: Text(repairViewModel.alertMessage), dismissButton: .cancel())
         }
         .toast(isPresenting: $showSuccessMessage) {
             AlertToast(
@@ -122,9 +133,7 @@ struct AddRepairView: View {
     let mockCarVM = CarViewModel(carUseCase: CarUseCase(carRepository: MockCarRepository(), userStoreRepository: UserStoreRepository()))
     let mockRepairVM = RepairViewModel(repairUseCase: RepairUseCase(repairRepository: MockRepairRepository()))
     
-    let container = AppDIContainer()
-    
-    AddRepairView(container: container)
+    AddRepairView()
         .environmentObject(mockCarVM)
         .environmentObject(mockRepairVM)
 }

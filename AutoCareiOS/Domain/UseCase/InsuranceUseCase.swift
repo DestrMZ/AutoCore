@@ -8,7 +8,7 @@
 import Foundation
 
 
-class InsuranceUseCase: InsuranceUseCaseProtocol {
+final class InsuranceUseCase: InsuranceUseCaseProtocol {
     
     private let insuranceRepository: InsuranceRepositoryProtocol
     

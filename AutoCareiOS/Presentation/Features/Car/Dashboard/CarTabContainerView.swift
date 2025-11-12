@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CarSelectionCarouselView: View {
+    
     @EnvironmentObject var carViewModel: CarViewModel
     @Environment(\.dismiss) var dismiss
     
@@ -69,7 +70,7 @@ struct CarSelectionCarouselView: View {
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
         }
         .fullScreenCover(isPresented: $isAdditingNewCar) {
-            AddCarView(container: <#AppDIContainer#>)
+            AddCarView()
         }
         .alert(isPresented: $showDeleteConfirmantion) {
             Alert(title: Text("Delete car"),

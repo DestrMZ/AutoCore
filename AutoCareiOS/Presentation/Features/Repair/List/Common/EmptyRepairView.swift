@@ -1,29 +1,35 @@
 //
-//  EmptyRepairView.swift
+//  EmptyRepair.swift
 //  AutoCareiOS
 //
-//  Created by Ivan Maslennikov on 31.07.2025.
+//  Created by Ivan Maslennikov on 01.08.2025.
 //
 
-import Foundation
 import SwiftUI
 
-
 struct EmptyRepairView: View {
-    
     var body: some View {
-        VStack(alignment: .center) {
-            Spacer()
-            Text("Please, go back to the selection menu ")
-            + Text(Image(systemName: "car.2"))
-                    .font(.title2)
-                    .foregroundColor(.secondary)
-                + Text(" and add your first vehicle.")
-            Spacer()
+        ZStack {
+            VStack(spacing: 12) {
+                Image(systemName: "wrench.and.screwdriver")
+                    .font(.system(size: 40, weight: .semibold))
+                    .symbolRenderingMode(.hierarchical)
+                    .foregroundStyle(.secondary)
+
+                Text("No repairs yet")
+                    .font(.headline)
+
+                Text("Track costs and history. Add your first repair to get started.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 20)
+            }
+            .padding(20)
+            .frame(maxWidth: 360)
+            .shadow(radius: 2, y: 1)
+            .padding()
         }
-        .font(.headline)
-        .padding(.horizontal, 25)
-        .multilineTextAlignment(.center)
     }
 }
 

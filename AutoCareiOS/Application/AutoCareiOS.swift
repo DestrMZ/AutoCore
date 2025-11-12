@@ -9,13 +9,17 @@ import SwiftUI
 
 @main
 struct AutoCareiOS: App {
+    
     let container = AppDIContainer.shared
     
     var body: some Scene {
         WindowGroup {
-            ContentView(container: container)
-//                .preferredColorScheme(container.settingsViewModel.changeColorScheme())
+            ContentView()
+                .environmentObject(container.carViewModel)
+                .environmentObject(container.repairViewModel)
+                .environmentObject(container.insuranceViewModel)
+                .environmentObject(container.settingsViewModel)
+                .preferredColorScheme(container.settingsViewModel.changeColorScheme())
         }
     }
 }
-

@@ -11,7 +11,7 @@ import SwiftUI
 
 struct RepairPartsListView: View {
     
-    @ObservedObject var addRepairViewModel: AddRepairViewModel
+    @EnvironmentObject var repairViewModel: AddRepairViewModel
     @Binding var parts: [Part]
 
     
@@ -24,14 +24,14 @@ struct RepairPartsListView: View {
                     
                     if index == 0 {
                         Button(action: {
-                            addRepairViewModel.addPart(for: &parts)
+                            repairViewModel.addPart(for: &parts)
                         }) {
                             Image(systemName: "plus.circle.fill")
                                 .foregroundStyle(.green)
                         }
                     } else {
                         Button(action: {
-                            addRepairViewModel.removePart(for: &parts, to: index)
+                            repairViewModel.removePart(for: &parts, to: index)
                         }) {
                             Image(systemName: "minus.circle.fill")
                                 .foregroundStyle(.red)
