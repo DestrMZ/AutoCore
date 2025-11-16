@@ -32,9 +32,9 @@
 		5C18EE1E2DB567B5009BE4ED /* Exceptions for "AutoCareiOS" folder in "AutoCareiOS" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Application/AppFactory/AppFactory.swift,
 				Application/AutoCareiOS.swift,
 				Application/ContentView.swift,
-				Application/DIContainer/AppDIContainer.swift,
 				Application/MainView.swift,
 				Core/Notification/NotificationService.swift,
 				Core/WatchSession/PhoneSessionManager.swift,
@@ -67,6 +67,8 @@
 				Domain/Interfaces/Repositories/RepairRepositoryProtocol.swift,
 				Domain/Interfaces/Repositories/UserSettingsRepositoryProtocol.swift,
 				Domain/Store/CarStore.swift,
+				Domain/Store/InsuranceStore.swift,
+				Domain/Store/RepairStore.swift,
 				Domain/UseCase/CarUseCase.swift,
 				Domain/UseCase/InsuranceUseCase.swift,
 				Domain/UseCase/RepairUseCase.swift,

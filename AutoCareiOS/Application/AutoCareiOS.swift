@@ -10,16 +10,26 @@ import SwiftUI
 @main
 struct AutoCareiOS: App {
     
-    let container = AppDIContainer.shared
+    static let factory = AppFactory.shared
     
+    @StateObject private var carStore: CarStore
+    @StateObject private var repairStore: RepairStore
+    @StateObject private var insuranceStore: InsuranceStore
+    
+    init() {
+        _carStore = StateObject(wrappedValue: CarStore(carUseCase: Self.factory.carUseCase))
+        _repairStore = StateObject(wrappedValue: RepairStore(repairUseCase: Self.factory.repairUseCase))
+        _insuranceStore = StateObject(wrappedValue: InsuranceStore(insuranceUseCase: Self.factory.insuranceUseCase))
+    }
+                                                        
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(container.carViewModel)
-                .environmentObject(container.repairViewModel)
-                .environmentObject(container.insuranceViewModel)
-                .environmentObject(container.settingsViewModel)
-                .preferredColorScheme(container.settingsViewModel.changeColorScheme())
+                .environmentObject(carStore)
+                .environmentObject(repairStore)
+                .environmentObject(insuranceStore)
+                .environmentObject(Self.factory.settingsViewModel)
+                .preferredColorScheme(Self.factory.settingsViewModel.changeColorScheme())
         }
     }
 }
