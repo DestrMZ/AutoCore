@@ -9,16 +9,16 @@ import Foundation
 
 
 final class RepairUseCase: RepairUseCaseProtocol {
-    
+
     private let repairRepository: RepairRepositoryProtocol
-    
+
     init(repairRepository: RepairRepositoryProtocol) {
         self.repairRepository = repairRepository
     }
-    
+
     func createRepair(for carModel: CarModel, repairModel: RepairModel) throws -> RepairModel {
         try validateRepair(repairModel: repairModel)
-        
+
         do {
             let repair = try repairRepository.createRepair(repairModel: repairModel, for: carModel.id)
             debugPrint("[RepairUseCase] \(repairModel.partReplaced) successful created!")
@@ -29,7 +29,7 @@ final class RepairUseCase: RepairUseCaseProtocol {
             throw RepairError.createFailed
         }
     }
-    
+
     func fetchAllRepairs(for carModel: CarModel) throws -> [RepairModel] {
         do {
             return try repairRepository.fetchAllRepairs(for: carModel.id)
@@ -37,10 +37,10 @@ final class RepairUseCase: RepairUseCaseProtocol {
             throw RepairError.fetchFailed
         }
     }
-    
+
     func updateRepair(repairModel: RepairModel, for carModel: CarModel) throws {
         try validateRepair(repairModel: repairModel)
-        
+
         do {
             try repairRepository.updateRepair(repair: repairModel, for: carModel.id)
             debugPrint("[RepairUseCase] \(repairModel.partReplaced) successful updated!")
@@ -52,10 +52,10 @@ final class RepairUseCase: RepairUseCaseProtocol {
             throw RepairError.updateFailed
         }
     }
-    
+
     func fetchLatestRefueling(from repairs: [RepairModel]) throws -> (litres: String, date: Date) {
         let refuels = repairs.filter { $0.repairCategory == "Fuel" }
-        
+
         guard let latest = refuels.max(by: { $0.repairDate < $1.repairDate }) else {
             return (litres: "0", date: Date())
         }
@@ -63,36 +63,36 @@ final class RepairUseCase: RepairUseCaseProtocol {
         let litres = String(format: "%.1f", latest.litresFuel ?? 0)
         return (litres: litres, date: latest.repairDate)
     }
-    
+
     func fetchRepairsGroupByMonth(for repairs: [RepairModel]) throws -> [RepairGroup] {
         var result: [String: [RepairModel]] = [:]
-        
+
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ru_RU")
         formatter.dateFormat = "LLLL yyyy"
-        
+
         for repair in repairs {
             let date = repair.repairDate
-            
+
             let month = formatter.string(from: date)
             let key = month.prefix(1).capitalized + month.dropFirst()
-            
+
             if result[key] != nil {
                 result[key]?.append(repair)
             } else {
                 result[key] = [repair]
             }
         }
-        
+
         let sortedResult = result.sorted { (lhs, rhs) in
             formatter.date(from: lhs.key)! > formatter.date(from: rhs.key)!
         }
-        
+
         return sortedResult.map { (month, repairsInMonth) in
             let totalAmount = repairsInMonth.reduce(0) { $0 + Double($1.amount )}
             return RepairGroup(monthTitle: month, repairs: repairsInMonth, totalAmount: totalAmount)}
     }
-    
+
     func deleteRepair(repairModel: RepairModel) throws {
         do {
             try repairRepository.deleteRepair(repair: repairModel)
@@ -103,7 +103,7 @@ final class RepairUseCase: RepairUseCaseProtocol {
             throw RepairError.deleteFailed
         }
     }
-    
+
     func validateRepair(repairModel: RepairModel) throws {
         if repairModel.partReplaced.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             throw RepairError.missingTitle
@@ -141,16 +141,16 @@ final class RepairUseCase: RepairUseCaseProtocol {
 
 protocol RepairUseCaseProtocol {
     func createRepair(for carModel: CarModel, repairModel: RepairModel) throws -> RepairModel
-    
+
     func fetchAllRepairs(for carModel: CarModel) throws -> [RepairModel]
-    
+
     func updateRepair(repairModel: RepairModel, for carModel: CarModel) throws
-    
-    func fetchLatestRefueling(from repairs: [RepairModel]) throws -> (litres: String, date: Date) 
+
+    func fetchLatestRefueling(from repairs: [RepairModel]) throws -> (litres: String, date: Date)
 
     func fetchRepairsGroupByMonth(for repairs: [RepairModel]) throws -> [RepairGroup]
-    
+
     func deleteRepair(repairModel: RepairModel) throws
-    
+
     func validateRepair(repairModel: RepairModel) throws
 }

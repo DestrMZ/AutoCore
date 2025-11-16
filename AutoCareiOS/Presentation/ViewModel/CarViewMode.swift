@@ -11,15 +11,15 @@ import UIKit
 
 
 class CarViewModel: ObservableObject {
-    
+
     private let carUseCase: CarUseCaseProtocol
-    
+
     init(carUseCase: CarUseCaseProtocol) {
         self.carUseCase = carUseCase
-        
+
         initializeCar()
     }
-    
+
     @Published var nameModel: String = ""
     @Published var year: Int16 = 0
     @Published var vinNumber: String = ""
@@ -32,9 +32,9 @@ class CarViewModel: ObservableObject {
 
     @Published var alertMessage: String = ""
     @Published var isShowAlert: Bool = false
-    
+
     @Published var cars: [CarModel] = []
-    
+
     @Published var selectedCar: CarModel? {
         didSet {
             if let car = selectedCar {
@@ -43,7 +43,7 @@ class CarViewModel: ObservableObject {
             }
         }
     }
-  
+
     func fetchCars() {
         do {
             let result = try carUseCase.fetchAllCars()
@@ -53,10 +53,10 @@ class CarViewModel: ObservableObject {
             isShowAlert = true
         }
     }
-     
+
     func initializeCar() {
         fetchCars()
-        
+
         do {
             if let currentCar = try carUseCase.initializeCar(cars: self.cars) {
                 selectedCar = currentCar
@@ -76,7 +76,7 @@ class CarViewModel: ObservableObject {
             debugPrint("[CarViewModel] Unexpected error during initializeCar: \(error.localizedDescription)")
         }
     }
-    
+
     func populate(from carModel: CarModel) {
         self.nameModel = carModel.nameModel
         self.year = carModel.year
@@ -88,7 +88,7 @@ class CarViewModel: ObservableObject {
         self.photoCar = carModel.photoCar as Data
         self.stateNumber = carModel.stateNumber ?? ""
     }
-    
+
     func addCar(newCar: CarModel) {
         do {
             let result = try carUseCase.createCar(carModel: newCar)
@@ -101,7 +101,7 @@ class CarViewModel: ObservableObject {
             isShowAlert = true
         }
     }
-    
+
     func updateCar(carModel: CarModel) {
         do {
             try carUseCase.updateCar(carModel: carModel)
@@ -113,7 +113,7 @@ class CarViewModel: ObservableObject {
             isShowAlert = true
         }
     }
-    
+
     func updateMileage(for carModel: CarModel, newMileage: Int32) {
         do {
             try carUseCase.updateMileage(for: carModel, newMileage: newMileage)
@@ -125,11 +125,11 @@ class CarViewModel: ObservableObject {
             isShowAlert = true
         }
     }
-    
+
     func changePhotoCar(image: UIImage) {
         guard let car = self.selectedCar else { return }
         let data = image.jpegData(compressionQuality: 1) ?? Data()
-        
+
         do {
             try carUseCase.changeImage(for: car, image: data)
             // Продумать обновление состояние UI
@@ -141,7 +141,7 @@ class CarViewModel: ObservableObject {
             isShowAlert = true
         }
     }
-    
+
     func deleteCar(carModel: CarModel) {
         do {
             try carUseCase.deleteCar(carModel: carModel)

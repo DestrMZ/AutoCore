@@ -10,15 +10,15 @@ import CoreData
 
 
 class CarRepository: CarRepositoryProtocol {
-    
+
     private let context = CoreDataStack.shared.context
-    
+
     func createCar(_ carModel: CarModel) throws -> CarModel {
-        
+
         let car = Car(context: context)
-        
+
         CarMapper.mapToCoreData(carModel: carModel, entity: car)
-        
+
         do {
             try context.save()
             return CarMapper.mapToModel(entity: car)
@@ -36,11 +36,11 @@ class CarRepository: CarRepositoryProtocol {
             }
         }
     }
-    
+
     func getCar(carID: UUID) throws -> CarModel {
         let fetchRequest: NSFetchRequest<Car> = Car.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", carID as CVarArg)
-        
+
         do {
             guard let entity = try context.fetch(fetchRequest).first else {
                 debugPrint("[CarRepository] Car with ID \(carID) not found.")
@@ -52,10 +52,10 @@ class CarRepository: CarRepositoryProtocol {
             throw RepositoryError.fetchFailed
         }
     }
-    
+
     func fetchAllCars() throws -> [CarModel] {
         let fetchRequest: NSFetchRequest<Car> = Car.fetchRequest()
-        
+
         do {
             let cars = try context.fetch(fetchRequest)
             let carsModel = cars.map { CarMapper.mapToModel(entity: $0) }
@@ -65,18 +65,18 @@ class CarRepository: CarRepositoryProtocol {
             throw RepositoryError.fetchFailed
         }
     }
-    
+
     func updateCar(_ car: CarModel) throws {
         let fetchRequest: NSFetchRequest<Car> = Car.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", car.id as CVarArg)
-        
+
         do {
             guard let entity = try context.fetch(fetchRequest).first else {
                 throw RepositoryError.carNotFound
             }
-            
+
             CarMapper.mapToCoreData(carModel: car, entity: entity)
-            
+
             do {
                 try context.save()
             } catch let error as NSError {
@@ -89,13 +89,13 @@ class CarRepository: CarRepositoryProtocol {
                     throw RepositoryError.updateFailed
                 }
             }
-            
+
         } catch {
             debugPrint("[CarRepository] Failed to fetch car for update: \(error.localizedDescription)")
             throw RepositoryError.fetchFailed
         }
     }
-    
+
     func updateMileage(for car: CarModel, newMileage: Int32) throws {
         let fetchRequest: NSFetchRequest<Car> = Car.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", car.id as CVarArg)
@@ -111,16 +111,16 @@ class CarRepository: CarRepositoryProtocol {
             throw RepositoryError.updateFailed
         }
     }
-    
+
     func changeImage(for car: CarModel, image: Data) throws {
         let fetchRequest: NSFetchRequest<Car> = Car.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", car.id as CVarArg)
-        
+
         do {
             guard let entity = try context.fetch(fetchRequest).first else {
                 throw RepositoryError.carNotFound
             }
-            
+
             entity.photoCar = image
             try context.save()
         } catch {
@@ -130,7 +130,7 @@ class CarRepository: CarRepositoryProtocol {
         }
     }
 
-    
+
     func deleteCar(_ car: CarModel) throws {
         let fetchRequest: NSFetchRequest<Car> = Car.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", car.id as CVarArg)

@@ -9,12 +9,12 @@ import Foundation
 
 
 class UserStoreRepository: UserStoreRepositoryProtocol {
-    
+
     func saveLastSelectedVin(_ vin: String) {
         UserDefaults.standard.set(vin, forKey: "currentAuto")
         debugPrint("[UserSettingsRepository] Save last selected vin: \(vin)")
     }
-    
+
     func loadLastSelectedVin() -> String? {
         UserDefaults.standard.string(forKey: "currentAuto")
     }

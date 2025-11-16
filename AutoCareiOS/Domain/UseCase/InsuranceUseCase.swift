@@ -9,16 +9,16 @@ import Foundation
 
 
 final class InsuranceUseCase: InsuranceUseCaseProtocol {
-    
+
     private let insuranceRepository: InsuranceRepositoryProtocol
-    
+
     init(insuranceRepository: InsuranceRepositoryProtocol) {
         self.insuranceRepository = insuranceRepository
     }
-    
+
     func createInsurance(for carModel: CarModel, with insuranceModel: InsuranceModel) throws -> InsuranceModel {
         try validateInsurance(insuranceModel, for: carModel)
-        
+
         do {
             let insurance = try insuranceRepository.createInsurance(insuranceModel: insuranceModel, for: carModel.id)
             debugPrint("[InsuranceUseCase] \(insuranceModel.nameCompany) successful created!")
@@ -29,7 +29,7 @@ final class InsuranceUseCase: InsuranceUseCaseProtocol {
             throw InsuranceError.createFailed
         }
     }
-    
+
     func fetchAllInsurances(for carModel: CarModel) throws -> [InsuranceModel] {
         do {
             return try insuranceRepository.fetchInsurances(for: carModel.id)
@@ -37,10 +37,10 @@ final class InsuranceUseCase: InsuranceUseCaseProtocol {
             throw InsuranceError.fetchFailed
         }
     }
-    
+
     func updateInsurance(for carModel: CarModel, with insuranceModel: InsuranceModel) throws {
         try validateInsurance(insuranceModel, for: carModel)
-        
+
         do {
             try insuranceRepository.updateInsurance(insuranceModel: insuranceModel, for: carModel.id)
             debugPrint("[InsuranceUseCase] \(insuranceModel.nameCompany) successful updated!")
@@ -52,7 +52,7 @@ final class InsuranceUseCase: InsuranceUseCaseProtocol {
             throw InsuranceError.updateFailed
         }
     }
-    
+
     func deleteInsurance(insuranceModel: InsuranceModel) throws {
         do {
             try insuranceRepository.deleteInsurance(insuranceModel: insuranceModel)
@@ -63,7 +63,7 @@ final class InsuranceUseCase: InsuranceUseCaseProtocol {
             throw InsuranceError.deleteFailed
         }
     }
-    
+
     func validateInsurance(_ insuranceModel: InsuranceModel, for carModel: CarModel) throws {
         if insuranceModel.nameCompany.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             throw InsuranceError.missingCompanyName
@@ -96,12 +96,12 @@ final class InsuranceUseCase: InsuranceUseCaseProtocol {
 
 protocol InsuranceUseCaseProtocol {
     func createInsurance(for carModel: CarModel, with insuranceModel: InsuranceModel) throws -> InsuranceModel
-    
+
     func updateInsurance(for carModel: CarModel, with insuranceModel: InsuranceModel) throws
-    
+
     func fetchAllInsurances(for carModel: CarModel) throws -> [InsuranceModel]
-    
+
     func deleteInsurance(insuranceModel: InsuranceModel) throws
-    
+
     func validateInsurance(_ insuranceModel: InsuranceModel, for carModel: CarModel) throws
 }

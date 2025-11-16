@@ -10,13 +10,13 @@ import Foundation
 
 
 class RepairViewModel: ObservableObject {
-    
+
     private let repairUseCase: RepairUseCaseProtocol
-    
+
     init(repairUseCase: RepairUseCaseProtocol) {
         self.repairUseCase = repairUseCase
     }
-    
+
     @Published var nameRepair: String = ""
     @Published var repairDate: Date = Date()
     @Published var amount: Int32 = 0
@@ -27,12 +27,12 @@ class RepairViewModel: ObservableObject {
     @Published var parts: [Part] = [Part(article: "", name: "")]
 
     @Published var litresFuel: Double? = nil
-    
+
     @Published var repairs: [RepairModel] = []
-    
+
     @Published var alertMessage: String = ""
     @Published var alertShow: Bool = false
-    
+
     func addRepair(for car: CarModel, repairModel: RepairModel) {
         do {
             let repair = try repairUseCase.createRepair(for: car, repairModel: repairModel)
@@ -42,7 +42,7 @@ class RepairViewModel: ObservableObject {
             alertShow = true
         }
     }
-    
+
     func updateRepair(for car: CarModel, repairModel: RepairModel) {
         do {
             try repairUseCase.updateRepair(repairModel: repairModel, for: car)
@@ -51,7 +51,7 @@ class RepairViewModel: ObservableObject {
             alertShow = true
         }
     }
-    
+
     func fetchAllRepairs(for car: CarModel) {
         do {
             self.repairs = try repairUseCase.fetchAllRepairs(for: car)
@@ -59,7 +59,7 @@ class RepairViewModel: ObservableObject {
             alertMessage = "\(error.localizedDescription)"
         }
     }
-    
+
     func getLastRefuel(repairs: [RepairModel]) -> (litres: String, date: Date) {
         do {
             return try repairUseCase.fetchLatestRefueling(from: repairs)
@@ -68,7 +68,7 @@ class RepairViewModel: ObservableObject {
             return (litres: "None", date: Date())
         }
     }
-    
+
     func fetchRepairsGroupByMonth(for repairs: [RepairModel]) -> [RepairGroup] {
         do {
             return try repairUseCase.fetchRepairsGroupByMonth(for: repairs)
@@ -77,7 +77,7 @@ class RepairViewModel: ObservableObject {
             return []
         }
     }
-    
+
     func deleteRepair(repair: RepairModel) {
         do {
             try repairUseCase.deleteRepair(repairModel: repair)
@@ -89,7 +89,7 @@ class RepairViewModel: ObservableObject {
             alertShow = true
         }
     }
-    
+
     func toRepairModel() -> RepairModel {
         return RepairModel(
             id: UUID(),
@@ -104,7 +104,7 @@ class RepairViewModel: ObservableObject {
             repairMileage: self.mileage
         )
     }
-    
+
 //     MARK: Method for work struct Part
     func addPart(for parts: inout [Part]) {
         parts.append(Part(article: "", name: ""))
