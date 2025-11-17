@@ -9,6 +9,8 @@ import SwiftUI
 
 struct CarSelectionCarouselView: View {
     
+    private var carStore: CarStore
+    
     @EnvironmentObject var carViewModel: CarViewModel
     @Environment(\.dismiss) var dismiss
     
@@ -19,6 +21,11 @@ struct CarSelectionCarouselView: View {
     @State var showDeleteConfirmantion: Bool = false
     @State var сarForRemoval: String = ""
     @State var carToDelete: CarModel? = nil
+    
+    init(carStore: CarStore, isSelecting: Binding<Bool>) {
+        self.carStore = carStore
+        self._isSelecting = isSelecting
+    }
     
     var body: some View {
         
@@ -70,7 +77,7 @@ struct CarSelectionCarouselView: View {
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
         }
         .fullScreenCover(isPresented: $isAdditingNewCar) {
-            AddCarView()
+            AddCarView(carStore: carStore)
         }
         .alert(isPresented: $showDeleteConfirmantion) {
             Alert(title: Text("Delete car"),

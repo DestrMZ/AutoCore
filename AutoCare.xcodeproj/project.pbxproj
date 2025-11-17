@@ -70,7 +70,7 @@
 				Presentation/Features/Car/Add/Common/AddCarDetailsSection.swift,
 				Presentation/Features/Car/Add/Common/AddCarHeaderView.swift,
 				Presentation/Features/Car/Add/Common/AddCarMainInfoSection.swift,
-				Presentation/Features/Car/Add/Common/AddCarPhotoSection.swift,
+				Presentation/Features/Car/Add/Common/CarCardView.swift,
 				Presentation/Features/Car/Dashboard/CarProfileView.swift,
 				Presentation/Features/Car/Dashboard/CarTabContainerView.swift,
 				Presentation/Features/Car/Dashboard/Common/AddNewCarView.swift,

@@ -11,6 +11,8 @@ import TipKit
 
 struct CarProfileView: View {
     
+    private let carStore: CarStore
+    
     @EnvironmentObject var carViewModel: CarViewModel
     @Environment(\.dismiss) var dismiss
 
@@ -18,6 +20,11 @@ struct CarProfileView: View {
     @State var showQuestionMark: Bool = false
     
     @Binding var showTapBar: Bool
+    
+    init(carStore: CarStore, showTapBar: Binding<Bool>) {
+        self.carStore = carStore
+        _showTapBar = showTapBar
+    }
    
     var body: some View {
         NavigationStack {
@@ -86,7 +93,7 @@ struct CarProfileView: View {
                 .padding(.bottom, 80)
                 
                 if isSelecting {
-                    CarSelectionCarouselView(isSelecting: $isSelecting)
+                    CarSelectionCarouselView(carStore: carStore, isSelecting: $isSelecting)
                         .transition(.move(edge: .top).combined(with: .opacity))
                         .zIndex(1)
                         .onAppear {
