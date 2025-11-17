@@ -13,8 +13,6 @@ class InsuranceRepository: InsuranceRepositoryProtocol {
 
     private let context = CoreDataStack.shared.context
 
-    let test: Int = 32.1
-
     func createInsurance(insuranceModel: InsuranceModel, for carID: UUID) throws -> InsuranceModel {
 
         let fetchRequest: NSFetchRequest<Car> = Car.fetchRequest()
@@ -101,4 +99,15 @@ class InsuranceRepository: InsuranceRepositoryProtocol {
             throw RepositoryError.deleteFailed
         }
     }
+}
+
+
+protocol InsuranceRepositoryProtocol {
+    func createInsurance(insuranceModel: InsuranceModel, for carID: UUID) throws -> InsuranceModel
+    
+    func fetchInsurances(for carID: UUID) throws -> [InsuranceModel]
+    
+    func updateInsurance(insuranceModel: InsuranceModel, for carID: UUID) throws
+    
+    func deleteInsurance(insuranceModel: InsuranceModel) throws
 }

@@ -34,5 +34,5 @@ struct AddButtonView: View {
 
 
 #Preview {
-    AddCarView()
+    AddButtonView(isPresented: .constant(false))
 }

@@ -17,6 +17,8 @@ enum InsuranceError: Error, LocalizedError {
     case startDateAfterEndDate
     case endDateInPast
     case notificationSetInPast
+    case notificationAfterEndDate
+    case notificationBeforeStartDate
     case carNotFound
     case insuranceNotFound
 
@@ -46,6 +48,10 @@ enum InsuranceError: Error, LocalizedError {
             return "End date cannot be in the past."
         case .notificationSetInPast:
             return "Notification date cannot be set in the past."
+        case .notificationAfterEndDate:
+            return "Notification date must be before the insurance end date."
+        case .notificationBeforeStartDate:
+            return "Notification date cannot be earlier than the insurance start date."
 
         // Ошибки хранилища
         case .saveFailed:

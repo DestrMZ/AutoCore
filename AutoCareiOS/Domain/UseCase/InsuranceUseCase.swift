@@ -86,8 +86,18 @@ final class InsuranceUseCase: InsuranceUseCaseProtocol {
         }
 
         if let notificationDate = insuranceModel.notificationDate {
-            if notificationDate < Date() {
+            let now = Date()
+
+            if notificationDate < now {
                 throw InsuranceError.notificationSetInPast
+            }
+
+            if notificationDate > insuranceModel.endDate {
+                throw InsuranceError.notificationAfterEndDate
+            }
+
+            if notificationDate < insuranceModel.startDate {
+                throw InsuranceError.notificationBeforeStartDate
             }
         }
     }

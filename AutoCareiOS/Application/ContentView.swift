@@ -11,10 +11,16 @@ import SwiftUI
 
 struct ContentView: View {
     
+    @EnvironmentObject var carStore: CarStore
+    @EnvironmentObject var repairStore: RepairStore
+    @EnvironmentObject var insuranceStore: InsuranceStore
     
     var body: some View {
         VStack {
-            MainView()
+            MainView(
+                carStore: carStore,
+                repairStore: repairStore,
+                insuranceStore: insuranceStore)
         }
     }
 }

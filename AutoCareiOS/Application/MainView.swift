@@ -9,10 +9,20 @@ import SwiftUI
 
 struct MainView: View {
     
+    let carStore: CarStore
+    let repairStore: RepairStore
+    let insuranceStore: InsuranceStore
+    
     @Namespace private var animationNamespace
     
     @State private var selectedTab: CustomTapBar.TabItems = .cars
     @State private var showTapBar: Bool = true
+    
+    init(carStore: CarStore, repairStore: RepairStore, insuranceStore: InsuranceStore) {
+        self.carStore = carStore
+        self.repairStore = repairStore
+        self.insuranceStore = insuranceStore
+    }
     
     var body: some View {
         ZStack {

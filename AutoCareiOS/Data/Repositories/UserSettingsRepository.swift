@@ -19,3 +19,10 @@ class UserStoreRepository: UserStoreRepositoryProtocol {
         UserDefaults.standard.string(forKey: "currentAuto")
     }
 }
+
+
+protocol UserStoreRepositoryProtocol {
+    func saveLastSelectedVin(_ vin: String)
+    
+    func loadLastSelectedVin() -> String?
+}

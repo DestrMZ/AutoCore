@@ -28,14 +28,27 @@ final class InsuranceStore: ObservableObject {
     func addInsurance(for car: CarModel, insuranceModel: InsuranceModel) throws {
         let created = try insuranceUseCase.createInsurance(for: car, with: insuranceModel)
         self.insurances.append(created)
+        
+        if let date = created.notificationDate {
+            NotificationService.shared.scheduleNotification(
+                id: created.id.uuidString,
+                title: "Your insurance is expiring soon",
+                body: "\(created.type) expires on \(created.endDate). Don’t forget to renew it.",
+                date: date)
+        }
     }
 
     func updateInsurance(for car: CarModel, insuranceModel: InsuranceModel) throws {
+        guard let oldModel = insurances.first(where: { $0.id == insuranceModel.id }) else {
+            throw InsuranceError.insuranceNotFound}
+        
         try insuranceUseCase.updateInsurance(for: car, with: insuranceModel)
 
         if let index = insurances.firstIndex(where: { $0.id == insuranceModel.id }) {
             insurances[index] = insuranceModel
         }
+        
+        handleInsuranceNotificationUpdate(old: oldModel, new: insuranceModel)
     }
 
     func selectInsurance(_ insurance: InsuranceModel?) {
@@ -54,5 +67,47 @@ final class InsuranceStore: ObservableObject {
         if selectedInsurance == insuranceModel {
             selectedInsurance = nil
         }
+    }
+    
+    private func handleInsuranceNotificationUpdate(old: InsuranceModel, new: InsuranceModel) {
+        let id = new.id.uuidString
+        let oldDate = old.notificationDate
+        let newDate = new.notificationDate
+        
+        if oldDate == nil, newDate == nil {
+            debugPrint("Notification unchanged (nil → nil) for \(id)")
+            return
+        }
+        
+        if oldDate != nil, newDate == nil {
+            NotificationService.shared.removeNotification(id: id)
+            debugPrint("Notification was removed for \(id)")
+            return
+        }
+        
+        if oldDate == nil, let newDate {
+            NotificationService.shared.scheduleNotification(
+                id: id,
+                title: "Insurance reminder",
+                body: "Your \(new.type) insurance expires on \(new.endDate.formatted(date: .long, time: .omitted)).",
+                date: newDate
+            )
+            debugPrint("Added new notification for \(id)")
+            return
+        }
+        
+        if let oldDate, let newDate, oldDate != newDate {
+            NotificationService.shared.removeNotification(id: id)
+            NotificationService.shared.scheduleNotification(
+                id: id,
+                title: "Insurance reminder",
+                body: "Your \(new.type) insurance expires on \(new.endDate.formatted(date: .long, time: .omitted)).",
+                date: newDate
+            )
+            debugPrint("Updated notification for \(id)")
+            return
+        }
+
+        debugPrint("Notification unchanged for \(id)")
     }
 }

@@ -99,3 +99,15 @@ class RepairRepository: RepairRepositoryProtocol {
         }
     }
 }
+
+
+protocol RepairRepositoryProtocol {
+    func createRepair(repairModel: RepairModel, for carID: UUID) throws -> RepairModel
+    
+    func fetchAllRepairs(for carID: UUID) throws -> [RepairModel]
+    
+    func updateRepair(repair: RepairModel, for carID: UUID) throws
+    
+    func deleteRepair(repair: RepairModel) throws
+}
+
