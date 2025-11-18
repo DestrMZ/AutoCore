@@ -18,7 +18,7 @@ struct SelectRowCarView: View {
         
         VStack(alignment: .leading) {
             HStack {
-                if let image = UIImage(data: car.photoCar) {
+                if let image = UIImage(data: car.photoCar ?? Data()) {
                     Image(uiImage: image)
                         .resizable()
                         .aspectRatio(contentMode: .fill)

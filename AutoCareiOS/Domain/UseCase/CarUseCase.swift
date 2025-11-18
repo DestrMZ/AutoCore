@@ -14,8 +14,6 @@ final class CarUseCase: CarUseCaseProtocol {
     private let carRepository: CarRepositoryProtocol
     private let userStoreRepository: UserStoreRepositoryProtocol
 
-    let selectedCarPublisher: PassthroughSubject<CarModel, Never> = .init()
-
     init(carRepository: CarRepositoryProtocol, userStoreRepository: UserStoreRepositoryProtocol) {
         self.carRepository = carRepository
         self.userStoreRepository = userStoreRepository
@@ -23,8 +21,7 @@ final class CarUseCase: CarUseCaseProtocol {
 
     func selectCar(car: CarModel) {
         userStoreRepository.saveLastSelectedVin(car.vinNumbers)
-        selectedCarPublisher.send(car)
-        debugPrint("Combine: Natification send - selected car -> \(car.id)")
+        debugPrint("CarUseCase: selected car -> \(car.id)")
     }
 
     func initializeCar(cars: [CarModel]) throws -> CarModel? {

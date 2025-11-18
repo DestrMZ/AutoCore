@@ -37,7 +37,7 @@ struct CarMapper {
         entity.engineType = carModel.engineType
         entity.transmissionType = carModel.transmissionType
         entity.mileage = carModel.mileage
-        entity.photoCar = carModel.photoCar
+        entity.photoCar = carModel.photoCar ?? Data()
         entity.vinNumber = carModel.vinNumbers
         entity.stateNumber = carModel.stateNumber
     }

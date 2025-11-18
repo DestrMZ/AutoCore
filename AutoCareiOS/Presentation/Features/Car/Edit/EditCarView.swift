@@ -38,7 +38,7 @@ struct EditCarView: View {
             tempColor = car.color ?? "Default color"
             tempEngineType = EngineTypeEnum(rawValue: car.engineType) ?? .gasoline
             tempTransmissionType = TransmissionTypeEnum(rawValue: car.transmissionType) ?? .automatic
-            avatarImage = UIImage(data: car.photoCar)
+            avatarImage = UIImage(data: car.photoCar ?? Data())
         }
     }
     

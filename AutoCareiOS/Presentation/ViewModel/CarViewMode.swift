@@ -85,7 +85,7 @@ class CarViewModel: ObservableObject {
         self.mileage = carModel.mileage
         self.engineType = EngineTypeEnum(rawValue: carModel.engineType) ?? .gasoline
         self.transmissionType = TransmissionTypeEnum(rawValue: carModel.transmissionType) ?? .manual
-        self.photoCar = carModel.photoCar as Data
+        self.photoCar = carModel.photoCar! as Data
         self.stateNumber = carModel.stateNumber ?? ""
     }
 

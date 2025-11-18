@@ -13,8 +13,9 @@ struct CarProfileView: View {
     
     private let carStore: CarStore
     
-    @EnvironmentObject var carViewModel: CarViewModel
-    @Environment(\.dismiss) var dismiss
+    @StateObject var vm: DashboardViewModel
+    
+    @Environment(\.dismiss) private var dismiss
 
     @State var isSelecting: Bool = false
     @State var showQuestionMark: Bool = false
@@ -23,6 +24,7 @@ struct CarProfileView: View {
     
     init(carStore: CarStore, showTapBar: Binding<Bool>) {
         self.carStore = carStore
+        self._vm = StateObject(wrappedValue: DashboardViewModel(carStore: carStore))
         _showTapBar = showTapBar
     }
    

@@ -19,14 +19,31 @@ final class CarStore: ObservableObject {
 
     init(carUseCase: CarUseCaseProtocol) {
         self.carUseCase = carUseCase
+        Task { await initialize() }
+    }
+    
+    func initialize() async {
+        do {
+            let cars = fetchCars()
+            self.cars = cars
+            
+            if let currentCar = try carUseCase.initializeCar(cars: cars) {
+                self.selectedCar = currentCar
+            } else { selectedCar = nil }
+        } catch {
+            debugPrint("[CarStore]: No cars available.")
+            self.cars = []
+            self.selectedCar = nil
+        }
     }
 
-    func loadCars() throws {
-        let fetchedCars = try self.carUseCase.fetchAllCars()
-        let initial = try self.carUseCase.initializeCar(cars: fetchedCars)
-
-        self.cars = fetchedCars
-        self.selectedCar = initial
+    func fetchCars() -> [CarModel] {
+        do {
+            return try carUseCase.fetchAllCars()
+        } catch {
+            debugPrint("CarStore: Cars not found.")
+            return []
+        }
     }
 
     func selectCar(_ car: CarModel) {

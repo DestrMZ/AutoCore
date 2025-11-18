@@ -16,7 +16,7 @@ struct CarModel: Identifiable, Equatable {
     var engineType: String
     var transmissionType: String
     var mileage: Int32
-    var photoCar: Data
+    var photoCar: Data?
     var vinNumbers: String
     var repairs: [RepairModel]?
     var insurance: [InsuranceModel]?

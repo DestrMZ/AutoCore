@@ -10,6 +10,8 @@ import PhotosUI
 
 struct AddCarView: View {
     
+    private let carStore: CarStore
+    
     @StateObject private var vm: AddCarViewModel
     
     @Environment(\.dismiss) private var dismiss
@@ -19,6 +21,7 @@ struct AddCarView: View {
     @FocusState private var isKeyboardActive: Bool
     
     init(carStore: CarStore) {
+        self.carStore = carStore
         self._vm = StateObject(wrappedValue: AddCarViewModel(carStore: carStore))
     }
     
@@ -31,6 +34,7 @@ struct AddCarView: View {
                     vin: $vm.vinNumber,
                     mileage: $vm.mileageText,
                     avatarImage: $avatarImage)
+                .padding()
                 Divider()
                 
                 ScrollView {
@@ -40,13 +44,13 @@ struct AddCarView: View {
                             year: $vm.yearText,
                             vinNumber: $vm.vinNumber,
                             stateNumber: $vm.stateNumber,
-                            mileage: $vm.mileageText)
+                            mileage: $vm.mileageText,
+                            color: $vm.color)
                         .focused($isKeyboardActive)
 
                         AddCarDetailsSection(
                             engineType: $vm.engineType,
-                            transmissionType: $vm.transmissionType,
-                            color: $vm.color)
+                            transmissionType: $vm.transmissionType)
                         .focused($isKeyboardActive)
                     }
                     .padding(.horizontal, 20)
@@ -60,19 +64,16 @@ struct AddCarView: View {
                         if let avatarImage, let data = avatarImage.jpegData(compressionQuality: 1) {
                             vm.photoData = data
                         }
-                        
                         vm.saveCar()
-                        
                         if !vm.isShowAlert {
                             dismiss()
-                            
                         }
                     }
                 }
                 
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
-                        
+                        dismiss()
                     }
                 }
                 
@@ -89,7 +90,7 @@ struct AddCarView: View {
             }
             .alert(isPresented: $vm.isShowAlert) {
                 Alert(
-                    title: Text("Notice"),
+                    title: Text("Ops..."),
                     message: Text(vm.alertMessage),
                     dismissButton: .default(Text("OK"))
                 )
@@ -104,9 +105,7 @@ struct AddCarView: View {
     
     let mockUseCase = CarUseCase(carRepository: mockRepository, userStoreRepository: mockUser)
     
-    
     let carStore = CarStore(carUseCase: mockUseCase)
-    
     
     AddCarView(carStore: carStore)
 }

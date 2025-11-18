@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 @MainActor
@@ -21,8 +22,7 @@ final class AddCarViewModel: ObservableObject {
     @Published var engineType: EngineTypeEnum = .gasoline
     @Published var transmissionType: TransmissionTypeEnum = .automatic
     @Published var stateNumber: String = ""
-    
-    @Published var photoData: Data = Data()
+    @Published var photoData: Data? = nil
     
     @Published var alertMessage: String = ""
     @Published var isShowAlert: Bool = false
