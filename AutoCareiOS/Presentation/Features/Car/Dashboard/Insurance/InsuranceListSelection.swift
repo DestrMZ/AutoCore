@@ -9,13 +9,18 @@ import SwiftUI
 
 struct InsuranceListSelection: View {
     
-    @EnvironmentObject var insuranceViewModel: InsuranceViewModel
+    @StateObject private var vm: InsuranceViewModel
     @Environment(\.dismiss) var dismiss
     
     @State var showSheet: Bool = false
     @State var showDeleteConfirmation: Bool = false
     
     var selectedCar: CarModel
+    
+    init(insuranceStore: InsuranceStore, selectedCar: CarModel) {
+        self._vm = StateObject(wrappedValue: InsuranceViewModel(insuranceStore: insuranceStore))
+        self.selectedCar = selectedCar
+    }
    
     var body: some View {
         NavigationStack {
@@ -34,12 +39,12 @@ struct InsuranceListSelection: View {
                             .clipShape(Circle())
                     }
                     .sheet(isPresented: $showSheet) {
-                        AddInsuranceSheet(car: selectedCar)
+                        AddInsuranceSheet(vm: vm, car: selectedCar)
                     }
                 }
                 .padding(.horizontal, 10)
                 
-                if insuranceViewModel.insurances.isEmpty {
+                if vm.insurances.isEmpty {
                     VStack(alignment: .center, spacing: 12) {
                         Image(systemName: "doc.plaintext")
                             .resizable()
@@ -63,7 +68,7 @@ struct InsuranceListSelection: View {
                     .background(.ultraThinMaterial)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
                 } else {
-                    ForEach(insuranceViewModel.insurances, id: \.id) { insurance in
+                    ForEach(vm.insurances, id: \.id) { insurance in
                         InsuranceCardView(
                             insuranceCompany: insurance.nameCompany,
                             insuranceType: insurance.type,
@@ -71,7 +76,7 @@ struct InsuranceListSelection: View {
                             endDate: insurance.endDate)
                         .contextMenu {
                             Button(action: {
-                                insuranceViewModel.loadInsuranceInfo(from: insurance)
+                                vm.loadInsuranceInfo(from: insurance)
                                 showSheet = true
                             }) {
                                 Label("Edit", systemImage: "pencil")
@@ -85,7 +90,7 @@ struct InsuranceListSelection: View {
                         }
                         .alert("Confirm deletion?", isPresented: $showDeleteConfirmation) {
                             Button("Yes", role: .destructive) {
-                                insuranceViewModel.deleteInsurance(insuranceModel: insurance)
+                                vm.deleteInsurance(insurance)
                             }
                             Button("Cancel", role: .cancel) { dismiss() }
                         }
@@ -94,15 +99,26 @@ struct InsuranceListSelection: View {
             }
         }
         .onAppear {
-            insuranceViewModel.fetchAllInsurance(for: selectedCar)
+            vm.fetchAllInsurance(for: selectedCar)
         }
         .onChange(of: selectedCar) { newValue in
-            insuranceViewModel.fetchAllInsurance(for: newValue)
+            vm.fetchAllInsurance(for: newValue)
         }
     }
 }
 
 
-//#Preview {
-//    InsuranceListSelection(insuranceViewModel: InsuranceViewModel())
-//}
+#Preview {
+    let mockCar = CarModel(id: UUID(), nameModel: "Tesla Model 3", year: 2023, engineType: "Gasoline", transmissionType: "Manual", mileage: 12000, vinNumbers: "5YJ3E1EA7JF123456")
+    
+    let insuranceModel = InsuranceModel(id: UUID(), type: "КАСКО", nameCompany: "Сберстрахование", startDate: Date().addingTimeInterval(-86_400), endDate: Date().addingTimeInterval(86_400), price: 22_000, isActive: true)
+    
+    let mockStore = InsuranceStore(insuranceUseCase: InsuranceUseCase(insuranceRepository: MockInsuranceRepository()))
+    
+    let mockVM = InsuranceViewModel(insuranceStore: mockStore)
+    
+    mockVM.addInsurance(for: mockCar, insurance: insuranceModel)
+
+    return InsuranceListSelection(insuranceStore: mockStore, selectedCar: mockCar)
+        .environmentObject(mockVM)
+}
