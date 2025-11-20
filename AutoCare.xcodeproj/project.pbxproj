@@ -11,6 +11,16 @@
 		5C158F542DC74DBD00BEC527 /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 5C158F532DC74DBD00BEC527 /* DGCharts */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		5CC946872ECF795700D8E77F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5C2004FE2CB714BA0058D993 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5C2005052CB714BA0058D993;
+			remoteInfo = AutoCareiOS;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		5CF673C12D80929E00BC73C8 /* Embed Watch Content */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -26,6 +36,7 @@
 
 /* Begin PBXFileReference section */
 		5C2005062CB714BB0058D993 /* AutoCareiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AutoCareiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5CC946832ECF795700D8E77F /* AutoCareiOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AutoCareiOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -150,11 +161,26 @@
 				Shared/Utils/Mappers/RepairMapper.swift,
 				Shared/WatchBridge/ExpensFromWatchOS.swift,
 				Task.md,
+			);
+			target = 5C2005052CB714BA0058D993 /* AutoCareiOS */;
+		};
+		5CC9469B2ECF7BAC00D8E77F /* Exceptions for "AutoCareiOSTests" folder in "AutoCareiOS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
 				Tests/Mocks/Repositories/MockCarRepository.swift,
 				Tests/Mocks/Repositories/MockInsuranceRepository.swift,
 				Tests/Mocks/Repositories/MockRepairRepository.swift,
 			);
 			target = 5C2005052CB714BA0058D993 /* AutoCareiOS */;
+		};
+		5CC9469C2ECF7BAC00D8E77F /* Exceptions for "AutoCareiOSTests" folder in "AutoCareiOSTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Tests/Mocks/Repositories/MockCarRepository.swift,
+				Tests/Mocks/Repositories/MockInsuranceRepository.swift,
+				Tests/Mocks/Repositories/MockRepairRepository.swift,
+			);
+			target = 5CC946822ECF795700D8E77F /* AutoCareiOSTests */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -165,6 +191,15 @@
 				5C18EE1E2DB567B5009BE4ED /* Exceptions for "AutoCareiOS" folder in "AutoCareiOS" target */,
 			);
 			path = AutoCareiOS;
+			sourceTree = "<group>";
+		};
+		5CC946842ECF795700D8E77F /* AutoCareiOSTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				5CC9469B2ECF7BAC00D8E77F /* Exceptions for "AutoCareiOSTests" folder in "AutoCareiOS" target */,
+				5CC9469C2ECF7BAC00D8E77F /* Exceptions for "AutoCareiOSTests" folder in "AutoCareiOSTests" target */,
+			);
+			path = AutoCareiOSTests;
 			sourceTree = "<group>";
 		};
 		5CF673B12D80929C00BC73C8 /* AutoCareWatchOS */ = {
@@ -184,6 +219,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5CC946802ECF795700D8E77F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -192,6 +234,7 @@
 			children = (
 				5C18EDEA2DB567B5009BE4ED /* AutoCareiOS */,
 				5CF673B12D80929C00BC73C8 /* AutoCareWatchOS */,
+				5CC946842ECF795700D8E77F /* AutoCareiOSTests */,
 				5C2005072CB714BB0058D993 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -200,6 +243,7 @@
 			isa = PBXGroup;
 			children = (
 				5C2005062CB714BB0058D993 /* AutoCareiOS.app */,
+				5CC946832ECF795700D8E77F /* AutoCareiOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -229,6 +273,29 @@
 			productReference = 5C2005062CB714BB0058D993 /* AutoCareiOS.app */;
 			productType = "com.apple.product-type.application";
 		};
+		5CC946822ECF795700D8E77F /* AutoCareiOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5CC9468B2ECF795700D8E77F /* Build configuration list for PBXNativeTarget "AutoCareiOSTests" */;
+			buildPhases = (
+				5CC9467F2ECF795700D8E77F /* Sources */,
+				5CC946802ECF795700D8E77F /* Frameworks */,
+				5CC946812ECF795700D8E77F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5CC946882ECF795700D8E77F /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				5CC946842ECF795700D8E77F /* AutoCareiOSTests */,
+			);
+			name = AutoCareiOSTests;
+			packageProductDependencies = (
+			);
+			productName = AutoCareiOSTests;
+			productReference = 5CC946832ECF795700D8E77F /* AutoCareiOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -236,11 +303,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1620;
+				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 1640;
 				TargetAttributes = {
 					5C2005052CB714BA0058D993 = {
 						CreatedOnToolsVersion = 16.0;
+					};
+					5CC946822ECF795700D8E77F = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 5C2005052CB714BA0058D993;
 					};
 				};
 			};
@@ -264,12 +335,20 @@
 			projectRoot = "";
 			targets = (
 				5C2005052CB714BA0058D993 /* AutoCareiOS */,
+				5CC946822ECF795700D8E77F /* AutoCareiOSTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		5C2005042CB714BA0058D993 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CC946812ECF795700D8E77F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -286,7 +365,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5CC9467F2ECF795700D8E77F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5CC946882ECF795700D8E77F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5C2005052CB714BA0058D993 /* AutoCareiOS */;
+			targetProxy = 5CC946872ECF795700D8E77F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		5C2005172CB714BC0058D993 /* Debug */ = {
@@ -494,6 +588,58 @@
 			};
 			name = Release;
 		};
+		5CC946892ECF795700D8E77F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CHU99933X5;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ivanMaslennikov.AutoCareiOSTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AutoCareiOS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AutoCareiOS";
+			};
+			name = Debug;
+		};
+		5CC9468A2ECF795700D8E77F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CHU99933X5;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ivanMaslennikov.AutoCareiOSTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AutoCareiOS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AutoCareiOS";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -511,6 +657,15 @@
 			buildConfigurations = (
 				5C20051A2CB714BC0058D993 /* Debug */,
 				5C20051B2CB714BC0058D993 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5CC9468B2ECF795700D8E77F /* Build configuration list for PBXNativeTarget "AutoCareiOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5CC946892ECF795700D8E77F /* Debug */,
+				5CC9468A2ECF795700D8E77F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
