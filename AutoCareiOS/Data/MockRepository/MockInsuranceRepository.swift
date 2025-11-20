@@ -6,8 +6,6 @@
 //
 
 import Foundation
-@testable import AutoCareiOS
-
 
 final class MockInsuranceRepository: InsuranceRepositoryProtocol {
     

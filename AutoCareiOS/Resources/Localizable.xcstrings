@@ -52,9 +52,6 @@
     "%@ L" : {
 
     },
-    "%d mi" : {
-
-    },
     "%d miles" : {
       "extractionState" : "stale",
       "localizations" : {

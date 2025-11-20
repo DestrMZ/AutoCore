@@ -55,7 +55,7 @@ struct RefuelCardView: View {
         .shadow(radius: 3)
         .contentShape(Rectangle())
         .onAppear(perform: updateRefuelData)
-        .onChange(of: carViewModel.selectedCar) { _ in updateRefuelData() }
+//        .onChange(of: carViewModel.selectedCar) { _ in updateRefuelData() }
     }
 
     private func updateRefuelData() {

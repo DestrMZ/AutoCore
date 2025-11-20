@@ -18,7 +18,7 @@ struct MileageCardView: View {
                 Text("Mileage")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                Text("\(carViewModel.mileage) mi") 
+//                Text("\(carViewModel.mileage) mi") 
                     .font(.headline)
                     .foregroundStyle(.primary)
             }

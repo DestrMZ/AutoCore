@@ -6,7 +6,6 @@
 //
 
 import Foundation
-@testable import AutoCareiOS
 
 
 final class MockRepairRepository: RepairRepositoryProtocol {
