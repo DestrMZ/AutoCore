@@ -9,9 +9,9 @@ import Foundation
 import UserNotifications
 
 
-class NotificationService {
+final class NotificationService: NotificationServiceProtocol {
     
-    static let shared = NotificationService()
+//    static let shared = NotificationService()
     
     func scheduleNotification(id: String, title: String, body: String, date: Date) {
         let content = UNMutableNotificationContent()
@@ -38,4 +38,11 @@ class NotificationService {
             }
         }
     }
+}
+
+
+protocol NotificationServiceProtocol {
+    func scheduleNotification(id: String, title: String, body: String, date: Date)
+    func removeNotification(id: String)
+    func requestNotificationPermission()
 }

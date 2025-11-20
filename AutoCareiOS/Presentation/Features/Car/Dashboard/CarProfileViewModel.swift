@@ -54,5 +54,17 @@ final class CarProfileViewModel: ObservableObject {
         self.carStore.selectCar(carModel)
     }
     
+    func deleteCar(car: CarModel) {
+        do {
+            try carStore.deleteCar(car)
+        } catch {
+            handleError(error)
+        }
+    }
+    
+    private func handleError(_ error: Error) {
+        alertMessage = error.localizedDescription
+        isShowAlert = true
+    }
 }
 

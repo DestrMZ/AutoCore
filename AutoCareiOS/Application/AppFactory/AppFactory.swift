@@ -24,6 +24,9 @@ final class AppFactory {
     
     // MARK: Global ViewModel
     lazy var settingsViewModel = SettingsViewModel()
+    
+    // MARK: Service
+    lazy var notificationService = NotificationService()
 }
 
 

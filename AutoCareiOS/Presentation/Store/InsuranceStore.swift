@@ -12,12 +12,14 @@ import Foundation
 final class InsuranceStore: ObservableObject {
 
     private let insuranceUseCase: InsuranceUseCaseProtocol
+    private var notificationService: NotificationServiceProtocol = NotificationService()
 
     @Published private(set) var insurances: [InsuranceModel] = []
     @Published private(set) var selectedInsurance: InsuranceModel? = nil
 
-    init(insuranceUseCase: InsuranceUseCaseProtocol) {
+    init(insuranceUseCase: InsuranceUseCaseProtocol, notificationService: NotificationServiceProtocol = NotificationService()) {
         self.insuranceUseCase = insuranceUseCase
+        self.notificationService = notificationService
     }
 
     func loadInsurances(for car: CarModel) throws {
@@ -30,7 +32,7 @@ final class InsuranceStore: ObservableObject {
         self.insurances.append(created)
         
         if let date = created.notificationDate {
-            NotificationService.shared.scheduleNotification(
+            notificationService.scheduleNotification(
                 id: created.id.uuidString,
                 title: "Your insurance is expiring soon",
                 body: "\(created.type) expires on \(created.endDate). Don’t forget to renew it.",
@@ -62,7 +64,7 @@ final class InsuranceStore: ObservableObject {
             insurances.remove(at: index)
         }
 
-        NotificationService.shared.removeNotification(id: insuranceModel.id.uuidString)
+        notificationService.removeNotification(id: insuranceModel.id.uuidString)
 
         if selectedInsurance == insuranceModel {
             selectedInsurance = nil
@@ -80,13 +82,13 @@ final class InsuranceStore: ObservableObject {
         }
         
         if oldDate != nil, newDate == nil {
-            NotificationService.shared.removeNotification(id: id)
+            notificationService.removeNotification(id: id)
             debugPrint("Notification was removed for \(id)")
             return
         }
         
         if oldDate == nil, let newDate {
-            NotificationService.shared.scheduleNotification(
+            notificationService.scheduleNotification(
                 id: id,
                 title: "Insurance reminder",
                 body: "Your \(new.type) insurance expires on \(new.endDate.formatted(date: .long, time: .omitted)).",
@@ -97,8 +99,8 @@ final class InsuranceStore: ObservableObject {
         }
         
         if let oldDate, let newDate, oldDate != newDate {
-            NotificationService.shared.removeNotification(id: id)
-            NotificationService.shared.scheduleNotification(
+            notificationService.removeNotification(id: id)
+            notificationService.scheduleNotification(
                 id: id,
                 title: "Insurance reminder",
                 body: "Your \(new.type) insurance expires on \(new.endDate.formatted(date: .long, time: .omitted)).",

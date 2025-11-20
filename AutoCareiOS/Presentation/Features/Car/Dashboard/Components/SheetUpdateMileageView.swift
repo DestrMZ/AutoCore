@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct SheetUpdateMileageView: View {
-    @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var carViewModel: CarViewModel
     
+    @ObservedObject var carProfileViewModel: CarProfileViewModel
+
+    @Environment(\.dismiss) var dismiss
+
     @State var newMileage: String = ""
     @State var showAlert: Bool = false
     @State var alertTitle: String = ""
@@ -24,14 +26,14 @@ struct SheetUpdateMileageView: View {
                         .padding(.horizontal)
 
                     Button(action: {
-                        if let car = carViewModel.selectedCar {
+                        if let car = carProfileViewModel.selectedCar {
                             guard let mileageInt = Int32(newMileage) else {
                                 alertTitle = NSLocalizedString("Invalid mileage format", comment: "")
                                 showAlert = true
                                 return
                             }
                             
-                            carViewModel.updateMileage(for: car, newMileage: mileageInt)
+//                            carProfileViewModel.updateMileage(for: car, newMileage: mileageInt)
                         }
                     }) {
                         Label(NSLocalizedString("Update Mileage", comment: ""), systemImage: "checkmark.circle.fill")

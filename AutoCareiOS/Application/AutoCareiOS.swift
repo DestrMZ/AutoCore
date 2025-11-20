@@ -12,6 +12,8 @@ struct AutoCareiOS: App {
     
     static let factory = AppFactory.shared
     
+    private let notificationService: NotificationServiceProtocol = NotificationService()
+    
     @StateObject private var carStore: CarStore
     @StateObject private var repairStore: RepairStore
     @StateObject private var insuranceStore: InsuranceStore
@@ -19,7 +21,7 @@ struct AutoCareiOS: App {
     init() {
         _carStore = StateObject(wrappedValue: CarStore(carUseCase: Self.factory.carUseCase))
         _repairStore = StateObject(wrappedValue: RepairStore(repairUseCase: Self.factory.repairUseCase))
-        _insuranceStore = StateObject(wrappedValue: InsuranceStore(insuranceUseCase: Self.factory.insuranceUseCase))
+        _insuranceStore = StateObject(wrappedValue: InsuranceStore(insuranceUseCase: Self.factory.insuranceUseCase, notificationService: Self.factory.notificationService))
     }
                                                         
     var body: some Scene {

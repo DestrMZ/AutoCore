@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct RefuelCardView: View {
-    @EnvironmentObject var carViewModel: CarViewModel
-    @EnvironmentObject var repairViewModel: RepairViewModel
+//    @EnvironmentObject var carViewModel: CarViewModel
+//    @EnvironmentObject var repairViewModel: RepairViewModel
     
     @State var liters: String = ""
     @State var date: Date = Date()
@@ -23,10 +23,10 @@ struct RefuelCardView: View {
                 Text("Last Refuel")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                Text("\(liters) L")
+//                Text("\(liters) L")
                     .font(.headline)
                     .foregroundStyle(.primary)
-                Text(relativeDateString(from: date))
+//                Text(relativeDateString(from: date))
                     .font(.caption2)
                     .foregroundStyle(.gray)
             }
@@ -54,17 +54,17 @@ struct RefuelCardView: View {
         .cornerRadius(16)
         .shadow(radius: 3)
         .contentShape(Rectangle())
-        .onAppear(perform: updateRefuelData)
+//        .onAppear(perform: updateRefuelData)
 //        .onChange(of: carViewModel.selectedCar) { _ in updateRefuelData() }
     }
 
-    private func updateRefuelData() {
-        if carViewModel.selectedCar != nil {
-            let repairs = repairViewModel.getLastRefuel(repairs: repairViewModel.repairs)
-            liters = repairs.litres
-            date = repairs.date
-        }
-    }
+//    private func updateRefuelData() {
+//        if carViewModel.selectedCar != nil {
+//            let repairs = repairViewModel.getLastRefuel(repairs: repairViewModel.repairs)
+//            liters = repairs.litres
+//            date = repairs.date
+//        }
+//    }
 
     private func relativeDateString(from date: Date) -> String {
         let formatter = RelativeDateTimeFormatter()

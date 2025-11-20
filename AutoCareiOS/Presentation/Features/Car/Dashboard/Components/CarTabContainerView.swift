@@ -8,58 +8,54 @@
 import SwiftUI
 
 struct CarSelectionCarouselView: View {
-    
     private var carStore: CarStore
     
-    @EnvironmentObject var carViewModel: CarViewModel
+    @ObservedObject var carProfileViewModel: CarProfileViewModel
+    
     @Environment(\.dismiss) var dismiss
     
     @Binding var isSelecting: Bool
     
     @State private var selectedTabIndex = 0
-    @State var isAdditingNewCar: Bool = false
-    @State var showDeleteConfirmantion: Bool = false
-    @State var сarForRemoval: String = ""
-    @State var carToDelete: CarModel? = nil
+    @State private var isAdditingNewCar = false
+    @State private var showDeleteConfirmantion = false
+    @State private var carForRemoval = ""
+    @State private var carToDelete: CarModel?
     
-    init(carStore: CarStore, isSelecting: Binding<Bool>) {
+    init(carStore: CarStore, carProfileViewModel: CarProfileViewModel, isSelecting: Binding<Bool>) {
         self.carStore = carStore
+        self.carProfileViewModel = carProfileViewModel
         self._isSelecting = isSelecting
     }
     
     var body: some View {
-        
         ZStack {
             TabView(selection: $selectedTabIndex) {
-                ForEach(Array(carViewModel.cars.enumerated()), id: \.offset) { index, car in
-                    
+                ForEach(Array(carProfileViewModel.cars.enumerated()), id: \.offset) { index, car in
                     CarPlaceholderView(car: car)
                         .frame(width: UIScreen.main.bounds.width * 0.95, height: 500)
                         .padding(.vertical, 10)
-                        .animation(.easeInOut(duration: 0.5), value: selectedTabIndex)
                         .onTapGesture {
-                                carViewModel.selectedCar = carViewModel.cars[selectedTabIndex]
-                            withAnimation {
-                                isSelecting = false
-                            }
+                            carProfileViewModel.selectCar(carModel: car)
+                            withAnimation { isSelecting = false }
                         }
                         .overlay(alignment: .top) {
-                            if let currentCar = carViewModel.selectedCar, currentCar == car {
+                            if carProfileViewModel.selectedCar?.id == car.id {
                                 Image(systemName: "person.circle")
-                                    .font(Font.system(size: 20))
+                                    .font(.system(size: 20))
                                     .foregroundStyle(.primary)
                                     .shadow(radius: 3)
                                     .padding(.vertical, -20)
                             }
                         }
                         .overlay(alignment: .topTrailing) {
-                            Button(action: {
-                                showDeleteConfirmantion = true
-                                сarForRemoval = car.nameModel
+                            Button {
+                                carForRemoval = car.nameModel
                                 carToDelete = car
-                            }) {
+                                showDeleteConfirmantion = true
+                            } label: {
                                 Image(systemName: "trash.fill")
-                                    .font(Font.system(size: 25))
+                                    .font(.system(size: 25))
                                     .foregroundStyle(.red)
                                     .shadow(radius: 3)
                                     .padding(20)
@@ -67,30 +63,27 @@ struct CarSelectionCarouselView: View {
                         }
                 }
                 
-                Button(action: {
-                    isAdditingNewCar = true
-                }) {
+                Button { isAdditingNewCar = true } label: {
                     AddPlaceholderCarView()
                 }
-                .tag(carViewModel.cars.count)
+                .tag(carProfileViewModel.cars.count)
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+            .animation(.default, value: carProfileViewModel.cars) // ← плавное удаление!
         }
         .fullScreenCover(isPresented: $isAdditingNewCar) {
             AddCarView(carStore: carStore)
         }
-        .alert(isPresented: $showDeleteConfirmantion) {
-            Alert(title: Text("Delete car"),
-                  message: Text("Are you sure want to delete \(сarForRemoval)"),
-                  primaryButton: .destructive(Text("Yes")) {
+        .alert("Delete car", isPresented: $showDeleteConfirmantion) {
+            Button("Yes", role: .destructive) {
                 if let car = carToDelete {
-                    carViewModel.deleteCar(carModel: car)
+                    carProfileViewModel.deleteCar(car: car)
                 }
-
                 dismiss()
-            },
-                  secondaryButton: .cancel()
-            )
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Are you sure want to delete \(carForRemoval)?")
         }
     }
 }
