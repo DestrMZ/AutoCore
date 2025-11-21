@@ -53,17 +53,6 @@ final class RepairUseCase: RepairUseCaseProtocol {
         }
     }
 
-    func fetchLatestRefueling(from repairs: [RepairModel]) throws -> (litres: String, date: Date) {
-        let refuels = repairs.filter { $0.repairCategory == "Fuel" }
-
-        guard let latest = refuels.max(by: { $0.repairDate < $1.repairDate }) else {
-            return (litres: "0", date: Date())
-        }
-
-        let litres = String(format: "%.1f", latest.litresFuel ?? 0)
-        return (litres: litres, date: latest.repairDate)
-    }
-
     func fetchRepairsGroupByMonth(for repairs: [RepairModel]) throws -> [RepairGroup] {
         var result: [String: [RepairModel]] = [:]
 
@@ -145,8 +134,6 @@ protocol RepairUseCaseProtocol {
     func fetchAllRepairs(for carModel: CarModel) throws -> [RepairModel]
 
     func updateRepair(repairModel: RepairModel, for carModel: CarModel) throws
-
-    func fetchLatestRefueling(from repairs: [RepairModel]) throws -> (litres: String, date: Date)
 
     func fetchRepairsGroupByMonth(for repairs: [RepairModel]) throws -> [RepairGroup]
 

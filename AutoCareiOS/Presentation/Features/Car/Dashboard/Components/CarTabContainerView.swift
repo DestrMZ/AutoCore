@@ -10,7 +10,7 @@ import SwiftUI
 struct CarSelectionCarouselView: View {
     private var carStore: CarStore
     
-    @ObservedObject var carProfileViewModel: CarProfileViewModel
+    @ObservedObject var dashboardViewModel: DashboardViewModel
     
     @Environment(\.dismiss) var dismiss
     
@@ -22,25 +22,25 @@ struct CarSelectionCarouselView: View {
     @State private var carForRemoval = ""
     @State private var carToDelete: CarModel?
     
-    init(carStore: CarStore, carProfileViewModel: CarProfileViewModel, isSelecting: Binding<Bool>) {
+    init(carStore: CarStore, dashboardViewModel: DashboardViewModel, isSelecting: Binding<Bool>) {
         self.carStore = carStore
-        self.carProfileViewModel = carProfileViewModel
+        self.dashboardViewModel = dashboardViewModel
         self._isSelecting = isSelecting
     }
     
     var body: some View {
         ZStack {
             TabView(selection: $selectedTabIndex) {
-                ForEach(Array(carProfileViewModel.cars.enumerated()), id: \.offset) { index, car in
+                ForEach(Array(dashboardViewModel.cars.enumerated()), id: \.offset) { index, car in
                     CarPlaceholderView(car: car)
                         .frame(width: UIScreen.main.bounds.width * 0.95, height: 500)
                         .padding(.vertical, 10)
                         .onTapGesture {
-                            carProfileViewModel.selectCar(carModel: car)
+                            dashboardViewModel.selectCar(carModel: car)
                             withAnimation { isSelecting = false }
                         }
                         .overlay(alignment: .top) {
-                            if carProfileViewModel.selectedCar?.id == car.id {
+                            if dashboardViewModel.selectedCar?.id == car.id {
                                 Image(systemName: "person.circle")
                                     .font(.system(size: 20))
                                     .foregroundStyle(.primary)
@@ -66,10 +66,10 @@ struct CarSelectionCarouselView: View {
                 Button { isAdditingNewCar = true } label: {
                     AddPlaceholderCarView()
                 }
-                .tag(carProfileViewModel.cars.count)
+                .tag(dashboardViewModel.cars.count)
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
-            .animation(.default, value: carProfileViewModel.cars) // ← плавное удаление!
+            .animation(.default, value: dashboardViewModel.cars)
         }
         .fullScreenCover(isPresented: $isAdditingNewCar) {
             AddCarView(carStore: carStore)
@@ -77,7 +77,7 @@ struct CarSelectionCarouselView: View {
         .alert("Delete car", isPresented: $showDeleteConfirmantion) {
             Button("Yes", role: .destructive) {
                 if let car = carToDelete {
-                    carProfileViewModel.deleteCar(car: car)
+                    dashboardViewModel.deleteCar(car: car)
                 }
                 dismiss()
             }

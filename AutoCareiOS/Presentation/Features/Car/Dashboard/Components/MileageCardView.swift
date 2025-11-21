@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MileageCardView: View {
     
-    @ObservedObject var carProfileViewModel: CarProfileViewModel
+    @ObservedObject var dashboardViewModel: DashboardViewModel
     
     @State var showSheetUpdateMileage: Bool = false
     
@@ -19,7 +19,7 @@ struct MileageCardView: View {
                 Text("Mileage")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                Text("\(carProfileViewModel.mileage) mi")
+                Text("\(dashboardViewModel.currentMileage) mi")
                     .font(.headline)
                     .foregroundStyle(.primary)
             }
@@ -55,7 +55,7 @@ struct MileageCardView: View {
         .shadow(radius: 3)
         .contentShape(Rectangle())
         .sheet(isPresented: $showSheetUpdateMileage) {
-            SheetUpdateMileageView(carProfileViewModel: carProfileViewModel)
+            SheetUpdateMileageView(dashboardViewModel: dashboardViewModel)
                 .presentationDetents([.fraction(0.20)])
                 .presentationDragIndicator(.visible)
         }

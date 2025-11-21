@@ -12,8 +12,6 @@ struct AutoCareiOS: App {
     
     static let factory = AppFactory.shared
     
-    private let notificationService: NotificationServiceProtocol = NotificationService()
-    
     @StateObject private var carStore: CarStore
     @StateObject private var repairStore: RepairStore
     @StateObject private var insuranceStore: InsuranceStore

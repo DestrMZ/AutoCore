@@ -12,9 +12,10 @@ import TipKit
 struct CarProfileView: View {
     
     private let carStore: CarStore
+    private let repairStore: RepairStore
     private let insuranceStore: InsuranceStore
     
-    @StateObject var vm: CarProfileViewModel
+    @StateObject var dashboardViewModel: DashboardViewModel
     
     @Environment(\.dismiss) private var dismiss
 
@@ -23,9 +24,10 @@ struct CarProfileView: View {
     
     @Binding var showTapBar: Bool
     
-    init(carStore: CarStore, insuranceStore: InsuranceStore, showTapBar: Binding<Bool>) {
+    init(carStore: CarStore, repairStore: RepairStore, insuranceStore: InsuranceStore, showTapBar: Binding<Bool>) {
         self.carStore = carStore
-        self._vm = StateObject(wrappedValue: CarProfileViewModel(carStore: carStore))
+        self.repairStore = repairStore
+        self._dashboardViewModel = StateObject(wrappedValue: DashboardViewModel(carStore: carStore, repairStore: repairStore))
         self.insuranceStore = insuranceStore
         _showTapBar = showTapBar
     }
@@ -33,33 +35,33 @@ struct CarProfileView: View {
     var body: some View {
         NavigationStack {
             ZStack(alignment: .top) {
-                CarAvatarView(image: UIImage(data: vm.photoCar))
+                CarAvatarView(image: UIImage(data: dashboardViewModel.photoCar))
                 
                 ScrollView {
                     VStack {
                         Spacer().frame(height: 250)
-                        Text("\(vm.nameModel)")
+                        Text("\(dashboardViewModel.nameModel)")
                             .font(.title)
                             .bold()
                             .foregroundStyle(.white)
                             .shadow(radius: 4)
                         
                         Button(action: {
-                            copyToClipboard(text: vm.stateNumber)
+                            copyToClipboard(text: dashboardViewModel.stateNumber)
                             provideHapticFeedbackHeavy()
                             
                         }) {
-                            LicensePlateView(stateNumber: vm.stateNumber)
+                            LicensePlateView(stateNumber: dashboardViewModel.stateNumber)
                         }
                         
                         HStack(spacing: 16) {
-                            Label(String(vm.year), systemImage: "calendar")
+                            Label(String(dashboardViewModel.year), systemImage: "calendar")
                             
                             Button(action: {
-                                copyToClipboard(text: vm.vinNumber)
+                                copyToClipboard(text: dashboardViewModel.vinNumber)
                                 provideHapticFeedbackHeavy()
                             }) {
-                                Label("VIN: \(vm.vinNumber)", systemImage: "doc.text.magnifyingglass")
+                                Label("VIN: \(dashboardViewModel.vinNumber)", systemImage: "doc.text.magnifyingglass")
                             }
                         }
                         .font(.subheadline)
@@ -69,13 +71,13 @@ struct CarProfileView: View {
                     
                     VStack(spacing: 16) {
                         HStack(spacing: 16) {
-                            MileageCardView(carProfileViewModel: vm)
-                            RefuelCardView() // ??
+                            MileageCardView(dashboardViewModel: dashboardViewModel)
+                            RefuelCardView(dashboardViewModel: dashboardViewModel)
                         }
                         
                         WebViewScreen()
                         
-                        if let selectedCar = vm.selectedCar {
+                        if let selectedCar = dashboardViewModel.selectedCar {
                             InsuranceListSelection(insuranceStore: insuranceStore, selectedCar: selectedCar)
                         }
                     }
@@ -97,7 +99,7 @@ struct CarProfileView: View {
                 .padding(.bottom, 80)
                 
                 if isSelecting {
-                    CarSelectionCarouselView(carStore: carStore, carProfileViewModel: vm, isSelecting: $isSelecting)
+                    CarSelectionCarouselView(carStore: carStore, dashboardViewModel: dashboardViewModel, isSelecting: $isSelecting)
                         .transition(.move(edge: .top).combined(with: .opacity))
                         .zIndex(1)
                         .onAppear {
@@ -137,9 +139,14 @@ struct CarProfileView: View {
     let insuranceStore = InsuranceStore(insuranceUseCase: InsuranceUseCase(
         insuranceRepository: MockInsuranceRepository()
     ))
+    
+    let repairStore = RepairStore(repairUseCase: RepairUseCase(repairRepository: MockRepairRepository()
+    ))
+                                                              
 
     return CarProfileView(
         carStore: carStore,
+        repairStore: repairStore,
         insuranceStore: insuranceStore,
         showTapBar: .constant(true)
     )

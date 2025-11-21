@@ -32,6 +32,10 @@ final class AddCarViewModel: ObservableObject {
         self.carStore = carStore
     }
     
+    deinit {
+        print("AddCarViewModel - is deinitialized")
+    }
+    
     func saveCar() {
         guard !nameModel.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             showAlert(text: "Car name is required")

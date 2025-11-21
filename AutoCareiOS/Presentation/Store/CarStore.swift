@@ -22,6 +22,10 @@ final class CarStore: ObservableObject {
         Task { await initialize() }
     }
     
+    deinit {
+        print("CarStore - is deinitialized")
+    }
+    
     func initialize() async {
         do {
             let cars = fetchCars()
@@ -52,25 +56,29 @@ final class CarStore: ObservableObject {
     }
 
     func addCar(car: CarModel) throws {
-        let newCar = try self.carUseCase.createCar(carModel: car)
+        let newCar = try carUseCase.createCar(carModel: car)
         self.cars.append(newCar)
     }
 
     func updateCar(car: CarModel) throws {
         try self.carUseCase.updateCar(carModel: car)
 
-        if let index = self.cars.firstIndex(where: { $0.id == car.id }) {
+        if let index = cars.firstIndex(where: { $0.id == car.id }) {
             cars[index] = car
         }
     }
-
+    
     func updateMileage(for car: CarModel, newMileage: Int32) throws {
         try carUseCase.updateMileage(for: car, newMileage: newMileage)
+        
+        guard let index = cars.firstIndex(where: { $0.id == car.id }) else { return }
+        
+        var updatedCar = cars[index]
+        updatedCar.mileage = newMileage
+        cars[index] = updatedCar
 
-        if let index = self.cars.firstIndex(where: { $0.id == car.id }) {
-            var updatedCar = self.cars[index]
-            updatedCar.mileage = newMileage
-            cars[index] = updatedCar
+        if selectedCar?.id == car.id {
+            selectedCar = updatedCar
         }
     }
 

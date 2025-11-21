@@ -60,15 +60,6 @@ class RepairViewModel: ObservableObject {
         }
     }
 
-    func getLastRefuel(repairs: [RepairModel]) -> (litres: String, date: Date) {
-        do {
-            return try repairUseCase.fetchLatestRefueling(from: repairs)
-        } catch {
-            alertMessage = "\(error.localizedDescription)"
-            return (litres: "None", date: Date())
-        }
-    }
-
     func fetchRepairsGroupByMonth(for repairs: [RepairModel]) -> [RepairGroup] {
         do {
             return try repairUseCase.fetchRepairsGroupByMonth(for: repairs)

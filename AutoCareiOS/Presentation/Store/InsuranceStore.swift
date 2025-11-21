@@ -21,6 +21,10 @@ final class InsuranceStore: ObservableObject {
         self.insuranceUseCase = insuranceUseCase
         self.notificationService = notificationService
     }
+    
+    deinit {
+        print("InsuranceStore - is deinitialized")
+    }
 
     func loadInsurances(for car: CarModel) throws {
         let fetched = try insuranceUseCase.fetchAllInsurances(for: car)

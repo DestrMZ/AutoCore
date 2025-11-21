@@ -44,10 +44,6 @@ final class RepairStore: ObservableObject {
         }
     }
 
-    func getLastRefuel() throws -> (litres: String, date: Date) {
-        try repairUseCase.fetchLatestRefueling(from: repairs)
-    }
-
     func repairsGroupedByMonth() throws -> [RepairGroup] {
         try repairUseCase.fetchRepairsGroupByMonth(for: repairs)
     }
