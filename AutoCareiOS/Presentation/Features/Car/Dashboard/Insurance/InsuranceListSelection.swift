@@ -30,6 +30,7 @@ struct InsuranceListSelection: View {
                         .font(.title3.bold())
                     Spacer()
                     Button(action: {
+                        vm.resetFields()
                         showSheet = true
                     }) {
                         Label("Add", systemImage: "plus")
@@ -73,7 +74,8 @@ struct InsuranceListSelection: View {
                             insuranceCompany: insurance.nameCompany,
                             insuranceType: insurance.type,
                             startDate: insurance.startDate,
-                            endDate: insurance.endDate)
+                            endDate: insurance.endDate,
+                            notificationDate: insurance.notificationDate)
                         .contextMenu {
                             Button(action: {
                                 vm.loadInsuranceInfo(from: insurance)

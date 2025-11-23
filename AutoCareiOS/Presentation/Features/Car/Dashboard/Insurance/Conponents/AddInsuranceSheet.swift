@@ -14,7 +14,7 @@ struct AddInsuranceSheet: View {
     
     @State private var type = ""
     @State private var nameCompany = ""
-    @State private var startDate = Date()
+    @State private var startDate = Date.now
     @State private var endDate = Date()
     @State private var price: Int32 = 0
     @State private var notes = ""
@@ -44,20 +44,22 @@ struct AddInsuranceSheet: View {
                     DatePicker("End date", selection: $endDate, displayedComponents: .date)
                 }
                 
-                Section(header: Text("Notification")) {
+                Section("Notification") {
                     Toggle("Enable notification", isOn: Binding(
                         get: { notificationDate != nil },
                         set: { isOn in
-                            notificationDate = isOn ? Date() : nil
+                            if isOn && notificationDate == nil {
+                                notificationDate = endDate.addingTimeInterval(-7*86400)
+                            } else if !isOn {
+                                notificationDate = nil
+                            }
                         }
                     ))
                     
                     if notificationDate != nil {
                         DatePicker("Notification Date", selection: Binding(
                             get: { notificationDate ?? Date() },
-                            set: { newDate in
-                                notificationDate = newDate
-                            }
+                            set: { notificationDate = $0 }
                         ), displayedComponents: [.date, .hourAndMinute])
                     }
                 }
@@ -70,7 +72,9 @@ struct AddInsuranceSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button("Cancel") {
+                        dismiss()
+                    }
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
@@ -82,7 +86,7 @@ struct AddInsuranceSheet: View {
                             endDate: endDate,
                             price: price,
                             notes: notes,
-                            notificationDate: isNotificationEnabled ? notificationDate : nil,
+                            notificationDate: notificationDate,
                             isActive: true
                         )
                         
@@ -92,8 +96,10 @@ struct AddInsuranceSheet: View {
                             vm.addInsurance(for: car, insurance: insurance)
                         }
                         
-                        dismiss()
-                        vm.resetFields()
+                        if !vm.isShowAlert {
+                            dismiss()
+                            vm.resetFields()
+                        }
                     }
                     .disabled(type.isEmpty || nameCompany.isEmpty)
                 }
@@ -103,7 +109,7 @@ struct AddInsuranceSheet: View {
                     title: Text(NSLocalizedString("😳 Wow...", comment: "")),
                     message: Text(vm.alertMessage))
             }
-            .onAppear {
+            .task {
                 if let existing = vm.selectedInsurance {
                     type = existing.type
                     nameCompany = existing.nameCompany

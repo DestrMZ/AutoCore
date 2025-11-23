@@ -34,6 +34,7 @@ struct SheetUpdateMileageView: View {
                             }
                             
                             dashboardViewModel.updateMileage(for: car, new: mileageInt)
+                            dismiss()
                         }
                     }) {
                         Label(NSLocalizedString("Update Mileage", comment: ""), systemImage: "checkmark.circle.fill")

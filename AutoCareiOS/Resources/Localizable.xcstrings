@@ -845,7 +845,6 @@
       }
     },
     "Invalid mileage format" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ru" : {
           "stringUnit" : {
