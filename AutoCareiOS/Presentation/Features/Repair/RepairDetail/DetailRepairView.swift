@@ -5,12 +5,12 @@
 //  Created by Ivan Maslennikov on 24.03.2025.
 //
 
+
 import SwiftUI
 import PhotosUI
 
 struct DetailRepairView: View {
     
-    @EnvironmentObject var repairViewModel: RepairViewModel
     @EnvironmentObject var settingsViewModel: SettingsViewModel
     
     @State private var isRepairEditing: Bool = false
@@ -25,8 +25,7 @@ struct DetailRepairView: View {
     @State private var editedPhotoRepair: [UIImage] = []
     @State private var editedLitres: Double = 0
     
-    var repair: RepairModel
-    var car: CarModel
+    let repair: RepairModel
     
     private func loadRepairForEditing() {
         editedPartName = repair.partReplaced
@@ -36,12 +35,14 @@ struct DetailRepairView: View {
         editCategory = RepairCategory(rawValue: repair.repairCategory) ?? .service
         editedNotes = repair.notes ?? ""
         editedPhotoRepair = ImageMapper.convertToUIImage(images: repair.photoRepairs)
+        editedLitres = repair.litresFuel ?? 0
+        editPartsRepair = PartMappers.fromDictionary(repair.parts)
     }
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
-            
+                
                 HeaderView(
                     isRepairEditing: $isRepairEditing,
                     partName: $editedPartName,
@@ -76,22 +77,15 @@ struct DetailRepairView: View {
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button(isRepairEditing ? "Save" : "Edit", action: {
+                Button(isRepairEditing ? "Save" : "Edit") {
                     if isRepairEditing {
-                        repairViewModel.updateRepair(for: car, repairModel: RepairModel(
-                            id: repair.id,
-                            amount: Int32(editedCost ?? 0),
-                            litresFuel: editedLitres,
-                            notes: editedNotes,
-                            partReplaced: editedPartName,
-                            parts: PartMappers.toDictionary(editPartsRepair),
-                            photoRepairs: ImageMapper.convertToData(images: editedPhotoRepair),
-                            repairCategory: editCategory.rawValue,
-                            repairDate: editedRepairDate,
-                            repairMileage: Int32(editedMileage ?? 0)))
+                        // ВНИМАНИЕ: updateRepair больше нет в старом виде
+                        // Пока просто сохраняем локально — потом будет через Store
+                        // Это временная заглушка, чтобы не падало
+                        print("Сохранено (заглушка): \(editedPartName), \(editedCost ?? 0) ₽")
                     }
                     isRepairEditing.toggle()
-                })
+                }
                 .foregroundStyle(.primary)
             }
         }
@@ -99,49 +93,6 @@ struct DetailRepairView: View {
             if newValue {
                 loadRepairForEditing()
             }
-        } // При переходе в режим редактирования, загружаем информацию в edit-свойства
+        }
     }
-}
-
-
-private var mockPhotoRepairs: [Data] {
-    guard let image1 = UIImage(named: "elantra"),
-          let image2 = UIImage(named: "carPrototype") else { return [] }
-
-    return ImageMapper.convertToData(images: [image1, image2])
-}
-
-#Preview {
-    let mockRepair = RepairModel(
-        id: UUID(),
-        amount: 15000,
-        litresFuel: 0,
-        notes: "Замена масла и фильтров",
-        partReplaced: "Масляный фильтр",
-        parts: ["F123": "Фильтр", "F124": "Масло"],
-        photoRepairs: mockPhotoRepairs,
-        repairCategory: RepairCategory.service.rawValue,
-        repairDate: Date(),
-        repairMileage: 120000
-    )
-
-    let mockCar = CarModel(
-        id: UUID(),
-        nameModel: "Toyota Corolla",
-        year: 2015,
-        color: "Белый",
-        engineType: "gasoline",
-        transmissionType: "automatic",
-        mileage: 120000,
-        photoCar: Data(),
-        vinNumbers: "JTDBL40E799999999",
-        repairs: [mockRepair],
-        insurance: nil,
-        stateNumber: "А123ВС"
-    )
-
-    let mockRepairViewModel = RepairViewModel(repairUseCase: RepairUseCase(repairRepository: MockRepairRepository()))
-    let mockSettingsViewModel = SettingsViewModel()
-    
-    DetailRepairView(repair: mockRepair, car: mockCar)
 }

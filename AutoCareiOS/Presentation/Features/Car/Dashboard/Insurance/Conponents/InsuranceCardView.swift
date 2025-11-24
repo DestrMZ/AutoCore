@@ -13,7 +13,7 @@ struct InsuranceCardView: View {
     let insuranceType: String
     let startDate: Date
     let endDate: Date
-    let notificationDate: Date?   // ← добавляем
+    let notificationDate: Date?
     
     private var totalDays: Int {
         Calendar.current.dateComponents([.day], from: startDate, to: endDate).day ?? 1
@@ -78,13 +78,11 @@ struct InsuranceCardView: View {
                 
                 Spacer()
                 
-                // КОЛОКОЛЬЧИК — появляется только если есть уведомление
                 if notificationDate != nil {
                     Image(systemName: "bell.fill")
                         .font(.title3)
                         .foregroundStyle(.yellow)
                         .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
-//                        .symbolEffect(.pulse, options: .repeating) // iOS 17+ — лёгкая анимация
                         .transition(.scale.combined(with: .opacity))
                 }
             }

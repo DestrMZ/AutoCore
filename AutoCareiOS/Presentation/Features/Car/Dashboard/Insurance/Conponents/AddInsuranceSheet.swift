@@ -49,7 +49,7 @@ struct AddInsuranceSheet: View {
                         get: { notificationDate != nil },
                         set: { isOn in
                             if isOn && notificationDate == nil {
-                                notificationDate = endDate.addingTimeInterval(-7*86400)
+                                notificationDate = endDate
                             } else if !isOn {
                                 notificationDate = nil
                             }

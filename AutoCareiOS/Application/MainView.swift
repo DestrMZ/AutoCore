@@ -30,7 +30,7 @@ struct MainView: View {
             case .cars:
                 CarProfileView(carStore: carStore, repairStore: repairStore, insuranceStore: insuranceStore,showTapBar: $showTapBar)
             case .repair:
-                ListRepairView(showTapBar: $showTapBar)
+                ListRepairView(carStore: carStore, repairStore: repairStore, showTapBar: $showTapBar)
             case .statistics:
                 StatisticsView()
             case .settings:

@@ -1,119 +1,136 @@
 //
-//  AddViewModel.swift
+//  AddRepairViewModel.swift
 //  AutoCareiOS
 //
-//  Created by Ivan Maslennikov on 29.07.2025.
+//  Created by Ivan Maslennikov on 24.11.2025.
 //
 
 import Foundation
+import _PhotosUI_SwiftUI
 
 
-class AddRepairViewModel: ObservableObject {
-    
-    private let repairUseCase: RepairUseCaseProtocol
-    
-    init(repairUseCase: RepairUseCaseProtocol) {
-        self.repairUseCase = repairUseCase
-    }
-    
-    @Published var nameRepair: String = ""
-    @Published var dateRepair: Date = Date()
-    @Published var amountRepair: String = ""
-    @Published var mileageRepair: String = ""
-    @Published var notesRepiar: String = ""
-    @Published var photoRepair: [Data] = []
-    @Published var categoryRepair: RepairCategory = .service
-    @Published var partsRepair: [Part] = [Part(article: "", name: "")]
-    @Published var litresRepair: String = ""
-    
+@MainActor
+final class AddRepairViewModel: ObservableObject {
+
+    private let repairStore: RepairStore
+    private let carStore: CarStore
+
+    @Published var nameRepair = ""
+    @Published var amount = ""
+    @Published var mileage = ""
+    @Published var date = Date()
+    @Published var notes = ""
+    @Published var litres = ""
+    @Published var category: RepairCategory = .service
+    @Published var parts = [Part(article: "", name: "")]
+    @Published var selectedPhotos: [PhotosPickerItem] = []
+    @Published var currentImages: [UIImage] = []
+
+    @Published var isLoading = false
     @Published var alertMessage: String = ""
-    @Published var alertShow: Bool = false
-    
-//    var repairs: [RepairModel] {
-//        sharedRepairStore.repairs
-//    }
-    
-    func addRepair(for car: CarModel) {
-        guard let repairModel = toRepairModel() else {
-            return
-        }
-        
-        do {
-            let repair = try repairUseCase.createRepair(for: car, repairModel: repairModel)
-//            sharedRepairStore.repairs.append(repair)
-        } catch {
-            alertMessage = error.localizedDescription
-            alertShow = true
-        }
+    @Published var isShowAlert: Bool = false
+
+    init(carStore: CarStore, repairStore: RepairStore) {
+        self.carStore = carStore
+        self.repairStore = repairStore
     }
-    
-    func toRepairModel() -> RepairModel? {
-        let trimmedName = nameRepair.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !trimmedName.isEmpty else {
-                alertMessage = "Repair name cannot be empty."
-                alertShow = true
-                return nil
-            }
-        
-        guard let parsedAmount = Int32(amountRepair) else {
-            alertMessage = "Amount must be a valid number."
-            alertShow = true
-            return nil
-        }
-        
-        guard let parsedMileage = Int32(mileageRepair) else {
-                alertMessage = "Mileage must be a valid number."
-                alertShow = true
-                return nil
-            }
-        
-        var parsedLitres: Double? = nil
-        if categoryRepair == .fuel {
-            let trimmedLitres = litresRepair.trimmingCharacters(in: .whitespacesAndNewlines)
-            if !trimmedLitres.isEmpty {
-                if let litres = Double(trimmedLitres) {
-                    parsedLitres = litres
-                } else {
-                    alertMessage = "Litres must be a valid decimal number."
-                    alertShow = true
-                    return nil
-                }
-            } else {
-                alertMessage = "Please enter litres of fuel."
-                alertShow = true
-                return nil
-            }
-        }
-        
-        return RepairModel(
-            id: UUID(),
-            amount: parsedAmount,
-            litresFuel: parsedLitres,
-            notes: notesRepiar,
-            partReplaced: nameRepair,
-            parts: savePart(parts: partsRepair),
-            photoRepairs: photoRepair,
-            repairCategory: categoryRepair.rawValue,
-            repairDate: dateRepair,
-            repairMileage: parsedMileage
-        )
-    }
-    
-    // MARK: Method for work struct Part
-    func addPart(for parts: inout [Part]) {
+
+    func addPart() {
         parts.append(Part(article: "", name: ""))
     }
-    
-    func removePart(for parts: inout [Part], to index: Int) {
-        parts.remove(at: index)
+
+    func removePart(at offsets: IndexSet) {
+        parts.remove(atOffsets: offsets)
+    }
+
+    var isFormValid: Bool {
+        !nameRepair.trimmingCharacters(in: .whitespaces).isEmpty &&
+        Int(amount) != nil &&
+        (mileage.isEmpty || Int(mileage) != nil)
+    }
+
+    func save() async {
+        guard let car = carStore.selectedCar else {
+            return
+        }
+
+        guard isFormValid else {
+            return
+        }
+
+        isLoading = true
+        alertMessage = nil
+
+        var photoData: [Data] = []
+        for item in selectedPhotos {
+            if let data = try? await item.loadTransferable(type: Data.self) {
+                photoData.append(data)
+            }
+        }
+
+        let newRepair = RepairModel(
+            id: UUID(),
+            amount: Int32(amount) ?? 0,
+            litresFuel: category == .fuel ? Double(litres) ?? nil : nil,
+            notes: notes.isEmpty ? nil : notes,
+            partReplaced: nameRepair,
+            parts: PartMappers.toDictionary(parts.filter { !$0.name.isEmpty }),
+            photoRepairs: photoData.isEmpty ? nil : photoData,
+            repairCategory: category.rawValue,
+            repairDate: date,
+            repairMileage: Int32(mileage) ?? car.mileage
+        )
+
+        do {
+            try repairStore.addRepair(for: car, repairModel: newRepair)
+            resetForm()
+        } catch {
+            handleError(error)
+        }
+
+        isLoading = false
+    }
+
+    func loadSelectedPhotos() async {
+        var images: [UIImage] = []
+
+        for item in selectedPhotos {
+            if let data = try? await item.loadTransferable(type: Data.self),
+               let image = UIImage(data: data) {
+                images.append(image)
+            }
+        }
+
+        await MainActor.run {
+            self.currentImages.append(contentsOf: images)
+            self.selectedPhotos = []
+        }
     }
     
-    func savePart(parts: [Part]) -> [String: String] {
-        PartMappers.toDictionary(self.partsRepair)
+    func removePhoto(_ image: UIImage) {
+        currentImages.removeAll { $0 == image }
+    }
+
+    private func imagesData() -> [Data]? {
+        guard !currentImages.isEmpty else { return nil }
+        return currentImages.compactMap { $0.jpegData(compressionQuality: 0.8) }
     }
     
-    func loadPart(from dictionary: [String: String]) {
-        self.partsRepair = PartMappers.fromDictionary(dictionary)
+    func resetForm() {
+        nameRepair = ""
+        amount = ""
+        mileage = ""
+        date = Date()
+        notes = ""
+        litres = ""
+        category = .service
+        parts = [Part(article: "", name: "")]
+        selectedPhotos = []
+        currentImages = []
     }
     
+    private func handleError(_ error: Error) {
+        alertMessage = error.localizedDescription
+        isShowAlert = true
+    }
 }
