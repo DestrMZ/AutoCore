@@ -37,18 +37,17 @@ struct AddRepairView: View {
                             selectedCaregory: $addRepairViewModel.category,
                             focusedField: $focusedField)
                         
-                        RepairPartsListView(parts: $parts)
+//                        RepairPartsListView(parts: $parts)
                         
                         RepairPhotoPickerView(
-                            photoRepair: $repairViewModel.photoRepair,
-                            showSuccessMessage: $showSuccessMessage)
+                            addRepairViewModel: addRepairViewModel)
                         
                     }
                     .padding()
                     .toolbar {
                         ToolbarItem(placement: .confirmationAction) {
                             Button("Save", action: {
-                                addRepairViewModel.save()
+                                addRepairViewModel.createRepair()
                                 
                                 if !addRepairViewModel.isShowAlert {
                                     dismiss()
@@ -69,7 +68,7 @@ struct AddRepairView: View {
             .alert(isPresented: $addRepairViewModel.isShowAlert) {
                 Alert(title: Text("Ops"), message: Text(addRepairViewModel.alertMessage), dismissButton: .cancel())
             }
-            .toast(isPresenting: $showSuccessMessage) {
+            .toast(isPresenting: $addRepairViewModel.showSuccessMessage) {
                 AlertToast(
                     displayMode: .hud,
                     type: .complete(.white),

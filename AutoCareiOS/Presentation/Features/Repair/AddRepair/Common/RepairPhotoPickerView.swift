@@ -12,10 +12,8 @@ import PhotosUI
 
 struct RepairPhotoPickerView: View {
     
+    @ObservedObject var addRepairViewModel: AddRepairViewModel
     @State var selectedImagesRepair: [PhotosPickerItem] = []
-    
-    @Binding var photoRepair: [Data]
-    @Binding var showSuccessMessage: Bool
     
     var body: some View {
         HStack {
@@ -28,33 +26,9 @@ struct RepairPhotoPickerView: View {
             }
             .onChange(of: selectedImagesRepair) { newItem in
                 Task {
-                    await handleSelectedPhotos(items: newItem)
+                    await addRepairViewModel.loadPhotos(from: selectedImagesRepair)
                 }
             }
-        }
-    }
-    
-    @MainActor
-    private func handleSelectedPhotos(items: [PhotosPickerItem]) async {
-        var photo: [Data] = []
-
-        await withTaskGroup(of: Data?.self) { group in
-            for item in items {
-                group.addTask {
-                    try? await item.loadTransferable(type: Data.self)
-                }
-            }
-
-            for await result in group {
-                if let data = result {
-                    photo.append(data)
-                }
-            }
-        }
-
-        if !photo.isEmpty {
-            photoRepair.append(contentsOf: photo)
-            showSuccessMessage = true
         }
     }
 }

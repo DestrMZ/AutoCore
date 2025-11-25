@@ -6,7 +6,8 @@
 //
 
 import Foundation
-import _PhotosUI_SwiftUI
+import PhotosUI
+import SwiftUI
 
 
 @MainActor
@@ -23,51 +24,20 @@ final class AddRepairViewModel: ObservableObject {
     @Published var litres = ""
     @Published var category: RepairCategory = .service
     @Published var parts = [Part(article: "", name: "")]
-    @Published var selectedPhotos: [PhotosPickerItem] = []
-    @Published var currentImages: [UIImage] = []
+    @Published var photoData: [Data] = []
 
-    @Published var isLoading = false
     @Published var alertMessage: String = ""
     @Published var isShowAlert: Bool = false
+    @Published var showSuccessMessage: Bool = false
 
     init(carStore: CarStore, repairStore: RepairStore) {
         self.carStore = carStore
         self.repairStore = repairStore
     }
-
-    func addPart() {
-        parts.append(Part(article: "", name: ""))
-    }
-
-    func removePart(at offsets: IndexSet) {
-        parts.remove(atOffsets: offsets)
-    }
-
-    var isFormValid: Bool {
-        !nameRepair.trimmingCharacters(in: .whitespaces).isEmpty &&
-        Int(amount) != nil &&
-        (mileage.isEmpty || Int(mileage) != nil)
-    }
-
-    func save() async {
-        guard let car = carStore.selectedCar else {
-            return
-        }
-
-        guard isFormValid else {
-            return
-        }
-
-        isLoading = true
-        alertMessage = nil
-
-        var photoData: [Data] = []
-        for item in selectedPhotos {
-            if let data = try? await item.loadTransferable(type: Data.self) {
-                photoData.append(data)
-            }
-        }
-
+    
+    func createRepair() {
+        guard let car = carStore.selectedCar else { return }
+        
         let newRepair = RepairModel(
             id: UUID(),
             amount: Int32(amount) ?? 0,
@@ -79,41 +49,13 @@ final class AddRepairViewModel: ObservableObject {
             repairCategory: category.rawValue,
             repairDate: date,
             repairMileage: Int32(mileage) ?? car.mileage
-        )
-
+            )
+        
         do {
             try repairStore.addRepair(for: car, repairModel: newRepair)
-            resetForm()
         } catch {
             handleError(error)
         }
-
-        isLoading = false
-    }
-
-    func loadSelectedPhotos() async {
-        var images: [UIImage] = []
-
-        for item in selectedPhotos {
-            if let data = try? await item.loadTransferable(type: Data.self),
-               let image = UIImage(data: data) {
-                images.append(image)
-            }
-        }
-
-        await MainActor.run {
-            self.currentImages.append(contentsOf: images)
-            self.selectedPhotos = []
-        }
-    }
-    
-    func removePhoto(_ image: UIImage) {
-        currentImages.removeAll { $0 == image }
-    }
-
-    private func imagesData() -> [Data]? {
-        guard !currentImages.isEmpty else { return nil }
-        return currentImages.compactMap { $0.jpegData(compressionQuality: 0.8) }
     }
     
     func resetForm() {
@@ -125,8 +67,37 @@ final class AddRepairViewModel: ObservableObject {
         litres = ""
         category = .service
         parts = [Part(article: "", name: "")]
-        selectedPhotos = []
-        currentImages = []
+    }
+    
+    func addPart() {
+        parts.append(Part(article: "", name: ""))
+    }
+
+    func removePart(at offsets: IndexSet) {
+        parts.remove(atOffsets: offsets)
+    }
+    
+    func loadPhotos(from items: [PhotosPickerItem]) async {
+        var loadedData: [Data] = []
+
+        await withTaskGroup(of: Data?.self) { group in
+            for item in items {
+                group.addTask {
+                    try? await item.loadTransferable(type: Data.self)
+                }
+            }
+
+            for await result in group {
+                if let data = result {
+                    loadedData.append(data)
+                }
+            }
+        }
+
+        if !photoData.isEmpty {
+            photoData.append(contentsOf: loadedData)
+            showSuccessMessage = true
+        }
     }
     
     private func handleError(_ error: Error) {
