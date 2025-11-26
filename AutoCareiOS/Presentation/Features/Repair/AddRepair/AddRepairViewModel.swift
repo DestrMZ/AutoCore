@@ -35,6 +35,10 @@ final class AddRepairViewModel: ObservableObject {
         self.repairStore = repairStore
     }
     
+    deinit {
+        debugPrint("AddRepairViewModel - is deinitialized")
+    }
+    
     func createRepair() {
         guard let car = carStore.selectedCar else { return }
         
@@ -94,7 +98,7 @@ final class AddRepairViewModel: ObservableObject {
             }
         }
 
-        if !photoData.isEmpty {
+        if !loadedData.isEmpty {
             photoData.append(contentsOf: loadedData)
             showSuccessMessage = true
         }
