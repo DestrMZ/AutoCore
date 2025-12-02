@@ -47,7 +47,6 @@ struct PartsView: View {
                     }
                 }
             } else {
-                #warning("Show parts from repair")
                 let parts = repair.parts
                 if !parts.isEmpty {
                     ForEach(parts.sorted(by: { $0.key < $1.key }), id: \.key) { part in

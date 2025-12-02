@@ -12,10 +12,8 @@ import PhotosUI
 
 struct ImageView: View {
     
-    @EnvironmentObject var repairViewModel: RepairViewModel
-    
     @Binding var isRepairEditing: Bool
-    @Binding var photoRepair: [UIImage]
+    @Binding var photoRepair: [Data]
     
     @State var selectedPhotoItems: [PhotosPickerItem] = []
     @State var fullScreenPhoto: UIImage? = UIImage()
@@ -25,7 +23,7 @@ struct ImageView: View {
     
     var body: some View {
         let displayPhotos = isRepairEditing
-            ? photoRepair
+            ? ImageMapper.convertToUIImage(images: photoRepair)
         : ImageMapper.convertToUIImage(images: repair.photoRepairs)
         
         VStack(alignment: .leading, spacing: 12) {
@@ -51,7 +49,9 @@ struct ImageView: View {
                             
                             if isRepairEditing {
                                 Button(action: {
-                                    photoRepair.remove(at: index)
+                                    if index < photoRepair.count {
+                                        photoRepair.remove(at: index)
+                                    }
                                 }) {
                                     Image(systemName: "xmark.circle.fill")
                                         .foregroundColor(.red)
@@ -87,10 +87,8 @@ struct ImageView: View {
                             Task {
                                 for image in selectedPhotoItems {
                                     if let dataImage = try? await image.loadTransferable(type: Data.self) {
-                                        if let imageUIImage = UIImage(data: dataImage) {
-                                            DispatchQueue.main.async {
-                                                photoRepair.append(imageUIImage)
-                                            }
+                                        await MainActor.run {
+                                            photoRepair.append(dataImage)
                                         }
                                     }
                                 }

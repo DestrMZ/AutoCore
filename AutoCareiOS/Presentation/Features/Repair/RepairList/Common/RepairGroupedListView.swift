@@ -9,6 +9,9 @@ import SwiftUI
 
 struct RepairGroupedListView: View {
     let groupedRepairs: [RepairGroup]
+    
+    let carStore: CarStore
+    let repairStore: RepairStore
 
     @Binding var searchText: String
     @Binding var showTapBar: Bool
@@ -53,7 +56,7 @@ struct RepairGroupedListView: View {
 
                 ForEach(group.repairs) { repair in
                     NavigationLink {
-                        DetailRepairView(repair: repair)
+                        DetailRepairView(repair: repair, carStore: carStore, repairStore: repairStore)
                             .onAppear { showTapBar = false }
                             .onDisappear { showTapBar = true }
                     } label: {

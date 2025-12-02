@@ -52,6 +52,8 @@ struct ListRepairView: View {
 
                             RepairGroupedListView(
                                 groupedRepairs: repairListViewModel.groupedRepairs,
+                                carStore: carStore,
+                                repairStore: repairStore,
                                 searchText: $searchText,
                                 showTapBar: $showTapBar)
                             .padding(.bottom, 1)
